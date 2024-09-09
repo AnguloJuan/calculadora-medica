@@ -31,3 +31,29 @@ body {
     text-wrap: balance;
   }
 }
+
+input, textarea, select {
+
+  @apply block w-full px-3 py-2 text-base leading-normal bg-white border border-gray-300 rounded-lg appearance-none focus:outline-none focus:border-blue-500;
+  @apply bg-gray-100 text-gray-900;
+
+  &:focus {
+    @apply bg-white text-black;
+  }
+
+  &::placeholder {
+    @apply text-gray-500;
+  }
+
+  &::-webkit-input-placeholder {
+    @apply text-gray-500;
+  }
+
+  &::-moz-placeholder {
+    @apply text-gray-500;
+  }
+
+  &:-ms-input-placeholder {
+    @apply text-gray-500;
+  }
+}
