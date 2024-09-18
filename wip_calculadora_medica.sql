@@ -7,7 +7,8 @@ CREATE TABLE IF NOT EXISTS calculadora (
 	id INT NOT NULL PRIMARY KEY,
 	nombre VARCHAR(60) NOT NULL,
     descripción VARCHAR(360) NOT NULL,
-    instrucciones VARCHAR(360) NOT NULL,
+    descripcion_corta VARCHAR(120) NOT NULL,
+    instrucciones VARCHAR(360),
     formula VARCHAR(360) NOT NULL,
     fecha_creacion DATETIME NOT NULL,
     fecha_actualizacion DATETIME
@@ -16,7 +17,7 @@ CREATE TABLE IF NOT EXISTS calculadora (
 CREATE TABLE IF NOT EXISTS parametro (
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	nombre VARCHAR(32) NOT NULL,
-    tipo_campo ENUM('text', 'number', 'select', 'radio') NOT NULL
+    tipo_campo ENUM('texto', 'numerico', 'seleccion', 'radio', 'check') NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS parametros (
