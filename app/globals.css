@@ -5,16 +5,9 @@
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --background-end-rgb: 228, 80, 80;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
 
 body {
   color: rgb(var(--foreground-rgb));
@@ -56,4 +49,9 @@ input, textarea, select {
   &:-ms-input-placeholder {
     @apply text-gray-500;
   }
+}
+
+button {
+  @apply inline-block px-6 py-3 text-base font-semibold leading-normal text-white bg-blue-500 border border-blue-500 rounded-lg shadow-md appearance-none ;
+  @layer @apply focus:outline-none focus:shadow-outline;
 }
