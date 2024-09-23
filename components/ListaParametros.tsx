@@ -1,12 +1,13 @@
 'use client'
 
-import { TipoParametro } from "@/utils/types";
+import { InterfazParametro } from "@/utils/types";
 import React from "react";
 import { Each } from "./EachOf";
+import Parametro from "./Parametro";
 
 interface ListaParametrosProps {
-    parametro: TipoParametro;
-    parametrosExistentes: TipoParametro[];
+    parametro: InterfazParametro;
+    parametrosExistentes: InterfazParametro[];
 }
 
 interface ListaParametrosState {
@@ -23,9 +24,7 @@ class ListaParametros extends React.Component<ListaParametrosProps, ListaParamet
                     <Each
                         of={parametrosExistentes}
                         render={(parametro) => (
-                            <option key={parametro.id} value={parametro.id}>
-                                {parametro.nombre}
-                            </option>
+                            Parametro key={parametro.id}   />
                         )}
                     />
                 </select>
