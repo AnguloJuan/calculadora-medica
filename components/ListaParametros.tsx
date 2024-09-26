@@ -1,22 +1,36 @@
 'use client'
 
-import { InterfazParametro } from "@/utils/types";
+import { Parametro } from "@/utils/types";
 import React from "react";
 import { Each } from "./EachOf";
-import Parametro from "./Parametro";
+import CampoParametro from "./CampoParametro";
 
 interface ListaParametrosProps {
-    parametro: InterfazParametro;
-    parametrosExistentes: InterfazParametro[];
+    parametrosExistentes: Parametro[];
 }
 
 interface ListaParametrosState {
     open: boolean;
 }
 
+/**
+ * Constante de testeo sera eliminado en la version final
+ */
+const valores = [
+    { id: 1, valor: 'Valor 1' },
+    { id: 2, valor: 'Valor 2' },
+    { id: 3, valor: 'Valor 3' },
+    { id: 4, valor: 'Valor 4' },
+    { id: 5, valor: 'Valor 5' },
+];
+
 class ListaParametros extends React.Component<ListaParametrosProps, ListaParametrosState> {
-    state = { open: false }
+    constructor(props: ListaParametrosProps) {
+        super(props);
+        this.state = { open: false }
+    }
     render() {
+        const { parametrosExistentes } = this.props;
         return (
             <div className="flex flex-col">
                 <select name="parametros" id="parametros">
@@ -24,7 +38,7 @@ class ListaParametros extends React.Component<ListaParametrosProps, ListaParamet
                     <Each
                         of={parametrosExistentes}
                         render={(parametro) => (
-                            Parametro key={parametro.id}   />
+                            <CampoParametro key={parametro.id} parametro={parametro} valores={valores}  />
                         )}
                     />
                 </select>
@@ -33,4 +47,4 @@ class ListaParametros extends React.Component<ListaParametrosProps, ListaParamet
     }
 }
 
-export default parametro;
+export default ListaParametros;

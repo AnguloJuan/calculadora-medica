@@ -2,8 +2,8 @@ import { IconPlus } from "@tabler/icons-react";
 import React, { ReactNode } from "react";
 
 interface BotonAgregarProps {
-    children: ReactNode,
-    funcion?: () => void
+    children?: ReactNode,
+    funcion: () => void
 }
 
 class BotonAgregar extends React.Component<BotonAgregarProps> {

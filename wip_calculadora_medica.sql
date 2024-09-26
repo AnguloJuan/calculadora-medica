@@ -39,8 +39,8 @@ CREATE TABLE IF NOT EXISTS unidades_metricas (
 
 CREATE TABLE IF NOT EXISTS valores (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    id_parametro INT NOT NULL,
     valor VARCHAR(32) NOT NULL,
+    id_parametro INT NOT NULL,
     CONSTRAINT FK_id_valores_parametro FOREIGN KEY (id_parametro) REFERENCES parametro(id)
 );
 

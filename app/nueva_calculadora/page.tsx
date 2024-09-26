@@ -3,6 +3,7 @@
 import AgregarParametro from "@/components/AgregarParametro";
 import { BotonAgregar } from "@/components/Botones";
 import { Each } from "@/components/EachOf";
+import { Parametro } from "@/utils/types";
 import { useState } from "react";
 
 export default function NuevaCalculadora() {
@@ -23,6 +24,15 @@ export default function NuevaCalculadora() {
 
 
     // Guardar los datos en la nueva calculadora y redirigir a la pagina de la calculadora
+
+    /**
+     * Constante de testeo sera eliminado en la version final
+     */
+    const parametrosExistentes: Parametro[] = [
+        { id: 1, nombre: 'Parametro 1', tipo: "numerico" },
+        { id: 2, nombre: 'Parametro 2', tipo: 'seleccion' },
+        { id: 3, nombre: 'Parametro 3', tipo: 'radio' },
+    ];
 
     return (
         <>
@@ -51,13 +61,28 @@ export default function NuevaCalculadora() {
 
                 <h2>Parámetros</h2>
                 <div>
-                    <AgregarParametro/>
+                    <AgregarParametro parametrosExistentes={ parametrosExistentes } />
+                </div>
+                <div>
+
                 </div>
 
-                <input type="text" name="formula" id="formula" placeholder="Ingrese la formula" />
+                <input
+                    type="text"
+                    name="formula"
+                    id="formula"
+                    placeholder="Ingrese la formula"
+                />
 
                 <h2>Evidencias</h2>
-                <input type="text" name="cita" id="cita" placeholder="Ingrese la cita en formato APA" />
+                <input
+                    type="text"
+                    name="cita"
+                    id="cita"
+                    placeholder="Ingrese la cita en formato APA"
+                />
+
+                <BotonAgregar funcion={() => null}>Guardar</BotonAgregar>
             </form>
         </>
     );

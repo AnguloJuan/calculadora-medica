@@ -1,12 +1,13 @@
-interface InterfazParametro {
+interface Parametro {
     id: number;
     nombre: string;
     tipo: 'numerico' | 'seleccion' | 'radio';
 }
 
-interface InterfazValor {
+interface Valor {
     id: number;
     valor: string;
+    // idParametro: number;
 }
 
-export type { InterfazParametro, InterfazValor };
+export type { Parametro, Valor };
