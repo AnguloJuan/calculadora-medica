@@ -1,10 +1,9 @@
 'use client';
 
 import AgregarParametro from "@/components/AgregarParametro";
-import { BotonAgregar } from "@/components/Botones";
-import { Each } from "@/components/EachOf";
 import ListaParametros from "@/components/ListaParametros";
 import { Parametro } from "@/utils/types";
+import { IconDeviceFloppy } from "@tabler/icons-react";
 import { useState } from "react";
 
 export default function NuevaCalculadora() {
@@ -12,7 +11,11 @@ export default function NuevaCalculadora() {
     const [nombre, setNombre] = useState('');
     const [descripcion, setDescripcion] = useState('');
     const [descripcionCorta, setDescripcionCorta] = useState('');
-    const [parametros, setParametros] = useState([]);
+    const [parametros, setParametros] = useState<Parametro[]>([
+        { id: 1, nombre: 'Parametro 1', tipo: "numerico" },
+        { id: 2, nombre: 'Parametro 2', tipo: 'seleccion' },
+        { id: 3, nombre: 'Parametro 3', tipo: 'radio' },
+    ]);
     const [formula, setFormula] = useState('');
 
     const [tipo, setTipo] = useState(1);
@@ -26,61 +29,88 @@ export default function NuevaCalculadora() {
 
     // Guardar los datos en la nueva calculadora y redirigir a la pagina de la calculadora
 
-    /**
-     * Constante de testeo sera eliminado en la version final
-     */
-
     return (
-        <>
-            <h1 className="text-2xl font-bold">Nueva calculadora</h1>
-            <form className="flex min-h-screen flex-col items-center justify-between p-24 bg-white">
-                <h2>Información general</h2>
-                <input
-                    type="text"
-                    id="nombre"
-                    name="nombre"
-                    placeholder="Ingrese un nombre del parametro"
-                />
+        <div className="w-full items-center flex justify-center my-8">
+            <form className="flex min-h-screen md:max-w-screen-md lg:max-w-screen-lg flex-col items-center justify-between rounded-lg p-24 py-12 bg-white gap-16">
+                <div className="w-full flex flex-col gap-6">
+                    <h2 className="w-full text-xl font-semibold text-center">Información general</h2>
+                    <div className="w-full flex flex-col gap-2">
+                        <label htmlFor="nombre">Nombre del parámetro</label>
+                        <input
+                            type="text"
+                            id="nombre"
+                            name="nombre"
+                            placeholder="Ingrese un nombre del parametro"
+                            className="rounded-lg"
+                        />
+                    </div>
 
-                <input
-                    type="text"
-                    id="descripcion"
-                    name="descripcion"
-                    placeholder="Ingrese una descripcion de la calculadora"
-                />
-                <input
-                    type="text"
-                    id="descipción_corta"
-                    name="descipción_corta"
-                    placeholder="Ingrese una descipción corta de la calculadora"
-                />
-
-                <h2>Parámetros</h2>
-                <div>
-                    <AgregarParametro/>
-                    <ListaParametros parametros={ parametros } />
+                    <div className="w-full flex flex-col gap-2">
+                        <span>Descripción</span>
+                        <textarea
+                            name="descripcion"
+                            id="descripcion"
+                            placeholder="Ingrese una descripcion de la calculadora"
+                            className="bg-white"
+                        ></textarea>
+                    </div>
+                    <div className="w-full flex flex-col gap-2">
+                        <label htmlFor="descripcion_corta">Descripcion corta</label>
+                        <input
+                            type="text"
+                            id="descipción_corta"
+                            name="descipción_corta"
+                            placeholder="Ingrese una descipción corta de la calculadora"
+                            className="rounded-lg"
+                        />
+                    </div>
                 </div>
-                <div>
 
+
+                <div className="w-full flex flex-col gap-6">
+                    <h2 className="w-full text-xl font-semibold text-center">Parámetros</h2>
+
+                    <div className="w-full flex flex-col gap-2">
+                        <span>Selecciona un parámetro para agregarlo a la calculadora</span>
+                            <AgregarParametro />
+                    </div>
+
+                    <ListaParametros parametros={parametros} />
+
+                    <div className="w-full">
+                        <label htmlFor="formula">Formula</label>
+                        <input
+                            type="text"
+                            name="formula"
+                            id="formula"
+                            placeholder="Ingrese la formula"
+                            className="rounded-lg"
+                        />
+                    </div>
                 </div>
 
-                <input
-                    type="text"
-                    name="formula"
-                    id="formula"
-                    placeholder="Ingrese la formula"
-                />
 
-                <h2>Evidencias</h2>
-                <input
-                    type="text"
-                    name="cita"
-                    id="cita"
-                    placeholder="Ingrese la cita en formato APA"
-                />
+                <div className="w-full">
+                    <h2 className="w-full text-xl font-semibold text-center">Evidencias</h2>
+                    <label htmlFor="cita">Cita bibliográfica</label>
+                    <input
+                        type="text"
+                        name="cita"
+                        id="cita"
+                        placeholder="Ingrese la cita en formato APA"
+                        className="rounded-lg"
+                    />
+                </div>
 
-                <BotonAgregar funcion={() => null}>Guardar</BotonAgregar>
+                <button
+                    className="flex flex-row bg-green-600 border-green-700 text-white px-4 py-2 rounded-lg items-center gap-2"
+                    type="button"
+                    onClick={() => {}}
+                >
+                    <IconDeviceFloppy stroke={2} />
+                    Guardar
+                </button>
             </form>
-        </>
+        </div>
     );
 }

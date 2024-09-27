@@ -6,7 +6,7 @@ import { Each } from "./EachOf";
 import CampoParametro from "./CampoParametro";
 
 interface ListaParametrosProps {
-    parametrosExistentes: Parametro[];
+    parametros: Parametro[];
 }
 
 interface ListaParametrosState {
@@ -30,18 +30,15 @@ class ListaParametros extends React.Component<ListaParametrosProps, ListaParamet
         this.state = { open: false }
     }
     render() {
-        const { parametrosExistentes } = this.props;
+        const { parametros: parametrosExistentes } = this.props;
         return (
-            <div className="flex flex-col">
-                <select name="parametros" id="parametros">
-                    <option value="0">Seleccione un parámetro</option>
-                    <Each
-                        of={parametrosExistentes}
-                        render={(parametro) => (
-                            <CampoParametro key={parametro.id} parametro={parametro} valores={valores}  />
-                        )}
-                    />
-                </select>
+            <div className="flex flex-col w-full gap-6">
+                <Each
+                    of={parametrosExistentes}
+                    render={(parametro) => (
+                        <CampoParametro key={parametro.id} parametro={parametro} valores={valores} />
+                    )}
+                />
             </div>
         );
     }

@@ -25,9 +25,13 @@ body {
   }
 }
 
+text{
+  @apply text-balance text-gray-900;
+}
+
 input, textarea, select {
 
-  @apply block w-full px-3 py-2 text-base leading-normal bg-white border border-gray-300 rounded-lg appearance-none focus:outline-none focus:border-blue-500;
+  @apply mt-1 block w-full px-3 py-2 text-base leading-normal bg-white border-gray-300 appearance-none rounded-lg focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50;
   @apply bg-gray-100 text-gray-900;
 
   &:focus {
