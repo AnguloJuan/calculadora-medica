@@ -3,6 +3,7 @@
 import AgregarParametro from "@/components/AgregarParametro";
 import { BotonAgregar } from "@/components/Botones";
 import { Each } from "@/components/EachOf";
+import ListaParametros from "@/components/ListaParametros";
 import { Parametro } from "@/utils/types";
 import { useState } from "react";
 
@@ -28,11 +29,6 @@ export default function NuevaCalculadora() {
     /**
      * Constante de testeo sera eliminado en la version final
      */
-    const parametrosExistentes: Parametro[] = [
-        { id: 1, nombre: 'Parametro 1', tipo: "numerico" },
-        { id: 2, nombre: 'Parametro 2', tipo: 'seleccion' },
-        { id: 3, nombre: 'Parametro 3', tipo: 'radio' },
-    ];
 
     return (
         <>
@@ -61,7 +57,8 @@ export default function NuevaCalculadora() {
 
                 <h2>Parámetros</h2>
                 <div>
-                    <AgregarParametro parametrosExistentes={ parametrosExistentes } />
+                    <AgregarParametro/>
+                    <ListaParametros parametros={ parametros } />
                 </div>
                 <div>
 
