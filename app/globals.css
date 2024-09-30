@@ -11,12 +11,18 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom right,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background: 
+    radial-gradient(
+      circle farthest-corner at 100% 25%,
+      rgba(var(--background-end-rgb), 0.9) 1px,
+      transparent
+    ),
+    radial-gradient(
+      circle closest-corner at 0% 65%,
+      rgba(var(--background-end-rgb), 0.9) 1px,
+      transparent
+    ) 0 100vh;
+  margin: 0;
 }
 
 @layer utilities {
