@@ -24,9 +24,9 @@ export default function NuevaCalculadora() {
     // const [tipo, setTipo] = useState(1);
 
     let parametros: Parametro[] = [
-        { id: 1, nombre: 'Parametro 1', tipo: "numerico" },
-        { id: 2, nombre: 'Parametro 2', tipo: 'seleccion' },
-        { id: 3, nombre: 'Parametro 3', tipo: 'radio' },
+        { id: 1, nombre: 'Peso', tipo: "numerico", abreviatura: 'Peso', unidad: 'Kg'},
+        { id: 2, nombre: 'Parametro 2', tipo: 'seleccion', abreviatura: 'Parametro 2', opciones: 'Opcion 1, Opcion 2, Opcion 3' },
+        { id: 3, nombre: 'Sexo', tipo: 'radio', abreviatura: 'Sexo', opciones: 'Masculino, Femenino' },
     ]
 
 

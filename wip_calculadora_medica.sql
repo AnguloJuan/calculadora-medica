@@ -17,8 +17,11 @@ CREATE TABLE IF NOT EXISTS calculadora (
 CREATE TABLE IF NOT EXISTS parametro (
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	nombre VARCHAR(32) NOT NULL,
-    unidad_metrica VARCHAR(16),
     tipo_campo ENUM('numerico', 'seleccion', 'radio') NOT NULL
+    unidad_metrica VARCHAR(16),
+    valorMinimo FLOAT,
+    valorMaximo FLOAT,
+    opciones VARCHAR(360),
 );
 
 CREATE TABLE IF NOT EXISTS parametros (
@@ -35,13 +38,6 @@ CREATE TABLE IF NOT EXISTS unidades_metricas (
     abreviatura VARCHAR(16) NOT NULL,
     id_parametro INT NOT NULL,
     CONSTRAINT FK_id_unidades_metricas_parametro FOREIGN KEY (id_parametro) REFERENCES parametro(id)
-);
-
-CREATE TABLE IF NOT EXISTS valores (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    valor VARCHAR(32) NOT NULL,
-    id_parametro INT NOT NULL,
-    CONSTRAINT FK_id_valores_parametro FOREIGN KEY (id_parametro) REFERENCES parametro(id)
 );
 
 CREATE TABLE IF NOT EXISTS evidencia (
