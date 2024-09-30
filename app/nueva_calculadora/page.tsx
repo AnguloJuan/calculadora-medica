@@ -1,37 +1,40 @@
-'use client';
+// 'use client';
 
-import AgregarParametro from "@/components/AgregarParametro";
-import ListaParametros from "@/components/ListaParametros";
+import AgregarParametro from "@/app/components/AgregarParametro";
+import ListaParametros from "@/app/components/ListaParametros";
+import { crearCalculadora } from "@/utils/actions";
 import { Parametro } from "@/utils/types";
 import { IconDeviceFloppy } from "@tabler/icons-react";
-import { useState } from "react";
+import BotonAgregarParametro from "../components/BotonAgregarParametro";
+import FormularioCrearParametro from "../components/FormularioCrearParametro";
+// import { useState } from "react";
 
 export default function NuevaCalculadora() {
     // Datos de la calculadora
-    const [nombre, setNombre] = useState('');
-    const [descripcion, setDescripcion] = useState('');
-    const [descripcionCorta, setDescripcionCorta] = useState('');
-    const [parametros, setParametros] = useState<Parametro[]>([
+    // const [nombre, setNombre] = useState('');
+    // const [descripcion, setDescripcion] = useState('');
+    // const [descripcionCorta, setDescripcionCorta] = useState('');
+    // const [parametros, setParametros] = useState<Parametro[]>([
+    //     { id: 1, nombre: 'Parametro 1', tipo: "numerico" },
+    //     { id: 2, nombre: 'Parametro 2', tipo: 'seleccion' },
+    //     { id: 3, nombre: 'Parametro 3', tipo: 'radio' },
+    // ]);
+    // const [formula, setFormula] = useState('');
+
+    // const [tipo, setTipo] = useState(1);
+
+    let parametros: Parametro[] = [
         { id: 1, nombre: 'Parametro 1', tipo: "numerico" },
         { id: 2, nombre: 'Parametro 2', tipo: 'seleccion' },
         { id: 3, nombre: 'Parametro 3', tipo: 'radio' },
-    ]);
-    const [formula, setFormula] = useState('');
-
-    const [tipo, setTipo] = useState(1);
-
-    // Presionar boton + para desplegar las opciones del tipo de parametros
-    const agregarParametro = () => {
-        // Mostrar select con los parámetros existentes en la base de datos
-
-    }
+    ]
 
 
     // Guardar los datos en la nueva calculadora y redirigir a la pagina de la calculadora
 
     return (
         <div className="w-full items-center flex justify-center my-8">
-            <form className="flex min-h-screen md:max-w-screen-md lg:max-w-screen-lg flex-col items-center justify-between rounded-lg p-24 py-12 bg-white gap-16">
+            <form action={crearCalculadora} className="flex min-h-screen md:max-w-screen-md lg:max-w-screen-lg flex-col items-center justify-between rounded-lg p-24 py-12 bg-white gap-16">
                 <div className="w-full flex flex-col gap-6">
                     <h2 className="w-full text-xl font-semibold text-center">Información general</h2>
                     <div className="w-full flex flex-col gap-2">
@@ -71,10 +74,14 @@ export default function NuevaCalculadora() {
                     <h2 className="w-full text-xl font-semibold text-center">Parámetros</h2>
 
                     <div className="w-full flex flex-col gap-2">
-                        <span>Selecciona un parámetro para agregarlo a la calculadora</span>
+                        <span>Agregar parámetro</span>
+                        <div className="w-full grid grid-cols-2 gap-y-8 sm:grid-cols-6 gap-8">
                             <AgregarParametro />
+                            <BotonAgregarParametro>
+                                <FormularioCrearParametro />
+                            </BotonAgregarParametro>
+                        </div>
                     </div>
-
                     <ListaParametros parametros={parametros} />
 
                     <div className="w-full">
@@ -104,8 +111,6 @@ export default function NuevaCalculadora() {
 
                 <button
                     className="flex flex-row bg-green-600 border-green-700 text-white px-4 py-2 rounded-lg items-center gap-2"
-                    type="button"
-                    onClick={() => {}}
                 >
                     <IconDeviceFloppy stroke={2} />
                     Guardar

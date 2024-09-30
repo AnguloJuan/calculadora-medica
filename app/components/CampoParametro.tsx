@@ -44,7 +44,7 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = (CampoParametroPr
             {parametro.tipo === 'radio' && valores && (
                 <div className="mx-auto w-full col-span-3">
                     <RadioGroup
-                        by='valor'
+                        by={'valor'}
                         value={seleccionado}
                         onChange={setSeleccionado}
                         aria-label={parametro.nombre}
