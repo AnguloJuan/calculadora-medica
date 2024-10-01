@@ -13,17 +13,6 @@ interface ListaParametrosState {
     open: boolean;
 }
 
-/**
- * Constante de testeo sera eliminado en la version final
- */
-const valores = [
-    { id: 1, valor: 'Valor 1' },
-    { id: 2, valor: 'Valor 2' },
-    { id: 3, valor: 'Valor 3' },
-    { id: 4, valor: 'Valor 4' },
-    { id: 5, valor: 'Valor 5' },
-];
-
 class ListaParametros extends React.Component<ListaParametrosProps, ListaParametrosState> {
     constructor(props: ListaParametrosProps) {
         super(props);
@@ -36,7 +25,7 @@ class ListaParametros extends React.Component<ListaParametrosProps, ListaParamet
                 <Each
                     of={parametrosExistentes}
                     render={(parametro) => (
-                        <CampoParametro key={parametro.id} parametro={parametro} valores={valores} />
+                        <CampoParametro key={parametro.id} parametro={parametro} />
                     )}
                 />
             </div>

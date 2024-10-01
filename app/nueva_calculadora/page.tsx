@@ -25,8 +25,8 @@ export default function NuevaCalculadora() {
 
     let parametros: Parametro[] = [
         { id: 1, nombre: 'Peso', tipo: "numerico", abreviatura: 'Peso', unidad: 'Kg'},
-        { id: 2, nombre: 'Parametro 2', tipo: 'seleccion', abreviatura: 'Parametro 2', opciones: 'Opcion 1, Opcion 2, Opcion 3' },
-        { id: 3, nombre: 'Sexo', tipo: 'radio', abreviatura: 'Sexo', opciones: 'Masculino, Femenino' },
+        { id: 2, nombre: 'Parametro 2', tipo: 'seleccion', abreviatura: 'Parametro 2', opciones: 'Opcion 1,Opcion 2,Opcion 3' },
+        { id: 3, nombre: 'Sexo', tipo: 'radio', abreviatura: 'Sexo', opciones: 'Masculino,Femenino' },
     ]
 
 

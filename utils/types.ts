@@ -10,7 +10,7 @@
  * @property {string} [unidad] - Unidad de medida del parámetro para parámetros tipo numerico
  * @property {number} [valorMaximo] - Valor máximo del parámetro para parámetros tipo numerico
  * @property {number} [valorMinimo] - Valor mínimo del parámetro para parámetros tipo numerico
- * @property {Valor[]} [opciones] - Valores posibles del parámetro para parámetros tipo seleccion y radio
+ * @property {string} [opciones] - Valores posibles del parámetro para parámetros tipo seleccion y radio
  */
 interface Parametro {
     id: number;
@@ -23,10 +23,4 @@ interface Parametro {
     opciones?: string;
 }
 
-interface Valor {
-    id: number;
-    valor: string;
-    // idParametro: number;
-}
-
-export type { Parametro, Valor };
+export type { Parametro };

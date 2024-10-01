@@ -2,6 +2,7 @@
 import { crearParametro } from "@/utils/actions";
 import { Parametro } from "@/utils/types";
 import { FormEvent, FunctionComponent, useState } from "react";
+import CampoParametro from "./CampoParametro";
 
 interface FormularioCrearParametroProps {
     /**
@@ -13,7 +14,7 @@ interface FormularioCrearParametroProps {
 const FormularioCrearParametro: FunctionComponent<FormularioCrearParametroProps> = (FormularioCrearParametroProps) => {
     // const { datosFormulario } = FormularioCrearParametroProps;
     const [tipo, setTipo] = useState('numerico');
-    const [parametros, setParametros] = useState<Parametro>({
+    const [parametro, setParametro] = useState<Parametro>({
         id: 0,
         nombre: '',
         abreviatura: '',
@@ -27,8 +28,8 @@ const FormularioCrearParametro: FunctionComponent<FormularioCrearParametroProps>
     const manejarCambio = (e: FormEvent<HTMLInputElement> | FormEvent<HTMLTextAreaElement>) => {
         e.preventDefault();
 
-        setParametros({
-            ...parametros,
+        setParametro({
+            ...parametro,
             [e.currentTarget.name]: e.currentTarget.value
         });
     }
@@ -76,38 +77,40 @@ const FormularioCrearParametro: FunctionComponent<FormularioCrearParametroProps>
             </div>
 
             {tipo === 'numerico' && <>
-                <div className="w-full flex flex-col gap-2">
-                    <label htmlFor="unidad">Unidad</label>
-                    <input
-                        type="text"
-                        id="unidad"
-                        name="unidad"
-                        placeholder="Ingrese la unidad del parámetro"
-                        onChange={manejarCambio}
-                        className="rounded-lg"
-                    />
-                </div>
-                <div className="w-full flex flex-col gap-2">
-                    <label htmlFor="minimo">Valor mínimo</label>
-                    <input
-                        type="number"
-                        id="minimo"
-                        name="minimo"
-                        placeholder="Ingrese el valor mínimo"
-                        onChange={manejarCambio}
-                        className="rounded-lg"
-                    />
-                </div>
-                <div className="w-full flex flex-col gap-2">
-                    <label htmlFor="maximo">Valor máximo</label>
-                    <input
-                        type="number"
-                        id="maximo"
-                        name="maximo"
-                        placeholder="Ingrese el valor máximo"
-                        onChange={manejarCambio}
-                        className="rounded-lg"
-                    />
+                <div className="sm:grid sm:grid-cols-3 sm:gap-2">
+                    <div className="w-full flex flex-col gap-2">
+                        <label htmlFor="unidad">Unidad</label>
+                        <input
+                            type="text"
+                            id="unidad"
+                            name="unidad"
+                            placeholder="Ingrese la unidad del parámetro"
+                            onChange={manejarCambio}
+                            className="rounded-lg"
+                        />
+                    </div>
+                    <div className="w-full flex flex-col gap-2">
+                        <label htmlFor="minimo">Valor mínimo</label>
+                        <input
+                            type="number"
+                            id="valorMinimo"
+                            name="valorMinimo"
+                            placeholder="Ingrese el valor mínimo"
+                            onChange={manejarCambio}
+                            className="rounded-lg"
+                        />
+                    </div>
+                    <div className="w-full flex flex-col gap-2">
+                        <label htmlFor="maximo">Valor máximo</label>
+                        <input
+                            type="number"
+                            id="valorMaximo"
+                            name="valorMaximo"
+                            placeholder="Ingrese el valor máximo"
+                            onChange={manejarCambio}
+                            className="rounded-lg"
+                        />
+                    </div>
                 </div>
             </>}
 
@@ -123,33 +126,34 @@ const FormularioCrearParametro: FunctionComponent<FormularioCrearParametroProps>
             </div>}
 
             <h2 className="font-semibold">Vista previa</h2>
-            {tipo === 'numerico' && <>
+            <CampoParametro parametro={parametro} />
+            {/* {tipo === 'numerico' && <>
                 <div className="w-full flex flex-col gap-2">
-                    <label htmlFor="minimo">{parametros.nombre}</label>
+                    <label htmlFor="minimo">{parametro.nombre}</label>
                     <input
                         type="number"
-                        id={`parametro-${parametros.nombre}`}
-                        name={`parametro-${parametros.nombre}`}
+                        id={`parametro-${parametro.nombre}`}
+                        name={`parametro-${parametro.nombre}`}
                         placeholder="Ingrese el valor"
                         className="rounded-lg"
                     />
                 </div>
                 <div className="w-full flex flex-col gap-2">
                     <label htmlFor="unidad">Unidad</label>
-                    <span className="rounded-lg bg-gray-100 p-2">{parametros.unidad}</span>
+                    <span className="rounded-lg bg-gray-100 p-2">{parametro.unidad}</span>
                 </div>
             </>}
             {(tipo === 'seleccion' || tipo === 'radio') && <>
                 <div className="w-full flex flex-col gap-2">
                     <label htmlFor="opciones">Opciones</label>
-                    <select name={`parametro-${parametros.nombre}`} id={`parametro-${parametros.nombre}`} className="rounded-lg">
+                    <select name={`parametro-${parametro.nombre}`} id={`parametro-${parametro.nombre}`} className="rounded-lg">
                         <option value="0">Seleccione una opción</option>
-                        {parametros.opciones?.split(',').map((opcion, index) =>
+                        {parametro.opciones?.split(',').map((opcion, index) =>
                             <option key={index} value={opcion}>{opcion}</option>
                         )}
                     </select>
                 </div>
-            </>}
+            </>} */}
         </div>
 
     </form>);
