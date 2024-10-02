@@ -21,7 +21,7 @@ class ListaParametros extends React.Component<ListaParametrosProps, ListaParamet
     render() {
         const { parametros: parametrosExistentes } = this.props;
         return (
-            <div className="flex flex-col w-full gap-6">
+            <div className="flex flex-col w-full gap-10">
                 <Each
                     of={parametrosExistentes}
                     render={(parametro) => (

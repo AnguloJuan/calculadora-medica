@@ -1,7 +1,6 @@
 'use client'
-import { ButtonHTMLAttributes, FunctionComponent } from "react";
-import { useState } from 'react';
-import { Description, Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
+import { FunctionComponent, ReactNode } from "react";
+import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
 
 interface botonAccion {
     contenido: React.ReactNode;
@@ -13,7 +12,7 @@ interface botonAccion {
 interface ModalProps {
     titulo?: string | React.ReactNode;
     children: string | React.ReactNode;
-    botonesAccion?: botonAccion[];
+    botonesAccion?: botonAccion[] | ReactNode;
     abierto: boolean;
     setAbierto: () => void;
 }
@@ -39,20 +38,22 @@ const Modal: FunctionComponent<ModalProps> = (ModalProps) => {
 
                         {children}
 
-                        <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                            {botonesAccion?.map((boton, index) => (
-                                <button
-                                    key={index}
-                                    onClick={() => {
-                                        boton.funcion();
-                                        if (boton.cerrarModal) setAbierto();
-                                    }}
-                                    className={boton.className ? boton.className :
-                                        `w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm`}
-                                >
-                                    {boton.contenido}
-                                </button>
-                            ))}
+                        <div className="px-4 py-3 sm:flex sm:flex-row sm:px-6 items-center justify-center">
+                            {/*validate if botonAccion is type BotonAccion | ReactNode*/}
+                            {Array.isArray(botonesAccion) ?
+                                botonesAccion.map((boton, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => {
+                                            boton.funcion();
+                                            if (boton.cerrarModal) setAbierto();
+                                        }}
+                                        className={boton.className ? boton.className :
+                                            `w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm`}
+                                    >
+                                        {boton.contenido}
+                                    </button>
+                                )) : botonesAccion}
                         </div>
                     </DialogPanel>
                 </div>

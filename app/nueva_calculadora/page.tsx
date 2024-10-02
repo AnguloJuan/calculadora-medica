@@ -2,29 +2,17 @@
 
 import AgregarParametro from "@/app/components/AgregarParametro";
 import ListaParametros from "@/app/components/ListaParametros";
-import { crearCalculadora } from "@/utils/actions";
+import { crearCalculadoraAction } from "@/utils/actions";
 import { Parametro } from "@/utils/types";
 import { IconDeviceFloppy } from "@tabler/icons-react";
 import BotonAgregarParametro from "../components/BotonAgregarParametro";
-import FormularioCrearParametro from "../components/FormularioCrearParametro";
 // import { useState } from "react";
 
 export default function NuevaCalculadora() {
-    // Datos de la calculadora
-    // const [nombre, setNombre] = useState('');
-    // const [descripcion, setDescripcion] = useState('');
-    // const [descripcionCorta, setDescripcionCorta] = useState('');
-    // const [parametros, setParametros] = useState<Parametro[]>([
-    //     { id: 1, nombre: 'Parametro 1', tipo: "numerico" },
-    //     { id: 2, nombre: 'Parametro 2', tipo: 'seleccion' },
-    //     { id: 3, nombre: 'Parametro 3', tipo: 'radio' },
-    // ]);
-    // const [formula, setFormula] = useState('');
-
-    // const [tipo, setTipo] = useState(1);
+    const datosCalculadora = new FormData();
 
     let parametros: Parametro[] = [
-        { id: 1, nombre: 'Peso', tipo: "numerico", abreviatura: 'Peso', unidad: 'Kg'},
+        { id: 1, nombre: 'Peso', tipo: "numerico", abreviatura: 'Peso', unidad: 'Kg' },
         { id: 2, nombre: 'Parametro 2', tipo: 'seleccion', abreviatura: 'Parametro 2', opciones: 'Opcion 1,Opcion 2,Opcion 3' },
         { id: 3, nombre: 'Sexo', tipo: 'radio', abreviatura: 'Sexo', opciones: 'Masculino,Femenino' },
     ]
@@ -34,7 +22,7 @@ export default function NuevaCalculadora() {
 
     return (
         <div className="w-full items-center flex justify-center my-8">
-            <form action={crearCalculadora} className="flex min-h-screen md:max-w-screen-md lg:max-w-screen-lg flex-col items-center justify-between rounded-lg p-24 py-12 bg-white gap-16">
+            <form action={crearCalculadoraAction} className="flex min-h-screen md:max-w-screen-md lg:max-w-screen-lg flex-col items-center justify-between rounded-lg p-24 py-12 bg-white gap-16">
                 <div className="w-full flex flex-col gap-6">
                     <h2 className="w-full text-xl font-semibold text-center">Información general</h2>
                     <div className="w-full flex flex-col gap-2">
@@ -77,9 +65,7 @@ export default function NuevaCalculadora() {
                         <span>Agregar parámetro</span>
                         <div className="w-full grid grid-cols-2 gap-y-8 sm:grid-cols-6 gap-8">
                             <AgregarParametro parametrosExistentes={parametros} />
-                            <BotonAgregarParametro>
-                                <FormularioCrearParametro />
-                            </BotonAgregarParametro>
+                            <BotonAgregarParametro datosCalculadora={datosCalculadora} />
                         </div>
                     </div>
                     <ListaParametros parametros={parametros} />
