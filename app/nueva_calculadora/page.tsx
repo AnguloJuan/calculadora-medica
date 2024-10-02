@@ -76,7 +76,7 @@ export default function NuevaCalculadora() {
                     <div className="w-full flex flex-col gap-2">
                         <span>Agregar parámetro</span>
                         <div className="w-full grid grid-cols-2 gap-y-8 sm:grid-cols-6 gap-8">
-                            <AgregarParametro />
+                            <AgregarParametro parametrosExistentes={parametros} />
                             <BotonAgregarParametro>
                                 <FormularioCrearParametro />
                             </BotonAgregarParametro>

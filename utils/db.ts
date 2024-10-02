@@ -8,7 +8,7 @@ import mysql from 'mysql2/promise';
 const connection = await connect();
 try {
     const [results] = await connection.query(
-        'SELECT * FROM `sessions` WHERE `name` LIKE ? AND `max_capacity` > ?',
+        'SELECT * FROM `parametro` WHERE `tipo` LIKE ?',
         ['C%', 10]
     );
     return results;

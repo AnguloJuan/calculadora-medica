@@ -7,6 +7,7 @@ import Modal from "./Modal";
 import FormularioCrearParametro from "./FormularioCrearParametro";
 
 interface AgregarParametroProps {
+    parametrosExistentes: Parametro[];
 }
 
 interface AgregarParametroState {
@@ -16,11 +17,6 @@ interface AgregarParametroState {
 /**
 * Constante de testeo sera eliminado en la version final
 */
-const parametrosExistentes: Parametro[] = [
-    { id: 1, nombre: 'Parametro 1', tipo: "numerico" },
-    { id: 2, nombre: 'Parametro 2', tipo: 'seleccion' },
-    { id: 3, nombre: 'Parametro 3', tipo: 'radio' },
-];
 
 class AgregarParametro extends React.Component<AgregarParametroProps, AgregarParametroState> {
     constructor(props: AgregarParametroProps) {
@@ -32,7 +28,7 @@ class AgregarParametro extends React.Component<AgregarParametroProps, AgregarPar
     }
 
     render() {
-
+        const { parametrosExistentes } = this.props;
         return (<>
             <select name="parametrosExistentes" id="parametrosExistentes" className="col-span-4">
                 <option value="0">Seleccione un parámetro</option>

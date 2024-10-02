@@ -5,7 +5,7 @@ export async function GET(req: NextRequest) {
     const connection = await connect();
     try {
         const [results] = await connection.query(
-            'SELECT * FROM `session` WHERE `exersice_type_id` = ? AND `max_capacity` > ?',
+            'SELECT * FROM `parametro` WHERE `tipo` = ?',
             [10, 10]
         );
 
