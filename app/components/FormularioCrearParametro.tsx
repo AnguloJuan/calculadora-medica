@@ -44,7 +44,7 @@ const FormularioCrearParametro: FunctionComponent<FormularioCrearParametroProps>
     }
 
     return (<>
-        <div className="flex md:max-w-screen-md lg:max-w-screen-lg flex-col items-center rounded-lg p-12 bg-white gap-8">
+        <div className="flex md:max-w-screen-md lg:max-w-screen-lg flex-col items-center rounded-lg p-12 py-12 bg-white gap-8">
             <div className="w-full flex flex-col gap-2">
                 <label htmlFor="nombre">Nombre del parámetro</label>
                 <input
