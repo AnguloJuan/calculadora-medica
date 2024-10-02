@@ -1,19 +1,14 @@
 'use client'
-import { crearParametro } from "@/utils/actions";
 import { Parametro } from "@/utils/types";
 import { FormEvent, FunctionComponent, useState } from "react";
 import CampoParametro from "./CampoParametro";
 
 interface FormularioCrearParametroProps {
-    /**
-     * Datos del formulario que provienen al crear una nueva calculadora
-     */
-    // datosFormulario: FormData;
+    datosFormulario: FormData;
 }
 
 const FormularioCrearParametro: FunctionComponent<FormularioCrearParametroProps> = (FormularioCrearParametroProps) => {
-    // const { datosFormulario } = FormularioCrearParametroProps;
-    const [tipo, setTipo] = useState('numerico');
+    const { datosFormulario } = FormularioCrearParametroProps;
     const [parametro, setParametro] = useState<Parametro>({
         id: 0,
         nombre: '',
@@ -32,18 +27,24 @@ const FormularioCrearParametro: FunctionComponent<FormularioCrearParametroProps>
             ...parametro,
             [e.currentTarget.name]: e.currentTarget.value
         });
+        datosFormulario.set(e.currentTarget.name, e.currentTarget.value);
     }
 
 
     const cambiarTipo = (e: FormEvent<HTMLSelectElement>) => {
         e.preventDefault();
+        const valor = e.currentTarget.value;
 
-        setTipo(e.currentTarget.value);
+        valor === ('numerico' || 'seleccion' || 'radio') && setParametro({
+            ...parametro,
+            tipo: valor,
+        });
+
+        datosFormulario.set('tipo', valor);
     }
 
-    return (<form action={crearParametro}
-        className="flex min-h-screen md:max-w-screen-md lg:max-w-screen-lg flex-col items-center justify-between rounded-lg p-12 py-12 bg-white gap-16">
-        <div className="w-full flex flex-col gap-6">
+    return (<>
+        <div className="flex md:max-w-screen-md lg:max-w-screen-lg flex-col items-center rounded-lg p-12 bg-white gap-8">
             <div className="w-full flex flex-col gap-2">
                 <label htmlFor="nombre">Nombre del parámetro</label>
                 <input
@@ -76,7 +77,7 @@ const FormularioCrearParametro: FunctionComponent<FormularioCrearParametroProps>
                 </select>
             </div>
 
-            {tipo === 'numerico' && <>
+            {parametro.tipo === 'numerico' && <>
                 <div className="sm:grid sm:grid-cols-3 sm:gap-2">
                     <div className="w-full flex flex-col gap-2">
                         <label htmlFor="unidad">Unidad</label>
@@ -114,7 +115,7 @@ const FormularioCrearParametro: FunctionComponent<FormularioCrearParametroProps>
                 </div>
             </>}
 
-            {(tipo === 'seleccion' || tipo === 'radio') && <div className="w-full flex flex-col gap-2">
+            {(parametro.tipo === 'seleccion' || parametro.tipo === 'radio') && <div className="w-full flex flex-col gap-2">
                 <label htmlFor="opciones">Opciones</label>
                 <textarea
                     name="opciones"
@@ -125,38 +126,13 @@ const FormularioCrearParametro: FunctionComponent<FormularioCrearParametroProps>
                 ></textarea>
             </div>}
 
-            <h2 className="font-semibold">Vista previa</h2>
-            <CampoParametro parametro={parametro} />
-            {/* {tipo === 'numerico' && <>
-                <div className="w-full flex flex-col gap-2">
-                    <label htmlFor="minimo">{parametro.nombre}</label>
-                    <input
-                        type="number"
-                        id={`parametro-${parametro.nombre}`}
-                        name={`parametro-${parametro.nombre}`}
-                        placeholder="Ingrese el valor"
-                        className="rounded-lg"
-                    />
-                </div>
-                <div className="w-full flex flex-col gap-2">
-                    <label htmlFor="unidad">Unidad</label>
-                    <span className="rounded-lg bg-gray-100 p-2">{parametro.unidad}</span>
-                </div>
-            </>}
-            {(tipo === 'seleccion' || tipo === 'radio') && <>
-                <div className="w-full flex flex-col gap-2">
-                    <label htmlFor="opciones">Opciones</label>
-                    <select name={`parametro-${parametro.nombre}`} id={`parametro-${parametro.nombre}`} className="rounded-lg">
-                        <option value="0">Seleccione una opción</option>
-                        {parametro.opciones?.split(',').map((opcion, index) =>
-                            <option key={index} value={opcion}>{opcion}</option>
-                        )}
-                    </select>
-                </div>
-            </>} */}
+            <div className="w-full flex flex-col gap-2 text-center">
+                <h2 className="font-semibold">Vista previa</h2>
+                <CampoParametro parametro={parametro} />
+            </div>
         </div>
 
-    </form>);
+    </>);
 }
 
 export default FormularioCrearParametro;

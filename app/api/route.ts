@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connect } from "@/utils/db";
+import { conectarBd } from "@/utils/db";
 
 export async function GET(req: NextRequest) {
-    const connection = await connect();
+    const connection = await conectarBd();
     try {
         const [results] = await connection.query(
             'SELECT * FROM `parametro` WHERE `tipo` = ?',

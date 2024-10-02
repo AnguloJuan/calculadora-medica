@@ -18,7 +18,7 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = (CampoParametroPr
     );
 
     return (
-        <div className={`w-full mt-10 grid grid-cols-2 gap-y-8 sm:grid-cols-6
+        <div className={`w-full grid grid-cols-2 gap-y-8 sm:grid-cols-6
         ${parametro.tipo === 'radio' ? (opciones && opciones.length > 3 ? 'items-start' : 'items-center') : 'items-center'}`}>
 
             <label htmlFor={parametro.nombre} className="sm:col-span-3">{parametro.nombre}</label>
