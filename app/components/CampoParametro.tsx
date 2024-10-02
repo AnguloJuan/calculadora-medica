@@ -1,10 +1,10 @@
 'use client'
 
 import { Parametro } from "@/utils/types";
-import { FunctionComponent, useState } from "react";
-import { Each } from "./EachOf";
 import { Radio, RadioGroup } from "@headlessui/react";
 import { IconCircle } from "@tabler/icons-react";
+import { FunctionComponent, useState } from "react";
+import { Each } from "./EachOf";
 
 interface CampoParametroProps {
     parametro: Parametro;

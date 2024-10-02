@@ -1,24 +1,12 @@
 'use client'
-import React from "react";
 import { Parametro } from "@/utils/types";
-import { BotonAgregar } from "./Botones";
-import { Each } from "./EachOf";
-import Modal from "./Modal";
-import FormularioCrearParametro from "./FormularioCrearParametro";
+import React from "react";
+import { Each } from "../components/EachOf";
 
 interface AgregarParametroProps {
     parametrosExistentes: Parametro[];
 }
-
-interface AgregarParametroState {
-
-}
-
-/**
-* Constante de testeo sera eliminado en la version final
-*/
-
-class AgregarParametro extends React.Component<AgregarParametroProps, AgregarParametroState> {
+class AgregarParametro extends React.Component<AgregarParametroProps> {
     constructor(props: AgregarParametroProps) {
         super(props);
         // this.state = { : };

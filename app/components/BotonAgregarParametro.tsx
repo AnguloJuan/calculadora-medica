@@ -1,5 +1,6 @@
 'use client'
 import { crearParametroAction } from "@/utils/actions";
+import { Parametro } from "@/utils/types";
 import { IconX } from "@tabler/icons-react";
 import { FunctionComponent, useState } from "react";
 import { createPortal } from "react-dom";
@@ -7,8 +8,6 @@ import { BotonAgregar } from "./Botones";
 import FormularioCrearParametro from "./FormularioCrearParametro";
 import Modal from "./Modal";
 import { useToast } from "./Toast";
-import { Parametro } from "@/utils/types";
-import { ResultSetHeader } from "mysql2";
 interface BotonAgregarParametroProps {
     datosCalculadora: FormData;
 }

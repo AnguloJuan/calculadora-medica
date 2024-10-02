@@ -2,8 +2,8 @@
 
 import { Parametro } from "@/utils/types";
 import React from "react";
-import { Each } from "./EachOf";
 import CampoParametro from "./CampoParametro";
+import { Each } from "./EachOf";
 
 interface ListaParametrosProps {
     parametros: Parametro[];

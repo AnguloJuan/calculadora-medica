@@ -1,6 +1,6 @@
 'use client'
-import { FunctionComponent, ReactNode } from "react";
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
+import { FunctionComponent, ReactNode } from "react";
 
 interface botonAccion {
     contenido: React.ReactNode;

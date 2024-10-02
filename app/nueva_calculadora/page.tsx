@@ -1,11 +1,11 @@
 // 'use client';
 
-import AgregarParametro from "@/app/components/AgregarParametro";
 import ListaParametros from "@/app/components/ListaParametros";
 import { crearCalculadoraAction } from "@/utils/actions";
 import { Parametro } from "@/utils/types";
 import { IconDeviceFloppy } from "@tabler/icons-react";
 import BotonAgregarParametro from "../components/BotonAgregarParametro";
+import AgregarParametro from "./AgregarParametro";
 // import { useState } from "react";
 
 export default function NuevaCalculadora() {
