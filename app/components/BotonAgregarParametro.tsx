@@ -2,12 +2,13 @@
 import { crearParametroAction } from "@/utils/actions";
 import { Parametro } from "@/utils/types";
 import { IconX } from "@tabler/icons-react";
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { BotonAgregar } from "./Botones";
 import FormularioCrearParametro from "./FormularioCrearParametro";
 import Modal from "./Modal";
 import { useToast } from "./Toast";
+
 interface BotonAgregarParametroProps {
     datosCalculadora: FormData;
 }
@@ -17,8 +18,14 @@ const BotonAgregarParametro: FunctionComponent<BotonAgregarParametroProps> = (Bo
     const datosParametro = new FormData();
     const { addToast } = useToast();
     const { datosCalculadora } = BotonAgregarParametroProps;
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        setIsClient(true)
+    }, [])
 
     const crearParametro = async () => {
+        // Validaciones de los campos del formulario
         if (!datosParametro.get('nombre') || !datosParametro.get('abreviatura') || !datosParametro.get('tipo')) {
             addToast('Por favor llene todos los campos', 'error')
             return;
@@ -35,7 +42,6 @@ const BotonAgregarParametro: FunctionComponent<BotonAgregarParametroProps> = (Bo
             return;
         }
 
-        const respuesta = crearParametroAction(datosParametro);
         try {
             const respuesta = await crearParametroAction(datosParametro);
             if (respuesta.parametro) {
@@ -45,11 +51,12 @@ const BotonAgregarParametro: FunctionComponent<BotonAgregarParametroProps> = (Bo
                 addToast(respuesta.message || 'Parámetro guardado con éxito', 'success');
                 setAbierto(false);
             } else {
-                addToast('Error: Parámetro no encontrado en la respuesta', 'error');
+                console.log(respuesta);
+                addToast('Ocurrió un error inesperado en el servidor', 'error');
             }
         } catch (err) {
             console.log(err);
-            addToast('Ocurrió un error', 'error');
+            addToast('Ocurrió un error inesperado', 'error');
         }
     }
 
@@ -57,7 +64,7 @@ const BotonAgregarParametro: FunctionComponent<BotonAgregarParametroProps> = (Bo
         <div className="w-full col-span-2">
             <BotonAgregar funcion={() => setAbierto(true)}>Crear nuevo parámetro</BotonAgregar>
         </div>
-        {typeof document !== 'undefined' && createPortal(
+        {isClient && createPortal(
             <form action={crearParametroAction}>
                 <Modal
                     titulo={'Crear nuevo parámetro'}
