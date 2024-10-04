@@ -10,6 +10,8 @@ import {
 import { useEffect } from 'react';
 import { create } from 'zustand';
 import { Each } from './EachOf';
+import { devtools } from 'zustand/middleware'
+import type { } from 'redux-devtools' // required for devtools typing
 
 interface Toast {
     id: number;
@@ -22,9 +24,10 @@ interface ToastStore {
     addToast: (message: string, type?: 'success' | 'warning' | 'error' | 'default') => void;
     removeToast: (id: number) => void;
 }
-    
+
 
 export default function Toast() {
+
     const styleType = {
         success: {
             bg: 'bg-green-100',
@@ -87,8 +90,7 @@ export default function Toast() {
                                     <IconX />
                                 </button>
                                 <div
-                                    className={`absolute bottom-0 right-0 ${styleType[toast.type].lineColor
-                                        } h-1 animate-line-load`}
+                                    className={`absolute bottom-0 right-0 ${styleType[toast.type].lineColor} h-1 animate-line-load`}
                                 />
                             </div>
                         </div>
@@ -99,14 +101,19 @@ export default function Toast() {
     );
 }
 
-export const useToast = create<ToastStore>()((set) => ({
-    toasts: [],
-    addToast: (message, type = 'default') =>
-        set((state) => ({
-            toasts: [...state.toasts, { id: Math.random(), message, type }],
-        })),
-    removeToast: (id) =>
-        set((state) => ({
-            toasts: state.toasts.filter((toast) => toast.id !== id),
-        })),
-}));
+export const useToast = create<ToastStore>()(
+    devtools(
+        (set) => ({
+            toasts: [],
+            addToast: (message, type = 'default') =>
+                set((state) => ({
+                    toasts: [...state.toasts, { id: Math.random(), message, type }],
+                })),
+            removeToast: (id) =>
+                set((state) => ({
+                    toasts: state.toasts.filter((toast) => toast.id !== id),
+                })),
+        }),
+        { name: 'toasts' }
+    ),
+)
