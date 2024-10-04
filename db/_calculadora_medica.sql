@@ -16,12 +16,13 @@ CREATE TABLE IF NOT EXISTS calculadora (
 
 CREATE TABLE IF NOT EXISTS parametro (
 	id INT PRIMARY KEY AUTO_INCREMENT,
-	nombre VARCHAR(32) NOT NULL,
-    tipo_campo ENUM('numerico', 'seleccion', 'radio') NOT NULL
+	nombre VARCHAR(32),
+    abrebiatura VARCHAR(16) NOT NULL,
+    tipo_campo ENUM('numerico', 'seleccion', 'radio') NOT NULL,
     unidad_metrica VARCHAR(16),
     valorMinimo FLOAT,
     valorMaximo FLOAT,
-    opciones VARCHAR(360),
+    opciones VARCHAR(360)
 );
 
 CREATE TABLE IF NOT EXISTS parametros (
