@@ -1,10 +1,7 @@
 'use server'
 
 import { ResultSetHeader } from "mysql2";
-import { conectarBd } from "./db";
-import { Parametro } from "./types";
-
-interface ParametroResultados extends Parametro, ResultSetHeader {}
+import { conectarBd } from "../db/conectarDb";
 
 export async function crearCalculadoraAction(formulario: FormData) {
     const conexion = await conectarBd();
@@ -23,32 +20,33 @@ export async function crearParametroAction(formulario: FormData) {
     const parametro = {
         nombre: formulario.get('nombre'),
         abreviatura: formulario.get('abreviatura'),
-        tipo: formulario.get('tipo'),
-        unidad: formulario.get('unidad'),
+        tipo_campo: formulario.get('tipo_campo'),
+        unidad_metrica: formulario.get('unidad_metrica'),
         valorMinimo: formulario.get('valorMinimo'),
         valorMaximo: formulario.get('valorMaximo'),
         opciones: formulario.get('opciones')
     };
     try {
         let insert;
-        if (parametro.tipo === 'numerico') {
-            insert = await conexion.query<ParametroResultados>(
-                'INSERT INTO `parametro` (`nombre`, `abreviatura`, `tipo`, `unidad`, `valorMinimo`, `valorMaximo`) VALUES (?, ?, ?, ?, ? , ?)',
-                [parametro.nombre, parametro.abreviatura, parametro.tipo, parametro.unidad, parametro.valorMinimo, parametro.valorMaximo]
+        if (parametro.tipo_campo === 'numerico') {
+            insert = await conexion.query<ResultSetHeader>(
+                'INSERT INTO `parametro` (`nombre`, `abreviatura`, `tipo_campo`, `unidad_metrica`, `valorMinimo`, `valorMaximo`) VALUES (?, ?, ?, ?, ? , ?)',
+                [parametro.nombre, parametro.abreviatura, parametro.tipo_campo, parametro.unidad_metrica, parametro.valorMinimo, parametro.valorMaximo]
             );
         } else {
-            insert = await conexion.query<ParametroResultados>(
-                'INSERT INTO `parametro` (`nombre`, `abreviatura`, `tipo`, `opciones`) VALUES (?, ?, ?, ?)',
-                [parametro.nombre, parametro.abreviatura, parametro.tipo, parametro.opciones]
+            insert = await conexion.query<ResultSetHeader>(
+                'INSERT INTO `parametro` (`nombre`, `abreviatura`, `tipo_campo`, `opciones`) VALUES (?, ?, ?, ?)',
+                [parametro.nombre, parametro.abreviatura, parametro.tipo_campo, parametro.opciones]
             );
         }
 
         if (insert[0].affectedRows !== 1) {
-            return { error: 'Fallo al guardar el parámetro', status: 500 };
+            return { error: 'Fallo inesperado guardando el parámetro', status: 500 };
         }
-        return { message: 'Parámetro guardado con exito', status: 200, parametro: insert[0] };
+
+        return { message: 'Parámetro guardado con exito', id: insert[0].insertId, status: 200 };
     } catch (err) {
         console.log(err);
-        return { error: 'Fallo al guardar el parámetro', status: 500 };
+        return { error: 'Fallo al intentar guardar el parámetro', status: 500 };
     }
 }

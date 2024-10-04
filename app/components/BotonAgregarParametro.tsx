@@ -10,7 +10,7 @@ import Modal from "./Modal";
 import { useToast } from "./Toast";
 
 interface BotonAgregarParametroProps {
-    datosCalculadora: FormData;
+    datosCalculadora: { nombre: string; descripcion: string; parametros: Parametro[]; formula: string; };
 }
 
 const BotonAgregarParametro: FunctionComponent<BotonAgregarParametroProps> = (BotonAgregarParametroProps) => {
@@ -19,6 +19,7 @@ const BotonAgregarParametro: FunctionComponent<BotonAgregarParametroProps> = (Bo
     const { addToast } = useToast();
     const { datosCalculadora } = BotonAgregarParametroProps;
     const [isClient, setIsClient] = useState(false);
+    datosParametro.set('tipo_campo', 'numerico');
 
     useEffect(() => {
         setIsClient(true)
@@ -26,36 +27,48 @@ const BotonAgregarParametro: FunctionComponent<BotonAgregarParametroProps> = (Bo
 
     const crearParametro = async () => {
         // Validaciones de los campos del formulario
-        if (!datosParametro.get('nombre') || !datosParametro.get('abreviatura') || !datosParametro.get('tipo')) {
-            addToast('Por favor llene todos los campos', 'error')
-            return;
-        }
-        if (datosParametro.get('tipo') === 'numerico' &&
-            (!datosParametro.get('valorMinimo') || !datosParametro.get('valorMaximo')) &&
-            (parseInt(datosParametro.get('valorMinimo') as string) < parseInt(datosParametro.get('valorMaximo') as string))
+        if (!datosParametro.get('nombre') || !datosParametro.get('tipo_campo')
+            || (datosParametro.get('tipo_campo') === 'numerico' && !datosParametro.get('unidad_metrica'))
         ) {
-            addToast('Por favor llene todos los campos', 'error')
+            addToast('Por favor llene todos los campos obligatorios', 'error')
             return;
         }
-        if (datosParametro.get('tipo') === 'seleccion' && !datosParametro.get('opciones')) {
-            addToast('Por favor llene todos los campos', 'error')
+
+        if (datosParametro.get('tipo_campo') === 'numerico' &&
+            ((datosParametro.get('valorMinimo') && datosParametro.get('valorMaximo')) &&
+                (parseInt(datosParametro.get('valorMinimo') as string) < parseInt(datosParametro.get('valorMaximo') as string))
+            )
+        ) {
+            addToast('Valor máximo no puede ser menor al minimo', 'error')
+            return;
+        }
+
+        if (datosParametro.get('tipo_campo') === 'seleccion' && !datosParametro.get('opciones')) {
+            addToast('Por favor ingrese al menos dos opciones', 'error')
             return;
         }
 
         try {
             const respuesta = await crearParametroAction(datosParametro);
-            if (respuesta.parametro) {
-                const parametro: Parametro = respuesta.parametro;
-                const parametros = datosCalculadora.get('parametros') as string;
-                datosCalculadora.set('parametros', parametros + (parametros ? ',' : '') + parametro.id);
+            if (respuesta.id) {
+                datosCalculadora.parametros.push(
+                    {
+                        id: respuesta.id,
+                        nombre: datosParametro.get('nombre') as string,
+                        tipo_campo: datosParametro.get('tipo_campo') as "numerico" | "seleccion" | "radio",
+                        abreviatura: datosParametro.get('abreviatura') as string,
+                        unidad_metrica: datosParametro.get('unidad_metrica') as string,
+                        valorMinimo: parseInt(datosParametro.get('valorMinimo') as string),
+                        valorMaximo: parseInt(datosParametro.get('valorMaximo') as string),
+                        opciones: datosParametro.get('opciones') as string,
+                    }
+                );
                 addToast(respuesta.message || 'Parámetro guardado con éxito', 'success');
                 setAbierto(false);
-            } else {
-                console.log(respuesta);
+            } else {                
                 addToast('Ocurrió un error inesperado en el servidor', 'error');
             }
         } catch (err) {
-            console.log(err);
             addToast('Ocurrió un error inesperado', 'error');
         }
     }

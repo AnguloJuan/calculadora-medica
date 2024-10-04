@@ -13,8 +13,8 @@ const FormularioCrearParametro: FunctionComponent<FormularioCrearParametroProps>
         id: 0,
         nombre: '',
         abreviatura: '',
-        tipo: 'numerico',
-        unidad: '',
+        tipo_campo: 'numerico',
+        unidad_metrica: '',
         valorMaximo: 0,
         valorMinimo: 0,
         opciones: '',
@@ -23,24 +23,24 @@ const FormularioCrearParametro: FunctionComponent<FormularioCrearParametroProps>
     const manejarCambio = (e: FormEvent<HTMLInputElement> | FormEvent<HTMLTextAreaElement>) => {
         e.preventDefault();
 
+        datosFormulario.set(e.currentTarget.name, e.currentTarget.value);        
+        
         setParametro({
             ...parametro,
             [e.currentTarget.name]: e.currentTarget.value
         });
-        datosFormulario.set(e.currentTarget.name, e.currentTarget.value);
     }
 
 
-    const cambiarTipo = (e: FormEvent<HTMLSelectElement>) => {
+    const cambiarTipoCampo = (e: FormEvent<HTMLSelectElement>) => {
         e.preventDefault();
         const valor = e.currentTarget.value;
-
+        
+        datosFormulario.set('tipo_campo', valor);
         valor === ('numerico' || 'seleccion' || 'radio') && setParametro({
             ...parametro,
-            tipo: valor,
+            tipo_campo: valor,
         });
-
-        datosFormulario.set('tipo', valor);
     }
 
     return (<>
@@ -60,31 +60,31 @@ const FormularioCrearParametro: FunctionComponent<FormularioCrearParametroProps>
             <div className="w-full flex flex-col gap-2">
                 <span>Abreviatura</span>
                 <textarea
-                    name="descripcion"
-                    id="descripcion"
-                    placeholder="Ingrese una descripcion de la calculadora"
+                    name="abreviatura"
+                    id="abreviatura"
+                    placeholder="Ingrese una abreviatura de la calculadora"
                     onChange={manejarCambio}
                     className="bg-white"
                 ></textarea>
             </div>
 
             <div className="w-full flex flex-col gap-2">
-                <label htmlFor="tipo">Tipo de campo</label>
-                <select name="tipo" id="tipo" className="rounded-lg" onChange={cambiarTipo}>
+                <label htmlFor="tipo_campo">Tipo de campo</label>
+                <select name="tipo_campo" id="tipo_campo" className="rounded-lg" onChange={cambiarTipoCampo}>
                     <option value="numerico">Numerico</option>
                     <option value="seleccion">Selección</option>
                     <option value="radio">Radio</option>
                 </select>
             </div>
 
-            {parametro.tipo === 'numerico' && <>
+            {parametro.tipo_campo === 'numerico' && <>
                 <div className="sm:grid sm:grid-cols-3 sm:gap-2">
                     <div className="w-full flex flex-col gap-2">
-                        <label htmlFor="unidad">Unidad</label>
+                        <label htmlFor="unidad_metrica">Unidad</label>
                         <input
                             type="text"
-                            id="unidad"
-                            name="unidad"
+                            id="unidad_metrica"
+                            name="unidad_metrica"
                             placeholder="Ingrese la unidad del parámetro"
                             onChange={manejarCambio}
                             className="rounded-lg"
@@ -115,7 +115,7 @@ const FormularioCrearParametro: FunctionComponent<FormularioCrearParametroProps>
                 </div>
             </>}
 
-            {(parametro.tipo === 'seleccion' || parametro.tipo === 'radio') && <div className="w-full flex flex-col gap-2">
+            {(parametro.tipo_campo === 'seleccion' || parametro.tipo_campo === 'radio') && <div className="w-full flex flex-col gap-2">
                 <label htmlFor="opciones">Opciones</label>
                 <textarea
                     name="opciones"

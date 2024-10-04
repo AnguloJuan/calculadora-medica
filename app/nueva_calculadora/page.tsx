@@ -9,12 +9,12 @@ import AgregarParametro from "./AgregarParametro";
 // import { useState } from "react";
 
 export default function NuevaCalculadora() {
-    const datosCalculadora = new FormData();
+    let datosCalculadora = { nombre: '', descripcion: '', parametros: [], formula: '', evidencias: '' };
 
     let parametros: Parametro[] = [
-        { id: 1, nombre: 'Peso', tipo: "numerico", abreviatura: 'Peso', unidad: 'Kg' },
-        { id: 2, nombre: 'Parametro 2', tipo: 'seleccion', abreviatura: 'Parametro 2', opciones: 'Opcion 1,Opcion 2,Opcion 3' },
-        { id: 3, nombre: 'Sexo', tipo: 'radio', abreviatura: 'Sexo', opciones: 'Masculino,Femenino' },
+        { id: 1, nombre: 'Peso', tipo_campo: "numerico", abreviatura: 'Peso', unidad_metrica: 'Kg' },
+        { id: 2, nombre: 'Parametro 2', tipo_campo: 'seleccion', abreviatura: 'Parametro 2', opciones: 'Opcion 1,Opcion 2,Opcion 3' },
+        { id: 3, nombre: 'Sexo', tipo_campo: 'radio', abreviatura: 'Sexo', opciones: 'Masculino,Femenino' },
     ]
 
 

@@ -14,15 +14,15 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = (CampoParametroPr
     const { parametro } = CampoParametroProps;
     const opciones = parametro.opciones?.split(',');
     const [valor, setValor] = useState<string | number>(
-        parametro.tipo === 'numerico' ? 0 : ''
+        parametro.tipo_campo === 'numerico' ? 0 : ''
     );
 
     return (
         <div className={`w-full grid grid-cols-2 gap-y-8 sm:grid-cols-6
-        ${parametro.tipo === 'radio' ? (opciones && opciones.length > 3 ? 'items-start' : 'items-center') : 'items-center'}`}>
+        ${parametro.tipo_campo === 'radio' ? (opciones && opciones.length > 3 ? 'items-start' : 'items-center') : 'items-center'}`}>
 
             <label htmlFor={parametro.nombre} className="sm:col-span-3">{parametro.nombre}</label>
-            {parametro.tipo === 'numerico' && (
+            {parametro.tipo_campo === 'numerico' && (
                 <div className="flex flex-row sm:col-span-3">
                     <input
                         type="number"
@@ -35,12 +35,12 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = (CampoParametroPr
                         className="sm:col-span-3 mt-0 rounded-s-lg"
                     />
                     <div className="h-full col-span-1 text-center self-center p-2 bg-slate-300 border border-gray-300 rounded-e-lg">
-                        <span className="text-sm/6">{parametro.unidad}</span>
+                        <span className="text-sm/6">{parametro.unidad_metrica}</span>
                     </div>
                 </div>
             )}
 
-            {parametro.tipo === 'seleccion' && (
+            {parametro.tipo_campo === 'seleccion' && (
                 <select
                     id={parametro.nombre}
                     name={parametro.nombre}
@@ -55,7 +55,7 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = (CampoParametroPr
                 </select>
             )}
 
-            {parametro.tipo === 'radio' && opciones && (
+            {parametro.tipo_campo === 'radio' && opciones && (
                 <div className="mx-auto w-full col-span-3">
                     <RadioGroup
                         id={parametro.nombre}
