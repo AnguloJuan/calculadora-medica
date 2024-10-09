@@ -12,6 +12,17 @@
  * @property {number} [valorMinimo] - Valor mínimo del parámetro para parámetros tipo numerico
  * @property {string} [opciones] - Valores posibles del parámetro para parámetros tipo seleccion y radio
  */
+
+interface Calculadora {
+    id: number,
+    nombre: string,
+    descripcion: string,
+    descripcion_corta: string,
+    parametros: Parametro[],
+    formula: string,
+    evidencias: Evidencia[]
+}
+
 interface Parametro {
     id: number;
     nombre: string;
@@ -23,4 +34,9 @@ interface Parametro {
     opciones?: string;
 }
 
-export type { Parametro };
+interface Evidencia {
+    id: number,
+    cita: string,
+}
+
+export type { Calculadora, Parametro, Evidencia };

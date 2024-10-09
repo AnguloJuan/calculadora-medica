@@ -10,14 +10,14 @@ import Modal from "./Modal";
 import { useToast } from "./Toast";
 
 interface BotonAgregarParametroProps {
-    datosCalculadora: { nombre: string; descripcion: string; parametros: Parametro[]; formula: string; };
+    parametros: Parametro[];
 }
 
 const BotonAgregarParametro: FunctionComponent<BotonAgregarParametroProps> = (BotonAgregarParametroProps) => {
     const [abierto, setAbierto] = useState(false);
     const datosParametro = new FormData();
     const { addToast } = useToast();
-    const { datosCalculadora } = BotonAgregarParametroProps;
+    const { parametros } = BotonAgregarParametroProps;
     const [isClient, setIsClient] = useState(false);
     datosParametro.set('tipo_campo', 'numerico');
 
@@ -51,7 +51,7 @@ const BotonAgregarParametro: FunctionComponent<BotonAgregarParametroProps> = (Bo
         try {
             const respuesta = await crearParametroAction(datosParametro);
             if (respuesta.id) {
-                datosCalculadora.parametros.push(
+                parametros.push(
                     {
                         id: respuesta.id,
                         nombre: datosParametro.get('nombre') as string,

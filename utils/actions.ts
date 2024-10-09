@@ -1,7 +1,8 @@
 'use server'
 
-import { ResultSetHeader } from "mysql2";
+import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { conectarBd } from "../db/conectarDb";
+import { Parametro } from "./types";
 
 export async function crearCalculadoraAction(formulario: FormData) {
     const conexion = await conectarBd();
@@ -48,5 +49,20 @@ export async function crearParametroAction(formulario: FormData) {
     } catch (err) {
         console.log(err);
         return { error: 'Fallo al intentar guardar el parámetro', status: 500 };
+    }
+}
+
+export async function obtenerParametros() {
+    interface Parametros extends RowDataPacket, Parametro { }
+
+    const conexion = await conectarBd();
+    try {
+        const [parametros] = await conexion.query<Parametros[]>(
+            'SELECT * FROM `parametro` ORDER BY `nombre` ASC;'
+        );
+        return parametros;
+    } catch (err) {
+        console.log(err);
+        return { error: 'Fallo al intentar obtener los parámetros', status: 500 };
     }
 }

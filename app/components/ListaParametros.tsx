@@ -1,7 +1,7 @@
 'use client'
 
 import { Parametro } from "@/utils/types";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CampoParametro from "./CampoParametro";
 import { Each } from "./EachOf";
 
@@ -9,28 +9,19 @@ interface ListaParametrosProps {
     parametros: Parametro[];
 }
 
-interface ListaParametrosState {
-    open: boolean;
+export default function ListaParametros({ parametros }: ListaParametrosProps) {
+    const [listaParametros, setListaParametros] = useState<Parametro[]>([]);
+    useEffect(() => {
+        setListaParametros(parametros);
+    }, [parametros]);
+    return (
+        <div className="flex flex-col w-full gap-10">
+            <Each
+                of={listaParametros}
+                render={(parametro) => (
+                    <CampoParametro key={parametro.id} parametro={parametro} />
+                )}
+            />
+        </div>
+    );
 }
-
-class ListaParametros extends React.Component<ListaParametrosProps, ListaParametrosState> {
-    constructor(props: ListaParametrosProps) {
-        super(props);
-        this.state = { open: false }
-    }
-    render() {
-        const { parametros: parametrosExistentes } = this.props;
-        return (
-            <div className="flex flex-col w-full gap-10">
-                <Each
-                    of={parametrosExistentes}
-                    render={(parametro) => (
-                        <CampoParametro key={parametro.id} parametro={parametro} />
-                    )}
-                />
-            </div>
-        );
-    }
-}
-
-export default ListaParametros;

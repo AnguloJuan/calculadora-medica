@@ -1,24 +1,15 @@
-// 'use client';
-
 import ListaParametros from "@/app/components/ListaParametros";
 import { crearCalculadoraAction } from "@/utils/actions";
-import { Parametro } from "@/utils/types";
+import { Calculadora, Evidencia, Parametro } from "@/utils/types";
 import { IconDeviceFloppy } from "@tabler/icons-react";
 import BotonAgregarParametro from "../components/BotonAgregarParametro";
 import AgregarParametro from "./AgregarParametro";
-// import { useState } from "react";
+import obtenerParametros from "@/utils/parametros";
 
-export default function NuevaCalculadora() {
-    let datosCalculadora = { nombre: '', descripcion: '', parametros: [], formula: '', evidencias: '' };
-
-    let parametros: Parametro[] = [
-        { id: 1, nombre: 'Peso', tipo_campo: "numerico", abreviatura: 'Peso', unidad_metrica: 'Kg' },
-        { id: 2, nombre: 'Parametro 2', tipo_campo: 'seleccion', abreviatura: 'Parametro 2', opciones: 'Opcion 1,Opcion 2,Opcion 3' },
-        { id: 3, nombre: 'Sexo', tipo_campo: 'radio', abreviatura: 'Sexo', opciones: 'Masculino,Femenino' },
-    ]
-
-
-    // Guardar los datos en la nueva calculadora y redirigir a la pagina de la calculadora
+export default async function NuevaCalculadora() {
+    const parametros: Parametro[] = [];
+    const evidencias: Evidencia[] = [];
+    const listaParametros = await obtenerParametros();
 
     return (
         <div className="w-full items-center flex justify-center my-8">
@@ -64,8 +55,8 @@ export default function NuevaCalculadora() {
                     <div className="w-full flex flex-col gap-2">
                         <span>Agregar parámetro</span>
                         <div className="w-full grid grid-cols-2 gap-y-8 sm:grid-cols-6 gap-8">
-                            <AgregarParametro parametrosExistentes={parametros} />
-                            <BotonAgregarParametro datosCalculadora={datosCalculadora} />
+                            <AgregarParametro parametros={listaParametros} datosCalculadora={parametros} />
+                            <BotonAgregarParametro parametros={parametros} />
                         </div>
                     </div>
                     <ListaParametros parametros={parametros} />

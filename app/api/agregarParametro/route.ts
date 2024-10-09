@@ -1,4 +1,4 @@
-import { conectarBd } from "@/utils/db";
+import { conectarBd } from "@/db/conectarDb";
 import { Parametro } from "@/utils/types";
 import { NextRequest, NextResponse } from "next/server";
 

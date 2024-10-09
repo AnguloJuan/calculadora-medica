@@ -1,11 +1,11 @@
+import { conectarBd } from "@/db/conectarDb";
 import { NextRequest, NextResponse } from "next/server";
-import { conectarBd } from "@/utils/db";
 
 export async function GET(req: NextRequest) {
     const connection = await conectarBd();
     try {
         const [results] = await connection.query(
-            'SELECT * FROM `parametro` WHERE `tipo` = ?',
+            'SELECT * FROM `parametro`',
             [10, 10]
         );
 
