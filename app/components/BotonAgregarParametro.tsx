@@ -10,14 +10,14 @@ import Modal from "./Modal";
 import { useToast } from "./Toast";
 
 interface BotonAgregarParametroProps {
+    // agregarParametro: (parametro: Parametro) => void;
     parametros: Parametro[];
 }
 
-const BotonAgregarParametro: FunctionComponent<BotonAgregarParametroProps> = (BotonAgregarParametroProps) => {
+const BotonAgregarParametro: FunctionComponent<BotonAgregarParametroProps> = ({ parametros }: BotonAgregarParametroProps) => {
     const [abierto, setAbierto] = useState(false);
     const datosParametro = new FormData();
     const { addToast } = useToast();
-    const { parametros } = BotonAgregarParametroProps;
     const [isClient, setIsClient] = useState(false);
     datosParametro.set('tipo_campo', 'numerico');
 
@@ -51,21 +51,20 @@ const BotonAgregarParametro: FunctionComponent<BotonAgregarParametroProps> = (Bo
         try {
             const respuesta = await crearParametroAction(datosParametro);
             if (respuesta.id) {
-                parametros.push(
-                    {
-                        id: respuesta.id,
-                        nombre: datosParametro.get('nombre') as string,
-                        tipo_campo: datosParametro.get('tipo_campo') as "numerico" | "seleccion" | "radio",
-                        abreviatura: datosParametro.get('abreviatura') as string,
-                        unidad_metrica: datosParametro.get('unidad_metrica') as string,
-                        valorMinimo: parseInt(datosParametro.get('valorMinimo') as string),
-                        valorMaximo: parseInt(datosParametro.get('valorMaximo') as string),
-                        opciones: datosParametro.get('opciones') as string,
-                    }
-                );
+                const parametro: Parametro = {
+                    id: respuesta.id,
+                    nombre: datosParametro.get('nombre') as string,
+                    tipo_campo: datosParametro.get('tipo_campo') as "numerico" | "seleccion" | "radio",
+                    abreviatura: datosParametro.get('abreviatura') as string,
+                    unidad_metrica: datosParametro.get('unidad_metrica') as string,
+                    valorMinimo: parseInt(datosParametro.get('valorMinimo') as string),
+                    valorMaximo: parseInt(datosParametro.get('valorMaximo') as string),
+                    opciones: datosParametro.get('opciones') as string,
+                }
+                parametros.push(parametro);
                 addToast(respuesta.message || 'Parámetro guardado con éxito', 'success');
                 setAbierto(false);
-            } else {                
+            } else {
                 addToast('Ocurrió un error inesperado en el servidor', 'error');
             }
         } catch (err) {

@@ -13,6 +13,8 @@ export default function ListaParametros({ parametros }: ListaParametrosProps) {
     const [listaParametros, setListaParametros] = useState<Parametro[]>([]);
     useEffect(() => {
         setListaParametros(parametros);
+        console.log(parametros);
+        
     }, [parametros]);
     return (
         <div className="flex flex-col w-full gap-10">

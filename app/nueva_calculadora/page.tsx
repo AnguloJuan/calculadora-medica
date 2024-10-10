@@ -5,6 +5,7 @@ import { IconDeviceFloppy } from "@tabler/icons-react";
 import BotonAgregarParametro from "../components/BotonAgregarParametro";
 import AgregarParametro from "./AgregarParametro";
 import obtenerParametros from "@/utils/parametros";
+import Parametros from "./Parametros";
 
 export default async function NuevaCalculadora() {
     const parametros: Parametro[] = [];
@@ -52,14 +53,7 @@ export default async function NuevaCalculadora() {
                 <div className="w-full flex flex-col gap-6">
                     <h2 className="w-full text-xl font-semibold text-center">Parámetros</h2>
 
-                    <div className="w-full flex flex-col gap-2">
-                        <span>Agregar parámetro</span>
-                        <div className="w-full grid grid-cols-2 gap-y-8 sm:grid-cols-6 gap-8">
-                            <AgregarParametro parametros={listaParametros} datosCalculadora={parametros} />
-                            <BotonAgregarParametro parametros={parametros} />
-                        </div>
-                    </div>
-                    <ListaParametros parametros={parametros} />
+                    <Parametros parametros={parametros} listaParametros={listaParametros}  />
 
                     <div className="w-full">
                         <label htmlFor="formula">Formula</label>

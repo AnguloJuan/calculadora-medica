@@ -5,31 +5,34 @@ import { Each } from "../components/EachOf";
 
 interface AgregarParametroProps {
     parametros: Parametro[];
-    datosCalculadora: Parametro[];
+    // agregarParametro: (parametro: Parametro) => Promise<void>;
+    parametrosCalculadora: Parametro[];
+    setParametrosCalculadora: (parametros: Parametro[]) => void;
 }
 
-export default function AgregarParametro({ parametros, datosCalculadora }: AgregarParametroProps) {
-    const [idParametro, setIdParametro] = useState(0);
+export default function AgregarParametro({ parametros, parametrosCalculadora, setParametrosCalculadora }: AgregarParametroProps) {
 
-    useEffect(() => {
-        function AgregarParametro() {
-            if (idParametro === 0) {
-                return;
-            }
-            const parametro = parametros.find(parametro => parametro.id === idParametro);
-            if (parametro) {
-                datosCalculadora.push(parametro);
-            }
+    const agregar = async (idParametro: number) => {
+        if (idParametro === 0) {
+            return;
         }
-    }, [idParametro, parametros, datosCalculadora]);
-
+        // ver si parametro ya esta agregado 
+        // if (parametrosCalculadora.find(parametro => parametro.id === idParametro)) {
+        //     return
+        // }
+        const parametro = parametros.find(parametro => parametro.id === idParametro);
+        // console.log(parametro, parametrosCalculadora);
+        
+        if (parametro) {
+            setParametrosCalculadora([...parametrosCalculadora, parametro]);
+        }
+    }
     return (<>
         <select
             name="parametrosExistentes"
             id="parametrosExistentes"
             className="col-span-4"
-            value={idParametro}
-            onChange={(e) => setIdParametro(parseInt(e.currentTarget.value))}
+            onChange={async (e) => agregar(parseInt(e.target.value))}
         >
             <option value="0">Seleccione un parámetro</option>
             {parametros.length !== 0 &&
