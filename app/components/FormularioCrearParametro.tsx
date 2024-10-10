@@ -20,7 +20,7 @@ const FormularioCrearParametro: FunctionComponent<FormularioCrearParametroProps>
         opciones: '',
     });
 
-    const manejarCambio = (e: FormEvent<HTMLInputElement>) => {
+    const manejarCambio = (e: FormEvent<HTMLInputElement> | FormEvent<HTMLTextAreaElement>) => {
         e.preventDefault();
 
         datosFormulario.set(e.currentTarget.name, e.currentTarget.value);
@@ -37,7 +37,7 @@ const FormularioCrearParametro: FunctionComponent<FormularioCrearParametroProps>
         const valor = e.currentTarget.value;
 
         datosFormulario.set('tipo_campo', valor);
-        valor === ('numerico' || 'seleccion' || 'radio') && setParametro({
+        (valor === 'numerico' || valor === 'seleccion' || valor === 'radio') && setParametro({
             ...parametro,
             tipo_campo: valor,
         });
