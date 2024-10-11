@@ -13,11 +13,14 @@
  * @property {string} [opciones] - Valores posibles del parámetro para parámetros tipo seleccion y radio
  */
 
+import { z } from "zod";
+
 interface Calculadora {
     id: number,
     nombre: string,
     descripcion: string,
     descripcion_corta: string,
+    resultados_recomendaciones: string,
     parametros: Parametro[],
     formula: string,
     evidencias: Evidencia[]
@@ -39,4 +42,32 @@ interface Evidencia {
     cita: string,
 }
 
+const ParametroZ = z.object({
+    id: z.number(),
+    nombre: z.string(),
+    abreviatura: z.string(),
+    tipo_campo: z.enum(['numerico', 'seleccion', 'radio']),
+    unidad_metrica: z.string().optional(),
+    valorMaximo: z.number().optional(),
+    valorMinimo: z.number().optional(),
+    opciones: z.string().optional()
+}) satisfies z.ZodType<Parametro>;
+
+const EvidenciaZ = z.object({
+    id: z.number(),
+    cita: z.string()
+}) satisfies z.ZodType<Evidencia>;
+
+const CalculadoraZ = z.object({
+    id: z.coerce.number(),
+    nombre: z.string().min(1),
+    descripcion: z.string().min(1),
+    descripcion_corta: z.string().min(1),
+    resultados_recomendaciones: z.string().min(1),
+    parametros: z.array(ParametroZ).nonempty(),
+    formula: z.string().min(1),
+    evidencias: z.array(EvidenciaZ).nonempty()
+}) satisfies z.ZodType<Calculadora>;
+
 export type { Calculadora, Parametro, Evidencia };
+export { CalculadoraZ, ParametroZ, EvidenciaZ };

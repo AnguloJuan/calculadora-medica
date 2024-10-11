@@ -10,16 +10,10 @@ interface ListaParametrosProps {
 }
 
 export default function ListaParametros({ parametros }: ListaParametrosProps) {
-    const [listaParametros, setListaParametros] = useState<Parametro[]>([]);
-    useEffect(() => {
-        setListaParametros(parametros);
-        console.log(parametros);
-        
-    }, [parametros]);
     return (
         <div className="flex flex-col w-full gap-10">
             <Each
-                of={listaParametros}
+                of={parametros}
                 render={(parametro) => (
                     <CampoParametro key={parametro.id} parametro={parametro} />
                 )}

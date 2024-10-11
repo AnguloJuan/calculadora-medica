@@ -29,8 +29,7 @@ export default function AgregarParametro({ parametros, parametrosCalculadora, se
     }
     return (<>
         <select
-            name="parametrosExistentes"
-            id="parametrosExistentes"
+            id="parametros_existentes"
             className="col-span-4"
             onChange={async (e) => agregar(parseInt(e.target.value))}
         >

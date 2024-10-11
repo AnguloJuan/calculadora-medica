@@ -10,11 +10,11 @@ import Modal from "./Modal";
 import { useToast } from "./Toast";
 
 interface BotonAgregarParametroProps {
-    // agregarParametro: (parametro: Parametro) => void;
     parametros: Parametro[];
+    setParametros: (parametros: Parametro[]) => void;
 }
 
-const BotonAgregarParametro: FunctionComponent<BotonAgregarParametroProps> = ({ parametros }: BotonAgregarParametroProps) => {
+const BotonAgregarParametro: FunctionComponent<BotonAgregarParametroProps> = ({ parametros, setParametros }: BotonAgregarParametroProps) => {
     const [abierto, setAbierto] = useState(false);
     const datosParametro = new FormData();
     const { addToast } = useToast();
@@ -61,7 +61,7 @@ const BotonAgregarParametro: FunctionComponent<BotonAgregarParametroProps> = ({ 
                     valorMaximo: parseInt(datosParametro.get('valorMaximo') as string),
                     opciones: datosParametro.get('opciones') as string,
                 }
-                parametros.push(parametro);
+                setParametros([...parametros, parametro]);
                 addToast(respuesta.message || 'Parámetro guardado con éxito', 'success');
                 setAbierto(false);
             } else {

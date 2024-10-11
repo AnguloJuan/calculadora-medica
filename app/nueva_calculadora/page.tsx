@@ -6,15 +6,20 @@ import BotonAgregarParametro from "../components/BotonAgregarParametro";
 import AgregarParametro from "./AgregarParametro";
 import obtenerParametros from "@/utils/parametros";
 import Parametros from "./Parametros";
+import AgregarEvidencias from "./AgregarEvidencias";
+import BotonGuardarCalculadora from "./BotonGuardarCalculadora";
 
 export default async function NuevaCalculadora() {
-    const parametros: Parametro[] = [];
-    const evidencias: Evidencia[] = [];
     const listaParametros = await obtenerParametros();
 
     return (
         <div className="w-full items-center flex justify-center my-8">
-            <form action={crearCalculadoraAction} className="flex min-h-screen md:max-w-screen-md lg:max-w-screen-lg flex-col items-center justify-between rounded-lg p-24 py-12 bg-white gap-16">
+            <form
+                action={crearCalculadoraAction}
+                id="form_calculadora"
+                name="form_calculadora"
+                className="flex min-h-screen md:max-w-screen-md lg:max-w-screen-lg flex-col items-center justify-between rounded-lg p-24 py-12 bg-white gap-16"
+            >
                 <div className="w-full flex flex-col gap-6">
                     <h2 className="w-full text-xl font-semibold text-center">Información general</h2>
                     <div className="w-full flex flex-col gap-2">
@@ -31,8 +36,8 @@ export default async function NuevaCalculadora() {
                     <div className="w-full flex flex-col gap-2">
                         <span>Descripción</span>
                         <textarea
-                            name="descripcion"
                             id="descripcion"
+                            name="descripcion"
                             placeholder="Ingrese una descripcion de la calculadora"
                             className="bg-white"
                         ></textarea>
@@ -41,19 +46,32 @@ export default async function NuevaCalculadora() {
                         <label htmlFor="descripcion_corta">Descripcion corta</label>
                         <input
                             type="text"
-                            id="descipción_corta"
-                            name="descipción_corta"
+                            id="descripcion_corta"
+                            name="descripcion_corta"
                             placeholder="Ingrese una descipción corta de la calculadora"
                             className="rounded-lg"
                         />
                     </div>
+                    <div className="w-full flex flex-col gap-2">
+                        <span>Resultados/Recomendaciones</span>
+                        <textarea
+                            name="resultados_recomendaciones"
+                            id="resultados_recomendaciones"
+                            placeholder="Ingrese recomendaciones de la calculadora"
+                            className="bg-white"
+                        ></textarea>
+                    </div>
+
+                    <AgregarEvidencias />
+
                 </div>
 
 
                 <div className="w-full flex flex-col gap-6">
                     <h2 className="w-full text-xl font-semibold text-center">Parámetros</h2>
 
-                    <Parametros parametros={parametros} listaParametros={listaParametros}  />
+                    {Array.isArray(listaParametros) ? <Parametros listaParametros={listaParametros ? listaParametros : [] as Parametro[]} />
+                        : <p>Cargando...</p>}
 
                     <div className="w-full">
                         <label htmlFor="formula">Formula</label>
@@ -67,25 +85,7 @@ export default async function NuevaCalculadora() {
                     </div>
                 </div>
 
-
-                <div className="w-full">
-                    <h2 className="w-full text-xl font-semibold text-center">Evidencias</h2>
-                    <label htmlFor="cita">Cita bibliográfica</label>
-                    <input
-                        type="text"
-                        name="cita"
-                        id="cita"
-                        placeholder="Ingrese la cita en formato APA"
-                        className="rounded-lg"
-                    />
-                </div>
-
-                <button
-                    className="flex flex-row bg-green-600 border-green-700 text-white px-4 py-2 rounded-lg items-center gap-2"
-                >
-                    <IconDeviceFloppy stroke={2} />
-                    Guardar
-                </button>
+                <BotonGuardarCalculadora />
             </form>
         </div>
     );

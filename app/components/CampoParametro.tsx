@@ -26,8 +26,8 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = (CampoParametroPr
                 <div className="flex flex-row sm:col-span-3">
                     <input
                         type="number"
-                        id={parametro.nombre}
-                        name={parametro.nombre}
+                        id={`campo_${parametro.nombre}`}
+                        name={`campo_${parametro.nombre}`}
                         min={parametro.valorMinimo}
                         max={parametro.valorMaximo}
                         value={valor}
@@ -42,8 +42,8 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = (CampoParametroPr
 
             {parametro.tipo_campo === 'seleccion' && (
                 <select
-                    id={parametro.nombre}
-                    name={parametro.nombre}
+                    id={`campo_${parametro.nombre}`}
+                    name={`campo_${parametro.nombre}`}
                     value={valor}
                     onChange={(e) => setValor(e.target.value)}
                     className="sm:col-span-3"
@@ -58,8 +58,8 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = (CampoParametroPr
             {parametro.tipo_campo === 'radio' && opciones && (
                 <div className="mx-auto w-full col-span-3">
                     <RadioGroup
-                        id={parametro.nombre}
-                        name={parametro.nombre}
+                        id={`campo_${parametro.nombre}`}
+                        name={`campo_${parametro.nombre}`}
                         value={valor}
                         onChange={setValor}
                         aria-label={parametro.nombre}
