@@ -2,7 +2,26 @@
 
 import { ResultSetHeader } from "mysql2";
 import { conectarBd } from "../db/conectarDb";
+import { logIn } from "./auth";
 import { Parametro } from "./types";
+import { redirect } from "next/navigation";
+
+export async function authenticate(_currentState: unknown, formData: FormData) {
+    try {
+        await logIn(formData)
+    } catch (error: any) {
+        if (error) {
+            switch (error.message) {
+                case 'CredentialsSignin':
+                    return 'Invalid credentials.'
+                default:
+                    return 'Something went wrong.'
+            }
+        }
+        throw error
+    }
+    redirect('/nueva_calculadora')
+}
 
 export async function crearCalculadoraAction(formulario: FormData) {
     const conexion = await conectarBd();
@@ -21,12 +40,14 @@ export async function crearCalculadoraAction(formulario: FormData) {
         return { error: 'Por favor agregue al menos un parámetro', status: 400 };
     }
 
+    // todo: to convert transaction all queries must be in the same connection
+
     try {
         const insertCalculadora = await conexion.query<ResultSetHeader>(
             'INSERT INTO `calculadora` (`nombre`, `descripcion`, `descripcion_corta`, `resultados_recomendaciones`, `area`, `formula`, `evidencias`) VALUES (?, ?, ?, ?, ?, ?, ?)',
             [calculadora.nombre, calculadora.descripcion, calculadora.descripcion_corta, calculadora.resultados_recomendaciones, calculadora.area, calculadora.formula, calculadora.evidencias]
         );
-        
+
         if (insertCalculadora[0].affectedRows !== 1) {
             return { error: 'Fallo inesperado guardando la calculadora', status: 500 };
         }
