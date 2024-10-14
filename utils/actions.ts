@@ -2,62 +2,48 @@
 
 import { ResultSetHeader } from "mysql2";
 import { conectarBd } from "../db/conectarDb";
+import { Parametro } from "./types";
 
 export async function crearCalculadoraAction(formulario: FormData) {
     const conexion = await conectarBd();
     const calculadora = {
         nombre: formulario.get('nombre'),
         descripcion: formulario.get('descripcion'),
-        descripcoin_corta: formulario.get('descripcion_corta'),
+        descripcion_corta: formulario.get('descripcion_corta'),
         resultados_recomendaciones: formulario.get('resultados_recomendaciones'),
+        area: formulario.get('area'),
         formula: formulario.get('formula'),
-        parametros: JSON.parse(formulario.get('parametros')?.toString() || '[]'),
-        evidencias: JSON.parse(formulario.get('evidencias')?.toString() || '[]')
+        evidencias: formulario.get('evidencias'),
+        parametros: JSON.parse(formulario.get('parametros')?.toString() || '[]') as Parametro[]
     };
 
-    console.log(calculadora);
-    
     if (calculadora.parametros.length === 0) {
         return { error: 'Por favor agregue al menos un parámetro', status: 400 };
     }
 
-    if (calculadora.evidencias.length === 0) {
-        return { error: 'Por favor agregue al menos una evidencia', status: 400 };
-    }
-
     try {
-
-        // start transaction so we can rollback if something goes wrong
-        await conexion.query('START TRANSACTION');
-
         const insertCalculadora = await conexion.query<ResultSetHeader>(
-            'INSERT INTO `calculadora` (`nombre`, `descripcion`, `descrion_corta`, `resultados_recomendaciones`, `formula`, `fecha_creacion`) VALUES (?, ?, ?, ?, ?, DATE(NOW()))',
-            [calculadora.nombre, calculadora.descripcion, calculadora.descripcion, calculadora.evidencias]
+            'INSERT INTO `calculadora` (`nombre`, `descripcion`, `descripcion_corta`, `resultados_recomendaciones`, `area`, `formula`, `evidencias`) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            [calculadora.nombre, calculadora.descripcion, calculadora.descripcion_corta, calculadora.resultados_recomendaciones, calculadora.area, calculadora.formula, calculadora.evidencias]
         );
-
+        
         if (insertCalculadora[0].affectedRows !== 1) {
             return { error: 'Fallo inesperado guardando la calculadora', status: 500 };
         }
 
-        const insertParametros = await conexion.query<ResultSetHeader>(
-            'INSERT INTO `parametro_calculadora` (`id_calculadora`, `id_parametro`) VALUES ${calculadora.parametros.map((parametro: number) => `(${insertCalculadora[0].insertId}, ${parametro})`).join(', ')}'
-        );
+        let insertParametros;
 
-        if (insertParametros[0].affectedRows !== calculadora.parametros.length) {
-            await conexion.query('ROLLBACK');
-            return { error: 'Fallo inesperado guardando los parametros de la calculadora', status: 500 };
+        for (let i = 0; i < calculadora.parametros.length; i++) {
+            insertParametros = await conexion.query<ResultSetHeader>(
+                'INSERT INTO `parametros` (`id_calculadora`, `id_parametro`) VALUES (?, ?)',
+                [insertCalculadora[0].insertId, calculadora.parametros[i].id]
+            );
+
+            if (insertParametros[0].affectedRows !== 1) {
+                console.log(insertParametros);
+                return { error: 'Fallo inesperado guardando los parametros de la calculadora', status: 500 };
+            }
         }
-
-        const insertEvidencias = await conexion.query<ResultSetHeader>(
-            'INSERT INTO `evidencia_calculadora` (`id_calculadora`, `id_evidencia`) VALUES ${calculadora.evidencias.map((evidencia: number) => `(${insertCalculadora[0].insertId}, ${evidencia})`).join(', ')}'
-        );
-
-        if (insertEvidencias[0].affectedRows !== calculadora.evidencias.length) {
-            await conexion.query('ROLLBACK');
-            return { error: 'Fallo inesperado guardando las evidencias de la calculadora', status: 500 };
-        }
-
-        await conexion.query('COMMIT');
 
         return { message: 'Calculadora guardada con exito', id: insertCalculadora[0].insertId, status: 200 };
     } catch (err) {
@@ -114,8 +100,7 @@ export async function editarParametroAction(formulario: FormData) {
         valorMaximo: formulario.get('valorMaximo'),
         opciones: formulario.get('opciones')
     };
-    console.log(parametro);
-    
+
     try {
         let update;
         if (parametro.tipo_campo === 'numerico') {

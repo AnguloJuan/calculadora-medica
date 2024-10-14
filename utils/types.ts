@@ -21,9 +21,11 @@ interface Calculadora {
     descripcion: string,
     descripcion_corta: string,
     resultados_recomendaciones: string,
+    area: string,
     parametros: Parametro[],
     formula: string,
-    evidencias: Evidencia[]
+    evidencias: string
+    // evidencias: Evidencia[]
 }
 
 interface Parametro {
@@ -64,9 +66,10 @@ const CalculadoraZ = z.object({
     descripcion: z.string().min(1),
     descripcion_corta: z.string().min(1),
     resultados_recomendaciones: z.string().min(1),
+    area: z.string().min(1),
     parametros: z.array(ParametroZ).nonempty(),
     formula: z.string().min(1),
-    evidencias: z.array(EvidenciaZ).nonempty()
+    evidencias: z.string().min(1),
 }) satisfies z.ZodType<Calculadora>;
 
 export { CalculadoraZ, EvidenciaZ, ParametroZ };

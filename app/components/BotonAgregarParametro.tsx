@@ -73,8 +73,9 @@ const BotonAgregarParametro: FunctionComponent<BotonAgregarParametroProps> = ({ 
 
             const respuesta = await crearParametroAction(datosParametro);
             if (respuesta.id) {
+                const parametroConId = { ...parametro, id: respuesta.id };
                 setParametro({ ...parametro, id: respuesta.id });
-                setParametros && parametros && setParametros([...parametros, parametro]);
+                setParametros && parametros && setParametros([...parametros, parametroConId]);
                 addToast(respuesta.message || 'Parámetro guardado con éxito', 'success');
                 setAbierto(false);
             } else {

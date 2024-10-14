@@ -20,7 +20,6 @@ export default function AgregarParametro({ parametros, parametrosCalculadora, se
         //     return
         // }
         const parametro = parametros.find(parametro => parametro.id === idParametro);
-        // console.log(parametro, parametrosCalculadora);
         
         if (parametro) {
             setParametrosCalculadora([...parametrosCalculadora, parametro]);

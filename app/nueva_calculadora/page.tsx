@@ -19,12 +19,12 @@ export default async function NuevaCalculadora() {
                 <div className="w-full flex flex-col gap-6">
                     <h2 className="w-full text-xl font-semibold text-center">Información general</h2>
                     <div className="w-full flex flex-col gap-2">
-                        <label htmlFor="nombre">Nombre del parámetro</label>
+                        <label htmlFor="nombre">Nombre de la calculadora</label>
                         <input
                             type="text"
                             id="nombre"
                             name="nombre"
-                            placeholder="Ingrese un nombre del parametro"
+                            placeholder="Ingrese el de la nombre"
                             className="rounded-lg"
                         />
                     </div>
@@ -56,6 +56,17 @@ export default async function NuevaCalculadora() {
                             placeholder="Ingrese recomendaciones de la calculadora"
                             className="bg-white"
                         ></textarea>
+                    </div>
+
+                    <div className="w-full flex flex-col gap-2">
+                        <label htmlFor="area">Área a la que pertenece la calculadora</label>
+                        <input
+                            type="text"
+                            id="area"
+                            name="area"
+                            placeholder="Ingrese el área a la que pertenece la calculadora"
+                            className="rounded-lg"
+                        />
                     </div>
 
                     <AgregarEvidencias />
