@@ -1,6 +1,5 @@
 'use client'
-import { Calculadora, Parametro } from "@/utils/types";
-import React, { FunctionComponent, use, useEffect, useState } from "react";
+import { Parametro } from "@/utils/types";
 import { Each } from "../components/EachOf";
 
 interface AgregarParametroProps {

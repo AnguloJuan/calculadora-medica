@@ -1,13 +1,9 @@
-import ListaParametros from "@/app/components/ListaParametros";
 import { crearCalculadoraAction } from "@/utils/actions";
-import { Calculadora, Evidencia, Parametro } from "@/utils/types";
-import { IconDeviceFloppy } from "@tabler/icons-react";
-import BotonAgregarParametro from "../components/BotonAgregarParametro";
-import AgregarParametro from "./AgregarParametro";
 import obtenerParametros from "@/utils/parametros";
-import Parametros from "./Parametros";
+import { Parametro } from "@/utils/types";
 import AgregarEvidencias from "./AgregarEvidencias";
 import BotonGuardarCalculadora from "./BotonGuardarCalculadora";
+import Parametros from "./Parametros";
 
 export default async function NuevaCalculadora() {
     const listaParametros = await obtenerParametros();

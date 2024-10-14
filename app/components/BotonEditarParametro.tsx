@@ -1,7 +1,7 @@
 'use client'
-import { crearParametroAction } from "@/utils/actions";
+import { editarParametroAction } from "@/utils/actions";
 import { Parametro } from "@/utils/types";
-import { IconPlus, IconX } from "@tabler/icons-react";
+import { IconPencil, IconX } from "@tabler/icons-react";
 import { FunctionComponent, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Boton } from "./Botones";
@@ -9,25 +9,17 @@ import FormularioParametro from "./FormularioParametro";
 import Modal from "./Modal";
 import { useToast } from "./Toast";
 
-interface BotonAgregarParametroProps {
+type BotonEditarParametroProps = {
+    parametro: Parametro;
     parametros?: Parametro[];
     setParametros?: (parametros: Parametro[]) => void;
 }
 
-const BotonAgregarParametro: FunctionComponent<BotonAgregarParametroProps> = ({ parametros, setParametros }: BotonAgregarParametroProps) => {
+const BotonEditarParametro: FunctionComponent<BotonEditarParametroProps> = ({ parametro: datosParametro, parametros, setParametros }: BotonEditarParametroProps) => {
     const [abierto, setAbierto] = useState(false);
     const [isClient, setIsClient] = useState(false);
     const { addToast } = useToast();
-    const [parametro, setParametro] = useState<Parametro>({
-        id: 0,
-        nombre: '',
-        abreviatura: '',
-        tipo_campo: 'numerico',
-        unidad_metrica: '',
-        valorMaximo: undefined,
-        valorMinimo: undefined,
-        opciones: '',
-    });
+    const [parametro, setParametro] = useState<Parametro>(datosParametro);
 
     useEffect(() => {
         setIsClient(true)
@@ -58,11 +50,12 @@ const BotonAgregarParametro: FunctionComponent<BotonAgregarParametroProps> = ({ 
         return true;
     }
 
-    const crearParametro = async () => {
+    const editarParametro = async () => {
         if (!validarDatos()) return;
 
         try {
             const datosParametro = new FormData();
+            datosParametro.set('id', parametro.id.toString());
             datosParametro.set('nombre', parametro.nombre);
             datosParametro.set('tipo_campo', parametro.tipo_campo);
             datosParametro.set('abreviatura', parametro.abreviatura);
@@ -71,10 +64,12 @@ const BotonAgregarParametro: FunctionComponent<BotonAgregarParametroProps> = ({ 
             datosParametro.set('valorMaximo', parametro.valorMaximo?.toString() || '');
             datosParametro.set('opciones', parametro.opciones?.toString() || '');
 
-            const respuesta = await crearParametroAction(datosParametro);
-            if (respuesta.id) {
-                setParametro({ ...parametro, id: respuesta.id });
-                setParametros && parametros && setParametros([...parametros, parametro]);
+            const respuesta = await editarParametroAction(datosParametro);
+            if (respuesta.status === 200) {
+                if (parametros && setParametros) {
+                    const nuevosParametros = parametros.map(param => param.id === parametro.id ? parametro : param);
+                    setParametros(nuevosParametros);
+                }
                 addToast(respuesta.message || 'Parámetro guardado con éxito', 'success');
                 setAbierto(false);
             } else {
@@ -85,13 +80,18 @@ const BotonAgregarParametro: FunctionComponent<BotonAgregarParametroProps> = ({ 
         }
     }
 
+    const cancelarEdicion = () => {
+        setParametro(datosParametro);
+        setAbierto(false);
+    }
+
     return (<>
-        <div className="w-full col-span-2">
-            <Boton color='green' funcion={() => setAbierto(true)}>
-                <IconPlus stroke={2} />
-                Crear nuevo parámetro
-            </Boton>
-        </div>
+        <Boton
+            color="yellow"
+            funcion={() => setAbierto(true)}
+        >
+            <IconPencil stroke={2} />
+        </Boton>
         {isClient && createPortal(
             <Modal
                 titulo={'Crear nuevo parámetro'}
@@ -99,14 +99,14 @@ const BotonAgregarParametro: FunctionComponent<BotonAgregarParametroProps> = ({ 
                 setAbierto={() => setAbierto(!abierto)}
                 botonesAccion={<>
                     <Boton
+                        funcion={cancelarEdicion}
                         color="red"
-                        funcion={() => setAbierto(false)}
                     >
                         <IconX stroke={2} />
                         Cancelar
                     </Boton>
-                    <Boton color='green' funcion={crearParametro}>
-                        <IconPlus stroke={2} />
+                    <Boton color="yellow" funcion={editarParametro}>
+                        <IconPencil stroke={2} />
                         Guardar
                     </Boton>
                 </>}
@@ -118,4 +118,4 @@ const BotonAgregarParametro: FunctionComponent<BotonAgregarParametroProps> = ({ 
     </>);
 }
 
-export default BotonAgregarParametro;
+export default BotonEditarParametro;

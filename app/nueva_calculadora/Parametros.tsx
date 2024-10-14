@@ -1,9 +1,9 @@
 'use client'
 import { Parametro } from "@/utils/types";
+import { useState } from "react";
 import BotonAgregarParametro from "../components/BotonAgregarParametro";
 import ListaParametros from "../components/ListaParametros";
 import AgregarParametro from "./AgregarParametro";
-import { useState } from "react";
 
 interface ParametrosProps {
     listaParametros: Parametro[];
@@ -20,7 +20,7 @@ export default function Parametros({ listaParametros }: ParametrosProps) {
                     <BotonAgregarParametro parametros={parametros} setParametros={setParametros} />
                 </div>
             </div>
-            <ListaParametros parametros={parametros} />
+            <ListaParametros parametros={parametros} setParametros={setParametros} />
             <input
                 id="parametros"
                 name="parametros"

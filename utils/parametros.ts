@@ -1,6 +1,6 @@
+import { conectarBd } from "@/db/conectarDb";
 import { RowDataPacket } from "mysql2";
 import { Parametro } from "./types";
-import { conectarBd } from "@/db/conectarDb";
 
 let parametros: Parametro[] = [];
 

@@ -1,38 +1,81 @@
 'use client'
-import { CalculadoraZ } from "@/utils/types";
+import { CalculadoraZ, Parametro } from "@/utils/types";
 import { IconDeviceFloppy } from "@tabler/icons-react";
 import { useToast } from "../components/Toast";
+import { Boton } from "../components/Botones";
+import { crearCalculadoraAction } from "@/utils/actions";
 
 export default function BotonGuardarCalculadora() {
     const { addToast } = useToast();
-    const GuardarCalculadora = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
+
+    const validarDatos = (datosFormulario: { [k: string]: FormDataEntryValue }) => {
+
+        const validarCalcudora = CalculadoraZ.omit({ parametros: true, evidencias: true }).safeParse(datosFormulario);
+
+        if (!validarCalcudora.success) {
+            // const errores = validarCalcudora.error.formErrors;
+            const errores = Object.keys(validarCalcudora.error.formErrors.fieldErrors).join(', ');
+            addToast(
+                `Por favor llene todos los campos obligatorios: ${errores}`,
+                'error'
+            );
+            return false;
+        }
+
+        const { parametros, evidencias } = datosFormulario;
+        const parametrosArray = JSON.parse(parametros as string) as Parametro[];
+        const evidenciasArray = JSON.parse(evidencias as string) as Parametro[];
+
+        if (parametrosArray.length === 0) {
+            addToast(
+                'Por favor agregue al menos un parámetro',
+                'error'
+            );
+            return false;
+        }
+
+        
+        if (evidenciasArray.length === 0) {
+            addToast(
+                'Por favor agregue al menos una evidencia',
+                'error'
+            );
+            return false;
+        }
+        return true;
+    }
+
+    const guardarCalculadora = async () => {
         const formulario = new FormData(document.getElementById("form_calculadora") as HTMLFormElement);
         formulario.set('id', '0')
         const datosFormulario = Object.fromEntries(formulario.entries());
-        const validarCalcudora = CalculadoraZ.omit({ parametros: true, evidencias: true }).safeParse(datosFormulario);
-        if (!validarCalcudora.success) {
-            // const errores = validarCalcudora.error.formErrors;
-            const errores = validarCalcudora.error.format();
-            console.log(errores);
+        
+        if (!validarDatos(datosFormulario)) return;
+        
+        const respuesta = await crearCalculadoraAction(formulario)
+        if (respuesta.error) {
             addToast(
-                `Por favor llene todos los campos obligatorios: ${Object.values(errores._errors).join(', ')}`,
+                respuesta.error,
                 'error'
             );
-            
             return;
         }
 
+        addToast(
+            'Calculadora guardada exitosamente',
+            'success'
+        );
+
+        // navigate(`/calculadora/${respuesta.id}`);
     }
 
     return (
-        <button
-            type="button"
-            onClick={GuardarCalculadora}
-            className="flex flex-row bg-green-600 border-green-700 text-white px-4 py-2 rounded-lg items-center gap-2"
+        <Boton
+            color="green"
+            funcion={guardarCalculadora}
         >
             <IconDeviceFloppy stroke={2} />
             Guardar
-        </button>
+        </Boton>
     )
 }

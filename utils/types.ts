@@ -44,7 +44,7 @@ interface Evidencia {
 
 const ParametroZ = z.object({
     id: z.number(),
-    nombre: z.string(),
+    nombre: z.string().min(1),
     abreviatura: z.string(),
     tipo_campo: z.enum(['numerico', 'seleccion', 'radio']),
     unidad_metrica: z.string().optional(),
@@ -69,5 +69,5 @@ const CalculadoraZ = z.object({
     evidencias: z.array(EvidenciaZ).nonempty()
 }) satisfies z.ZodType<Calculadora>;
 
-export type { Calculadora, Parametro, Evidencia };
-export { CalculadoraZ, ParametroZ, EvidenciaZ };
+export { CalculadoraZ, EvidenciaZ, ParametroZ };
+export type { Calculadora, Evidencia, Parametro };

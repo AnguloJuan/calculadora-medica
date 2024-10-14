@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS calculadora (
 	nombre VARCHAR(60) NOT NULL,
     descripción VARCHAR(360) NOT NULL,
     descripcion_corta VARCHAR(120),
+    resultado_recomendaciones VARCHAR(360),
     formula VARCHAR(360) NOT NULL,
     fecha_creacion DATETIME NOT NULL,
     fecha_actualizacion DATETIME

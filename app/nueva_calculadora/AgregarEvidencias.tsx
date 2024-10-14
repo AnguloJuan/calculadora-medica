@@ -1,8 +1,8 @@
 'use client'
+import { IconPlus, IconTrash } from "@tabler/icons-react";
 import { useState } from "react";
+import { Boton } from "../components/Botones";
 import { Each } from "../components/EachOf";
-import { IconTrash } from "@tabler/icons-react";
-import { BotonAgregar } from "../components/Botones";
 
 export default function AgregarEvidencias() {
     const [evidencia, setEvidencia] = useState<string>('');
@@ -21,7 +21,8 @@ export default function AgregarEvidencias() {
                     placeholder="Ingrese la cita en formato APA"
                     className="rounded-lg"
                 />
-                <BotonAgregar
+                <Boton
+                    color="green"
                     funcion={() => {
                         if (evidencia === '') {
                             return;
@@ -30,8 +31,9 @@ export default function AgregarEvidencias() {
                         setEvidencia('');
                     }}
                 >
-                    Agregar más evidencia
-                </BotonAgregar>
+                    <IconPlus stroke={2} />
+                    Agregar evidencia
+                </Boton>
             </div>
             {evidencias.length > 0 && (<>
                 <h3 className="my-2 text-lg font-semibold">Referencias</h3>
@@ -39,16 +41,15 @@ export default function AgregarEvidencias() {
                     <Each of={evidencias} render={(evidencia) => (
                         <div className="flex flex-row justify-between gap-2 w-full">
                             <p className="text-sm font-light self-center">{evidencia}</p>
-                            <button
-                                type="button"
-                                onClick={() => {
+                            <Boton
+                                color="red"
+                                funcion={() => {
                                     setEvidencias(evidencias.filter(e => e !== evidencia));
                                 }}
-                                className="inline-flex flex-row bg-red-600 border-red-700 text-white px-4 py-2 rounded-lg items-center gap-2 w-full justify-center border border-transparent shadow-sm  hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto"
                             >
                                 <IconTrash />
                                 Eliminar
-                            </button>
+                            </Boton>
                         </div>
                     )} />
                 </div>
