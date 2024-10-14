@@ -1,7 +1,7 @@
 import { conectarBd } from "@/db/conectarDb";
 import { ResultSetHeader } from "mysql2";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { NextRequest } from "next/server";
 
 interface Usuario extends ResultSetHeader {
     usuario: string;
@@ -45,4 +45,9 @@ export async function logIn(formData: FormData) {
         maxAge: 60 * 60 * 24 * 7, // One week
         path: '/',
     })
+}
+ 
+export async function getSessionData(req: NextRequest) {
+//   const encryptedSessionData = cookies().get('session')?.value
+//   return encryptedSessionData ? JSON.parse(decrypt(encryptedSessionData)) : null
 }
