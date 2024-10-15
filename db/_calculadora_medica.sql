@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS calculadora (
     formula VARCHAR(360) NOT NULL,
     evidencias VARCHAR(360) NOT NULL,
     area VARCHAR(60) NOT NULL,
+    link VARCHAR(120) NOT NULL,
     fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     fecha_actualizacion DATETIME
 );

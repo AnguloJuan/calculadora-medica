@@ -7,7 +7,7 @@ export default async function CalculadoraPage({ params }: { params: { calculador
     async function obtenerCalculadora() {        
         const conexion = await conectarBd();
         try {
-            const [rows, fields] = await conexion.query('SELECT * FROM calculadora WHERE nombre = ?', [params.calculadora]);
+            const [rows, fields] = await conexion.query('SELECT * FROM calculadora WHERE link = ?', [params.calculadora]);
 
             if (rows.length === 0) {
                 redirect('/404');

@@ -36,6 +36,13 @@ export async function crearCalculadoraAction(formulario: FormData) {
         parametros: JSON.parse(formulario.get('parametros')?.toString() || '[]') as Parametro[]
     };
 
+    // link name in kebab case
+    const kebabCase = (string: string) => string
+        .replace(/([a-z])([A-Z])/g, "$1-$2")
+        .replace(/[\s_]+/g, '-')
+        .toLowerCase();
+    const link = kebabCase(calculadora.nombre as string);
+
     if (calculadora.parametros.length === 0) {
         return { error: 'Por favor agregue al menos un parámetro', status: 400 };
     }
@@ -44,8 +51,8 @@ export async function crearCalculadoraAction(formulario: FormData) {
 
     try {
         const insertCalculadora = await conexion.query<ResultSetHeader>(
-            'INSERT INTO `calculadora` (`nombre`, `descripcion`, `descripcion_corta`, `resultados_recomendaciones`, `area`, `formula`, `evidencias`) VALUES (?, ?, ?, ?, ?, ?, ?)',
-            [calculadora.nombre, calculadora.descripcion, calculadora.descripcion_corta, calculadora.resultados_recomendaciones, calculadora.area, calculadora.formula, calculadora.evidencias]
+            'INSERT INTO `calculadora` (`nombre`, `descripcion`, `descripcion_corta`, `resultados_recomendaciones`, `area`, `formula`, `evidencias`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+            [calculadora.nombre, calculadora.descripcion, calculadora.descripcion_corta, calculadora.resultados_recomendaciones, calculadora.area, calculadora.formula, calculadora.evidencias, link]
         );
 
         if (insertCalculadora[0].affectedRows !== 1) {
@@ -66,7 +73,7 @@ export async function crearCalculadoraAction(formulario: FormData) {
             }
         }
 
-        return { message: 'Calculadora guardada con exito', id: insertCalculadora[0].insertId, status: 200 };
+        return { message: 'Calculadora guardada con exito', link, status: 200 };
     } catch (err) {
         console.log(err);
         return { error: 'Fallo al intentar guardar la calculadora', status: 500 };

@@ -15,13 +15,13 @@ import { Each } from './EachOf';
 
 interface Toast {
     id: number;
-    message: string;
+    message: string | JSX.Element;
     type: 'success' | 'warning' | 'error' | 'default';
 }
 
 interface ToastStore {
     toasts: Toast[];
-    addToast: (message: string, type?: 'success' | 'warning' | 'error' | 'default') => void;
+    addToast: (message: string | JSX.Element, type?: 'success' | 'warning' | 'error' | 'default') => void;
     removeToast: (id: number) => void;
 }
 

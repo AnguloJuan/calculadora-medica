@@ -25,6 +25,7 @@ interface Calculadora {
     parametros: Parametro[],
     formula: string,
     evidencias: string
+    link: string
     // evidencias: Evidencia[]
 }
 
@@ -70,6 +71,7 @@ const CalculadoraZ = z.object({
     parametros: z.array(ParametroZ).nonempty(),
     formula: z.string().min(1),
     evidencias: z.string().min(1),
+    link: z.string()
 }) satisfies z.ZodType<Calculadora>;
 
 export { CalculadoraZ, EvidenciaZ, ParametroZ };
