@@ -11,7 +11,7 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: 
+  /* background: 
     radial-gradient(
       circle farthest-corner at 100% 25%,
       rgba(var(--background-end-rgb), 0.9) 1px,
@@ -21,7 +21,8 @@ body {
       circle closest-corner at 0% 65%,
       rgba(var(--background-end-rgb), 0.9) 1px,
       transparent
-    ) 0 100vh;
+    ) 0 100vh; */
+
   margin: 0;
 }
 
@@ -31,11 +32,13 @@ body {
   }
 }
 
-text{
-  @apply text-balance text-gray-900;
+text {
+  @apply text-balance text-slate-900 truncate dark:text-slate-200;
 }
 
-input, textarea, select {
+input,
+textarea,
+select {
 
   @apply mt-1 block w-full px-3 py-2 text-base leading-normal bg-white border-gray-300 appearance-none rounded-lg focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50;
   @apply bg-gray-100 text-gray-900;
@@ -59,9 +62,4 @@ input, textarea, select {
   &:-ms-input-placeholder {
     @apply text-gray-500;
   }
-}
-
-button {
-  @apply inline-block px-6 py-3 text-base font-semibold leading-normal rounded-lg shadow-md appearance-none ;
-  @layer @apply focus:outline-none focus:shadow-outline;
 }

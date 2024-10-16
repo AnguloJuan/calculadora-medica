@@ -88,7 +88,7 @@ const BotonAgregarParametro: FunctionComponent<BotonAgregarParametroProps> = ({ 
 
     return (<>
         <div className="w-full col-span-2">
-            <Boton color='green' funcion={() => setAbierto(true)}>
+            <Boton type="success" funcion={() => setAbierto(true)}>
                 <IconPlus stroke={2} />
                 Crear nuevo parámetro
             </Boton>
@@ -100,13 +100,13 @@ const BotonAgregarParametro: FunctionComponent<BotonAgregarParametroProps> = ({ 
                 setAbierto={() => setAbierto(!abierto)}
                 botonesAccion={<>
                     <Boton
-                        color="red"
+                        type="danger"
                         funcion={() => setAbierto(false)}
                     >
                         <IconX stroke={2} />
                         Cancelar
                     </Boton>
-                    <Boton color='green' funcion={crearParametro}>
+                    <Boton type="success" funcion={crearParametro}>
                         <IconPlus stroke={2} />
                         Guardar
                     </Boton>

@@ -46,8 +46,9 @@ export async function logIn(formData: FormData) {
         path: '/',
     })
 }
- 
-export async function getSessionData(req: NextRequest) {
-//   const encryptedSessionData = cookies().get('session')?.value
-//   return encryptedSessionData ? JSON.parse(decrypt(encryptedSessionData)) : null
+
+export async function getSessionData(request: NextRequest) {
+    return cookies().get('rol')?.value
+    //   const encryptedSessionData = cookies().get('session')?.value
+    //   return encryptedSessionData ? JSON.parse(decrypt(encryptedSessionData)) : null
 }

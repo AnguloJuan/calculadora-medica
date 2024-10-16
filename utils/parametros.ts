@@ -13,7 +13,7 @@ export default async function ObtenerParametros() {
             const [parametros] = await conexion.query<Parametros[]>(
                 'SELECT * FROM `parametro` ORDER BY `nombre` ASC;'
             );
-            return parametros;
+            return parametros as Parametro[];
         } catch (err) {
             console.log(err);
             return { error: 'Fallo al intentar obtener los parámetros', status: 500 };

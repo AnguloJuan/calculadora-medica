@@ -3,24 +3,24 @@ import { Parametro } from "@/utils/types";
 import { useState } from "react";
 import BotonAgregarParametro from "../components/BotonAgregarParametro";
 import ListaParametros from "../components/ListaParametros";
-import AgregarParametro from "./AgregarParametro";
+import SeleccionAgregarParametro from "./SeleccionAgregarParametro";
 
 interface ParametrosProps {
     listaParametros: Parametro[];
 }
 
-export default function Parametros({ listaParametros }: ParametrosProps) {
+export default function AgregarParametros({ listaParametros }: ParametrosProps) {
     const [parametros, setParametros] = useState<Parametro[]>([]);
     return (
         <>
-            <div className="w-full flex flex-col gap-2">
-                <span>Agregar parámetro</span>
+            <fieldset className="w-full flex flex-col gap-2">
+                <label htmlFor="parametros_existentes">Agregar parámetro</label>
                 <div className="w-full grid grid-cols-2 gap-y-8 sm:grid-cols-6 gap-8">
-                    <AgregarParametro parametros={listaParametros} parametrosCalculadora={parametros} setParametrosCalculadora={setParametros} />
+                    <SeleccionAgregarParametro parametros={listaParametros} parametrosCalculadora={parametros} setParametrosCalculadora={setParametros} />
                     <BotonAgregarParametro parametros={parametros} setParametros={setParametros} />
                 </div>
-            </div>
-            <ListaParametros parametros={parametros} setParametros={setParametros} />
+            </fieldset>
+            <ListaParametros parametros={parametros} setParametros={setParametros} sesion="admin" />
             <input
                 id="parametros"
                 name="parametros"

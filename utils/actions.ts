@@ -1,10 +1,10 @@
 'use server'
 
 import { ResultSetHeader } from "mysql2";
+import { redirect } from "next/navigation";
 import { conectarBd } from "../db/conectarDb";
 import { logIn } from "./auth";
 import { Parametro } from "./types";
-import { redirect } from "next/navigation";
 
 export async function authenticate(_currentState: unknown, formData: FormData) {
     try {
@@ -20,10 +20,11 @@ export async function authenticate(_currentState: unknown, formData: FormData) {
         }
         throw error
     }
-    redirect('/nueva_calculadora')
+    redirect('/nueva-calculadora')
 }
 
 export async function crearCalculadoraAction(formulario: FormData) {
+    var kebabCase = require('lodash/kebabCase');
     const conexion = await conectarBd();
     const calculadora = {
         nombre: formulario.get('nombre'),
@@ -31,17 +32,13 @@ export async function crearCalculadoraAction(formulario: FormData) {
         descripcion_corta: formulario.get('descripcion_corta'),
         resultados_recomendaciones: formulario.get('resultados_recomendaciones'),
         area: formulario.get('area'),
+        enlace: formulario.get('enlace') || null,
         formula: formulario.get('formula'),
-        evidencias: formulario.get('evidencias'),
+        evidencias: JSON.parse(formulario.get('evidencias')?.toString() || '[]') as string[],
         parametros: JSON.parse(formulario.get('parametros')?.toString() || '[]') as Parametro[]
     };
 
-    // link name in kebab case
-    const kebabCase = (string: string) => string
-        .replace(/([a-z])([A-Z])/g, "$1-$2")
-        .replace(/[\s_]+/g, '-')
-        .toLowerCase();
-    const link = kebabCase(calculadora.nombre as string);
+    const enlace = calculadora.enlace || kebabCase(calculadora.nombre);
 
     if (calculadora.parametros.length === 0) {
         return { error: 'Por favor agregue al menos un parámetro', status: 400 };
@@ -51,18 +48,16 @@ export async function crearCalculadoraAction(formulario: FormData) {
 
     try {
         const insertCalculadora = await conexion.query<ResultSetHeader>(
-            'INSERT INTO `calculadora` (`nombre`, `descripcion`, `descripcion_corta`, `resultados_recomendaciones`, `area`, `formula`, `evidencias`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-            [calculadora.nombre, calculadora.descripcion, calculadora.descripcion_corta, calculadora.resultados_recomendaciones, calculadora.area, calculadora.formula, calculadora.evidencias, link]
+            'INSERT INTO `calculadora` (`nombre`, `descripcion`, `descripcion_corta`, `resultados_recomendaciones`, `area`, `formula`, `enlace`) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            [calculadora.nombre, calculadora.descripcion, calculadora.descripcion_corta, calculadora.resultados_recomendaciones, calculadora.area, calculadora.formula, enlace]
         );
 
         if (insertCalculadora[0].affectedRows !== 1) {
             return { error: 'Fallo inesperado guardando la calculadora', status: 500 };
         }
 
-        let insertParametros;
-
         for (let i = 0; i < calculadora.parametros.length; i++) {
-            insertParametros = await conexion.query<ResultSetHeader>(
+            const insertParametros = await conexion.query<ResultSetHeader>(
                 'INSERT INTO `parametros` (`id_calculadora`, `id_parametro`) VALUES (?, ?)',
                 [insertCalculadora[0].insertId, calculadora.parametros[i].id]
             );
@@ -73,7 +68,18 @@ export async function crearCalculadoraAction(formulario: FormData) {
             }
         }
 
-        return { message: 'Calculadora guardada con exito', link, status: 200 };
+        for (let i = 0; i < calculadora.evidencias.length; i++) {
+            const insertEvidencias = await conexion.query<ResultSetHeader>(
+                'INSERT INTO `evidencia` (`id_calculadora`, `cita`) VALUES (?, ?)',
+                [insertCalculadora[0].insertId, calculadora.evidencias[i]]
+            );
+
+            if (insertEvidencias[0].affectedRows !== 1) {
+                return { error: 'Fallo inesperado guardando las evidencias de la calculadora', status: 500 };
+            }
+        }
+
+        return { message: 'Calculadora guardada con exito', enlace: enlace, status: 200 };
     } catch (err) {
         console.log(err);
         return { error: 'Fallo al intentar guardar la calculadora', status: 500 };

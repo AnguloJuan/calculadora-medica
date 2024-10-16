@@ -9,18 +9,19 @@ import { Boton } from "./Botones";
 
 interface ListaParametrosProps {
     parametros: Parametro[];
-    setParametros: (parametros: Parametro[]) => void;
+    setParametros?: (parametros: Parametro[]) => void;
+    sesion: string;
 }
 
-export default function ListaParametros({ parametros, setParametros }: ListaParametrosProps) {
+export default function ListaParametros({ parametros, setParametros, sesion }: ListaParametrosProps) {
     const BotonEliminar = ({ id }: { id: number }) => {
         const EliminarParametro = () => {
             const nuevosParametros = parametros.filter((parametro) => parametro.id !== id);
-            setParametros(nuevosParametros);
+            setParametros && setParametros(nuevosParametros);
         }
         return (
             <Boton
-                color="red"
+                type="danger"
                 funcion={EliminarParametro}
             >
                 <IconTrash stroke={2} />
@@ -34,10 +35,12 @@ export default function ListaParametros({ parametros, setParametros }: ListaPara
                 of={parametros}
                 render={(parametro) => (<div className="flex flex-row gap-2">
                     <CampoParametro key={parametro.id} parametro={parametro} />
-                    <div className="flex flex-row gap-1">
-                        <BotonEliminar id={parametro.id} />
-                        <BotonEditarParametro parametro={parametro} parametros={parametros} setParametros={setParametros} />
-                    </div>
+                    {sesion === 'admin' && (
+                        <div className="flex flex-row gap-1">
+                            <BotonEliminar id={parametro.id} />
+                            <BotonEditarParametro parametro={parametro} parametros={parametros} setParametros={setParametros} />
+                        </div>
+                    )}
                 </div>)}
             />
         </div>

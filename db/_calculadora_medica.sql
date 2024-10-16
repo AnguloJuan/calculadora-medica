@@ -10,9 +10,8 @@ CREATE TABLE IF NOT EXISTS calculadora (
     descripcion_corta VARCHAR(120),
     resultados_recomendaciones VARCHAR(360),
     formula VARCHAR(360) NOT NULL,
-    evidencias VARCHAR(360) NOT NULL,
     area VARCHAR(60) NOT NULL,
-    link VARCHAR(120) NOT NULL,
+    enlace VARCHAR(120) NOT NULL,
     fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     fecha_actualizacion DATETIME
 );
@@ -43,11 +42,19 @@ CREATE TABLE IF NOT EXISTS unidades_metricas (
     id_parametro INT NOT NULL,
     CONSTRAINT FK_id_unidades_metricas_parametro FOREIGN KEY (id_parametro) REFERENCES parametro(id)
 );
-/*
+
 CREATE TABLE IF NOT EXISTS evidencia (
-    id INT NOT NULLL PRIMARY KEY AUTO_INCREMENT,
-    enlace VARCHAR(500) NOT NULL,
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    cita VARCHAR(500) NOT NULL,
     id_calculadora INT NOT NULL,
     CONSTRAINT FK_id_evidencia_calculadora FOREIGN KEY (id_calculadora) REFERENCES calculadora(id)
 );
-*/
+
+CREATE TABLE IF NOT EXISTS usuario (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    usuario VARCHAR(30) NOT NULL,
+    contrasena VARCHAR(120) NOT NULL,
+    rol ENUM('admin', 'usuario') NOT NULL
+);
+
+INSERT INTO `usuario`(`id`, `usuario`, `contrasena`, `rol`) VALUES (1, 'admin','1234','admin')

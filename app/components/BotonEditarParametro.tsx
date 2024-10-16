@@ -87,7 +87,7 @@ const BotonEditarParametro: FunctionComponent<BotonEditarParametroProps> = ({ pa
 
     return (<>
         <Boton
-            color="yellow"
+            type="warning"
             funcion={() => setAbierto(true)}
         >
             <IconPencil stroke={2} />
@@ -100,12 +100,12 @@ const BotonEditarParametro: FunctionComponent<BotonEditarParametroProps> = ({ pa
                 botonesAccion={<>
                     <Boton
                         funcion={cancelarEdicion}
-                        color="red"
+                        type="danger"
                     >
                         <IconX stroke={2} />
                         Cancelar
                     </Boton>
-                    <Boton color="yellow" funcion={editarParametro}>
+                    <Boton type="warning" funcion={editarParametro}>
                         <IconPencil stroke={2} />
                         Guardar
                     </Boton>

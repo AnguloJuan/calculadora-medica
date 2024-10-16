@@ -2,16 +2,16 @@
 import { crearCalculadoraAction } from "@/utils/actions";
 import { CalculadoraZ, Parametro } from "@/utils/types";
 import { IconDeviceFloppy } from "@tabler/icons-react";
+import Link from "next/link";
 import { Boton } from "../components/Botones";
 import { useToast } from "../components/Toast";
-import Link from "next/link";
 
 export default function BotonGuardarCalculadora() {
     const { addToast } = useToast();
 
     const validarDatos = (datosFormulario: { [k: string]: FormDataEntryValue }) => {
 
-        const validarCalcudora = CalculadoraZ.omit({ parametros: true, evidencias: true }).safeParse(datosFormulario);
+        const validarCalcudora = CalculadoraZ.safeParse(datosFormulario);
 
         if (!validarCalcudora.success) {
             // const errores = validarCalcudora.error.formErrors;
@@ -25,7 +25,7 @@ export default function BotonGuardarCalculadora() {
 
         const { parametros, evidencias } = datosFormulario;
         const parametrosArray = JSON.parse(parametros as string) as Parametro[];
-        const evidenciasArray = JSON.parse(evidencias as string) as Parametro[];
+        const evidenciasArray = JSON.parse(evidencias as string) as string[];
 
         if (parametrosArray.length === 0) {
             addToast(
@@ -34,7 +34,6 @@ export default function BotonGuardarCalculadora() {
             );
             return false;
         }
-
 
         if (evidenciasArray.length === 0) {
             addToast(
@@ -49,7 +48,7 @@ export default function BotonGuardarCalculadora() {
     const guardarCalculadora = async () => {
         const formulario = new FormData(document.getElementById("form_calculadora") as HTMLFormElement);
         formulario.set('id', '0');
-        formulario.set('link', '');
+        formulario.set('enlace', '');
         const datosFormulario = Object.fromEntries(formulario.entries());
 
         if (!validarDatos(datosFormulario)) return;
@@ -68,7 +67,7 @@ export default function BotonGuardarCalculadora() {
                 Calculadora guardada exitosamente <br />
                 haz click para verla: {' '}
                 <Link
-                    href={`/calculadoras/${respuesta.link}`}
+                    href={`/calculadoras/${respuesta.enlace}`}
                     className="underline text-blue-500 cursor-pointer hover:text-blue-700 transition-colors"
                 >
                     ver calculadora
@@ -80,7 +79,7 @@ export default function BotonGuardarCalculadora() {
 
     return (
         <Boton
-            color="green"
+            type="success"
             funcion={guardarCalculadora}
         >
             <IconDeviceFloppy stroke={2} />

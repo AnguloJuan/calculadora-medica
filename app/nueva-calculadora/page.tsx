@@ -1,11 +1,13 @@
 import { crearCalculadoraAction } from "@/utils/actions";
 import obtenerParametros from "@/utils/parametros";
-import { Parametro } from "@/utils/types";
+import { AREA, Parametro } from "@/utils/types";
+import { NextRequest } from "next/server";
+import { Each } from "../components/EachOf";
 import AgregarEvidencias from "./AgregarEvidencias";
+import AgregarParametros from "./AgregarParametros";
 import BotonGuardarCalculadora from "./BotonGuardarCalculadora";
-import Parametros from "./Parametros";
 
-export default async function NuevaCalculadora() {
+export default async function NuevaCalculadora({ request }: { request: NextRequest }) {
     const listaParametros = await obtenerParametros();
 
     return (
@@ -18,7 +20,7 @@ export default async function NuevaCalculadora() {
             >
                 <div className="w-full flex flex-col gap-6">
                     <h2 className="w-full text-xl font-semibold text-center">Información general</h2>
-                    <div className="w-full flex flex-col gap-2">
+                    <fieldset className="w-full flex flex-col gap-2">
                         <label htmlFor="nombre">Nombre de la calculadora</label>
                         <input
                             type="text"
@@ -27,18 +29,18 @@ export default async function NuevaCalculadora() {
                             placeholder="Ingrese el de la nombre"
                             className="rounded-lg"
                         />
-                    </div>
-
-                    <div className="w-full flex flex-col gap-2">
+                    </fieldset>
+                    <fieldset className="w-full flex flex-col gap-2">
                         <span>Descripción</span>
                         <textarea
                             id="descripcion"
                             name="descripcion"
                             placeholder="Ingrese una descripcion de la calculadora"
+                            autoComplete="on"
                             className="bg-white"
                         ></textarea>
-                    </div>
-                    <div className="w-full flex flex-col gap-2">
+                    </fieldset>
+                    <fieldset className="w-full flex flex-col gap-2">
                         <label htmlFor="descripcion_corta">Descripcion corta</label>
                         <input
                             type="text"
@@ -47,27 +49,43 @@ export default async function NuevaCalculadora() {
                             placeholder="Ingrese una descipción corta de la calculadora"
                             className="rounded-lg"
                         />
-                    </div>
-                    <div className="w-full flex flex-col gap-2">
+                    </fieldset>
+                    <fieldset className="w-full flex flex-col gap-2">
                         <span>Resultados/Recomendaciones</span>
                         <textarea
                             name="resultados_recomendaciones"
                             id="resultados_recomendaciones"
                             placeholder="Ingrese recomendaciones de la calculadora"
+                            autoComplete="on"
                             className="bg-white"
                         ></textarea>
-                    </div>
+                    </fieldset>
 
-                    <div className="w-full flex flex-col gap-2">
+                    <fieldset className="w-full flex flex-col gap-2">
                         <label htmlFor="area">Área a la que pertenece la calculadora</label>
-                        <input
-                            type="text"
+                        <select
                             id="area"
                             name="area"
-                            placeholder="Ingrese el área a la que pertenece la calculadora"
+                            className="rounded-lg"
+                        >
+                            <Each
+                                of={AREA.options}
+                                render={(area) => (
+                                    <option value={area}>{area}</option>
+                                )}
+                            />
+                        </select>
+                    </fieldset>
+                    <fieldset className="w-full flex flex-col gap-2">
+                        <label htmlFor="enlace">Enlace</label>
+                        <input
+                            type="text"
+                            id="enlace"
+                            name="enlace"
+                            placeholder="Enlace a la calculadora (por defecto es el nombre en kebab case)"
                             className="rounded-lg"
                         />
-                    </div>
+                    </fieldset>
 
                     <AgregarEvidencias />
 
@@ -77,10 +95,10 @@ export default async function NuevaCalculadora() {
                 <div className="w-full flex flex-col gap-6">
                     <h2 className="w-full text-xl font-semibold text-center">Parámetros</h2>
 
-                    {Array.isArray(listaParametros) ? <Parametros listaParametros={listaParametros ? listaParametros : [] as Parametro[]} />
+                    {Array.isArray(listaParametros) ? <AgregarParametros listaParametros={listaParametros ? listaParametros : [] as Parametro[]} />
                         : <p>Cargando...</p>}
 
-                    <div className="w-full">
+                    <fieldset className="w-full">
                         <label htmlFor="formula">Formula</label>
                         <input
                             type="text"
@@ -89,7 +107,7 @@ export default async function NuevaCalculadora() {
                             placeholder="Ingrese la formula"
                             className="rounded-lg"
                         />
-                    </div>
+                    </fieldset>
                 </div>
 
                 <BotonGuardarCalculadora />

@@ -9,7 +9,7 @@ interface AgregarParametroProps {
     setParametrosCalculadora: (parametros: Parametro[]) => void;
 }
 
-export default function AgregarParametro({ parametros, parametrosCalculadora, setParametrosCalculadora }: AgregarParametroProps) {
+export default function SeleccionAgregarParametro({ parametros, parametrosCalculadora, setParametrosCalculadora }: AgregarParametroProps) {
 
     const agregar = async (idParametro: number) => {
         if (idParametro === 0) {

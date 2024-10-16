@@ -1,19 +1,6 @@
-/**
- * Tipos de datos utilizados en la aplicación
- * @module utils/types
- * 
- * @typedef {Object} Parametro
- * @property {number} id - Identificador del parámetro
- * @property {string} nombre - Nombre del parámetro
- * @property {string} abreviatura - Abreviatura del parámetro para la formula
- * @property {'numerico' | 'seleccion' | 'radio'} tipo_campo - Tipo de campo del parámetro
- * @property {string} [unidad_metrica] - Unidad de medida del parámetro para parámetros tipo numerico
- * @property {number} [valorMaximo] - Valor máximo del parámetro para parámetros tipo numerico
- * @property {number} [valorMinimo] - Valor mínimo del parámetro para parámetros tipo numerico
- * @property {string} [opciones] - Valores posibles del parámetro para parámetros tipo seleccion y radio
- */
-
 import { z } from "zod";
+
+const AREA = z.enum(['Química sanguínea', 'Hematología', 'Perfil de lípidos', 'Proteínas', 'Otros']);
 
 interface Calculadora {
     id: number,
@@ -21,12 +8,9 @@ interface Calculadora {
     descripcion: string,
     descripcion_corta: string,
     resultados_recomendaciones: string,
-    area: string,
-    parametros: Parametro[],
+    area: z.infer<typeof AREA>,
     formula: string,
-    evidencias: string
-    link: string
-    // evidencias: Evidencia[]
+    enlace: string
 }
 
 interface Parametro {
@@ -43,6 +27,7 @@ interface Parametro {
 interface Evidencia {
     id: number,
     cita: string,
+    id_calculadora: number
 }
 
 const ParametroZ = z.object({
@@ -58,7 +43,8 @@ const ParametroZ = z.object({
 
 const EvidenciaZ = z.object({
     id: z.number(),
-    cita: z.string()
+    cita: z.string().min(1),
+    id_calculadora: z.number()
 }) satisfies z.ZodType<Evidencia>;
 
 const CalculadoraZ = z.object({
@@ -67,12 +53,10 @@ const CalculadoraZ = z.object({
     descripcion: z.string().min(1),
     descripcion_corta: z.string().min(1),
     resultados_recomendaciones: z.string().min(1),
-    area: z.string().min(1),
-    parametros: z.array(ParametroZ).nonempty(),
+    area: AREA,
     formula: z.string().min(1),
-    evidencias: z.string().min(1),
-    link: z.string()
+    enlace: z.string()
 }) satisfies z.ZodType<Calculadora>;
 
-export { CalculadoraZ, EvidenciaZ, ParametroZ };
+export { CalculadoraZ, EvidenciaZ, ParametroZ, AREA };
 export type { Calculadora, Evidencia, Parametro };
