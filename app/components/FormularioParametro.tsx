@@ -75,7 +75,7 @@ const FormularioParametro: FunctionComponent<FormularioParametroProps> = (Formul
             </div>
 
             {parametro.tipo_campo === 'numerico' && <>
-                <div className="w-full sm:grid sm:grid-cols-3 sm:gap-2">
+                <div>
                     <div className="w-full flex flex-col gap-2">
                         <label htmlFor="unidad_metrica">Unidad</label>
                         <input
@@ -88,6 +88,9 @@ const FormularioParametro: FunctionComponent<FormularioParametroProps> = (Formul
                             className="rounded-lg"
                         />
                     </div>
+                    
+                </div>
+                <div className="w-full sm:grid sm:grid-cols-2 sm:gap-2">
                     <div className="w-full flex flex-col gap-2">
                         <label htmlFor="minimo">Valor mínimo</label>
                         <input

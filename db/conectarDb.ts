@@ -5,8 +5,8 @@ export async function conectarBd() {
     if (!conexionBd) {
         try {
             const acceso: ConnectionOptions = ({
-            host: 'localhost',
-            user: 'root',
+                host: 'localhost',
+                user: 'root',
                 database: 'calculadora_medica',
             });
             conexionBd = await mysql.createConnection(acceso);
