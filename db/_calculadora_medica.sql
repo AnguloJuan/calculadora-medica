@@ -21,13 +21,12 @@ CREATE TABLE IF NOT EXISTS parametro (
 	nombre VARCHAR(32),
     abreviatura VARCHAR(16) NOT NULL,
     tipo_campo ENUM('numerico', 'seleccion', 'radio') NOT NULL,
-    unidad_metrica VARCHAR(16),
     valorMinimo FLOAT,
     valorMaximo FLOAT,
     opciones VARCHAR(360)
 );
 
-CREATE TABLE IF NOT EXISTS parametros (
+CREATE TABLE IF NOT EXISTS calculadora_parametros (
 	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	id_calculadora INT NOT NULL,
     id_parametro INT NOT NULL,
@@ -35,12 +34,22 @@ CREATE TABLE IF NOT EXISTS parametros (
     CONSTRAINT FK_id_parametros_parametro FOREIGN KEY (id_parametro) REFERENCES parametro(id)
 );
 
-CREATE TABLE IF NOT EXISTS unidades_metricas (
+CREATE TABLE IF NOT EXISTS unidad (
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    nombre VARCHAR(32) NOT NULL,
-    abreviatura VARCHAR(16) NOT NULL,
+    unidad VARCHAR(10) NOT NULL,
+    conversion FLOAT,
     id_parametro INT NOT NULL,
-    CONSTRAINT FK_id_unidades_metricas_parametro FOREIGN KEY (id_parametro) REFERENCES parametro(id)
+    id_unidad_convesion INT,
+    CONSTRAINT FK_id_unidades_metricas_parametro FOREIGN KEY (id_parametro) REFERENCES parametro(id),
+    CONSTRAINT FK_id_unidades_conversion_unidad FOREIGN KEY (id_unidad_convesion) REFERENCES unidades_metricas(id)
+);
+
+CREATE TABLE IF NOT EXISTS parametros_unidades (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    id_unidad INT NOT NULL,
+    id_parametro INT NOT NULL,
+    CONSTRAINT FK_id_parametros_unidades_metricas_parametro FOREIGN KEY (id_parametro) REFERENCES parametro(id),
+    CONSTRAINT FK_id_parametros_unidades_metricas_unidad FOREIGN KEY (id_unidad) REFERENCES unidad(id)
 );
 
 CREATE TABLE IF NOT EXISTS evidencia (
