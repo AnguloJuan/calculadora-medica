@@ -79,8 +79,9 @@ export default function BotonGuardarCalculadora() {
 
     return (
         <Boton
-            type="success"
-            funcion={guardarCalculadora}
+            type="button"
+            tipo="success"
+            onClick={guardarCalculadora}
         >
             <IconDeviceFloppy stroke={2} />
             Guardar

@@ -21,8 +21,9 @@ export default function ListaParametros({ parametros, setParametros, sesion }: L
         }
         return (
             <Boton
-                type="danger"
-                funcion={EliminarParametro}
+                type="button"
+                tipo="danger"
+                onClick={EliminarParametro}
             >
                 <IconTrash stroke={2} />
             </Boton>

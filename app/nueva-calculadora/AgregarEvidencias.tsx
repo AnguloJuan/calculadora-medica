@@ -22,8 +22,9 @@ export default function AgregarEvidencias() {
                     className="rounded-lg"
                 />
                 <Boton
-                    type="success"
-                    funcion={() => {
+                    type="button"
+                    tipo="success"
+                    onClick={() => {
                         if (evidencia === '') {
                             return;
                         }
@@ -42,8 +43,9 @@ export default function AgregarEvidencias() {
                         <div className="flex flex-row justify-between gap-2 w-full">
                             <p className="text-sm font-light self-center">{evidencia}</p>
                             <Boton
-                                type="danger"
-                                funcion={() => {
+                                type="button"
+                                tipo="danger"
+                                onClick={() => {
                                     setEvidencias(evidencias.filter(e => e !== evidencia));
                                 }}
                             >

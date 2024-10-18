@@ -1,5 +1,5 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import { IconMenu2, IconX } from '@tabler/icons-react';
+import { IconMenu2, IconUserFilled, IconX } from '@tabler/icons-react';
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Image from 'next/image';
@@ -43,7 +43,7 @@ const navigation = [
   { name: 'Hematologia', href: '#', current: false },
 ]
 const userNavigation = [
-  { name: 'Dashboard', href: '#' },
+  { name: 'Dashboard', href: '/dashboard' },
   { name: 'Cerrar sesión', href: '#' },
 ]
 
@@ -56,16 +56,17 @@ const NavBar = () => {
     <div className="min-h-full">
       <Disclosure as="nav" className="sticky top-0 z-40 w-full backdrop-blur flex-none transition-colors duration-500
              dark:border-slate-50/[0.06] bg-white supports-backdrop-blur:bg-white/95 dark:bg-slate-900/75
-            border-b border-slate-900/10 lg:px-8 lg:border-0">
+            border-b border-slate-900/10 lg:px-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center">
               <div className="flex-shrink-0">
                 <Image
-                  alt="Your Company"
-                  src="/../../next.svg"
-                  width={32}
-                  height={32}
+                  alt="ToronjaLab"
+                  src="/logo.png"
+                  width={100}
+                  height={40}
+                  style={{ objectFit: 'contain' }}
                 />
               </div>
               <div className="hidden md:block">
@@ -103,13 +104,14 @@ const NavBar = () => {
                     <MenuButton className="relative flex max-w-xs items-center rounded-full bg-gray-200 dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white dark:bg-slate-900/75 focus:ring-offset-2 focus:ring-offset-gray-800">
                       <span className="absolute -inset-1.5" />
                       <span className="sr-only">Open user menu</span>
-                      <Image
+                      {/* <Image
                         alt=""
                         src={user.imageUrl}
                         width={32}
                         height={32}
                         className="rounded-full"
-                      />
+                      /> */}
+                      <IconUserFilled aria-hidden="true" className="h-8 w-8" />
                     </MenuButton>
                   </div>
                   <MenuItems
@@ -166,13 +168,14 @@ const NavBar = () => {
           <div className="border-t border-slate-900/20 pb-3 pt-4">
             <div className="flex items-center px-5">
               <div className="flex-shrink-0">
-                <Image
+                {/* <Image
                   alt=""
                   src={user.imageUrl}
                   width={40}
                   height={40}
                   className="rounded-full"
-                />
+                /> */}
+                <IconUserFilled aria-hidden="true" className="h-8 w-8" />
               </div>
               <div className="ml-3">
                 <div className="text-base font-medium leading-none">{user.name}</div>

@@ -1,3 +1,4 @@
+import { Boton } from "@/app/components/Botones";
 import ListaParametros from "@/app/components/ListaParametros";
 import { conectarBd } from "@/db/conectarDb";
 import { Calculadora, Parametro } from "@/utils/types";
@@ -44,9 +45,13 @@ export default async function CalculadoraPage({ params, request }: { params: { c
 
     return (
         <div className="flex md:max-w-screen-md lg:max-w-screen-lg flex-col items-center rounded-lg p-12 py-12 bg-white gap-8">
-            <div className="w-full flex flex-row gap-4">
-                <h1>{calculadora.nombre}</h1>
-                <ListaParametros parametros={parametros} sesion="usuario" />
+            <h1 className="text-xl font-bold    ">{calculadora.nombre}</h1>
+            <div className="w-full flex flex-col gap-4">
+                <form>
+                    <ListaParametros parametros={parametros} sesion="usuario" />
+                    <Boton type="button" tipo="primary">Calcular</Boton>
+
+                </form>
             </div>
         </div>
     )

@@ -27,10 +27,11 @@ export default function LogIn() {
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <Image
             alt="Toronja Lab logo"
-            src="/../../vercel.svg"
-            className="mx-auto h-10 w-auto"
-            width={40}
-            height={40}
+            src="/logo.png"
+            className="mx-auto h-20 w-auto"
+            width={120}
+            height={80}
+            style={{ objectFit: 'contain' }}
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Iniciar sesión
@@ -73,7 +74,7 @@ export default function LogIn() {
               </div>
             </div>
 
-            <div>{errorMessage ? <p>{errorMessage}</p>: null}</div>
+            <div>{errorMessage ? <p>{errorMessage}</p> : null}</div>
             <LoginButton />
           </form>
         </div>
