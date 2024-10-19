@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "./es-zod";
 
 const AREA = z.enum(['Química sanguínea', 'Hematología', 'Perfil de lípidos', 'Proteínas', 'Otros']);
 

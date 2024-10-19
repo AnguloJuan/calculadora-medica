@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="min-h-full">
-      <body className={`${inter.className} min-h-full backdrop-blur transition-colors duration-500 bg-white supports-backdrop-blur:bg-white/95 dark:bg-slate-900/75`}>
+      <body className={`${inter.className} min-h-full`}>
         <NavBar />
         {children}
         <Toast />

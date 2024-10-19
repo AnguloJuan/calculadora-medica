@@ -23,7 +23,6 @@ const BotonAgregarParametro: FunctionComponent<BotonAgregarParametroProps> = ({ 
         nombre: '',
         abreviatura: '',
         tipo_campo: 'numerico',
-        unidad_metrica: '',
         valorMaximo: undefined,
         valorMinimo: undefined,
         opciones: '',
@@ -35,12 +34,12 @@ const BotonAgregarParametro: FunctionComponent<BotonAgregarParametroProps> = ({ 
 
     const validarDatos = () => {
         // Validaciones de los campos del formulario
-        if (!parametro.nombre || !parametro.tipo_campo
-            || (parametro.tipo_campo === 'numerico' && !parametro.unidad_metrica)
-        ) {
-            addToast('Por favor llene todos los campos obligatorios', 'error')
-            return false;
-        }
+        // if (!parametro.nombre || !parametro.tipo_campo
+        //     || (parametro.tipo_campo === 'numerico' && !parametro.unidad_metrica)
+        // ) {
+        //     addToast('Por favor llene todos los campos obligatorios', 'error')
+        //     return false;
+        // }
 
         if (parametro.tipo_campo === 'numerico' &&
             ((parametro.valorMinimo && parametro.valorMaximo) &&
@@ -66,7 +65,6 @@ const BotonAgregarParametro: FunctionComponent<BotonAgregarParametroProps> = ({ 
             datosParametro.set('nombre', parametro.nombre);
             datosParametro.set('tipo_campo', parametro.tipo_campo);
             datosParametro.set('abreviatura', parametro.abreviatura);
-            datosParametro.set('unidad_metrica', parametro.unidad_metrica?.toString() || '');
             datosParametro.set('valorMinimo', parametro.valorMinimo?.toString() || '');
             datosParametro.set('valorMaximo', parametro.valorMaximo?.toString() || '');
             datosParametro.set('opciones', parametro.opciones?.toString() || '');
