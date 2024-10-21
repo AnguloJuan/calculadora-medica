@@ -10,25 +10,17 @@ import FormularioUnidad from "./FormularioUnidad";
 interface UnidadProps {
     unidades?: Unidad[];
     setUnidades?: (unidades: Unidad[]) => void;
+    fetchUnidades: boolean;
+    setFetchUnidades: (fetchUnidades: boolean) => void;
 }
 
-export default function AgregarUnidad(UnidadProps: UnidadProps) {
+export default function BotonCrearUnidad({ unidades, setUnidades, fetchUnidades, setFetchUnidades }: UnidadProps) {
     const [abierto, setAbierto] = useState(false);
     const [isClient, setIsClient] = useState(false);
-    const [unidad, setUnidad] = useState<Unidad>({
-        id: 0,
-        unidad: '',
-        conversion: undefined,
-        id_unidad_conversion: undefined
-    });
 
     useEffect(() => {
         setIsClient(true)
     }, [])
-
-    const crearUnidad = () => {
-        
-    }
 
     return (<>
         <div className="w-full col-span-2">
@@ -42,22 +34,8 @@ export default function AgregarUnidad(UnidadProps: UnidadProps) {
                 titulo={'Crear nuevo parámetro'}
                 abierto={abierto}
                 setAbierto={() => setAbierto(!abierto)}
-                botonesAccion={<>
-                    <Boton
-                        type="button"
-                        tipo="danger"
-                        onClick={() => setAbierto(false)}
-                    >
-                        <IconX stroke={2} />
-                        Cancelar
-                    </Boton>
-                    <Boton type="button" tipo="success" onClick={crearUnidad}>
-                        <IconPlus stroke={2} />
-                        Guardar
-                    </Boton>
-                </>}
             >
-                <FormularioUnidad unidad={unidad} setUnidad={setUnidad} />
+                <FormularioUnidad unidadesParametro={unidades} setUnidadesParametro={setUnidades} setAbierto={setAbierto} fetchUnidades={fetchUnidades} setFetchUnidades={setFetchUnidades} />
             </Modal>,
             document.body
         )}

@@ -6,7 +6,7 @@ import { conectarBd } from "../db/conectarDb";
 import { logIn } from "./auth";
 import { Parametro } from "./types";
 
-export async function authenticate(_currentState: unknown, formData: FormData) {
+export async function authenticateAction(_currentState: unknown, formData: FormData) {
     try {
         await logIn(formData)
     } catch (error: any) {
@@ -157,6 +157,34 @@ export async function editarParametroAction(formulario: FormData) {
     } catch (err) {
         console.log(err);
         return { error: 'Fallo al intentar actualizar el parámetro', status: 500 };
+    }
+}
+
+export async function crearUnidadAction(formulario: FormData) {
+    const conexion = await conectarBd();
+    const unidad = {
+        unidad: formulario.get('unidad'),
+        conversion: formulario.get('conversion'),
+        id_unidad_conversion: formulario.get('id_unidad_conversion')
+    };
+
+    const conversion = unidad.conversion !== '' ? unidad.conversion : null
+    const id_unidad_conversion = unidad.id_unidad_conversion !== '' ? unidad.id_unidad_conversion : null
+
+    try {
+        const insert = await conexion.query<ResultSetHeader>(
+            'INSERT INTO `unidad` (`unidad`, `conversion`, `id_unidad_conversion`) VALUES (?, ?, ?)',
+            [unidad.unidad, conversion, id_unidad_conversion]
+        );
+
+        if (insert[0].affectedRows !== 1) {
+            return { error: 'Fallo inesperado guardando la unidad', status: 500 };
+        }
+
+        return { message: 'Unidad guardada con exito', id: insert[0].insertId, status: 200 };
+    } catch (err) {
+        console.log(err);
+        return { error: 'Fallo al intentar guardar la unidad', status: 500 };
     }
 }
 

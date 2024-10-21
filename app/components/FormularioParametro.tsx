@@ -1,11 +1,13 @@
 'use client'
-import { Parametro, ParametroZ, Unidad, UnidadZ } from "@/utils/types";
-import { FormEvent, FunctionComponent, useState } from "react";
-import CampoParametro from "./CampoParametro";
-import Select from "react-tailwindcss-select";
-import { Field, Form, Formik } from "formik";
-import { withZodSchema } from "formik-validator-zod";
 import { z } from "@/utils/es-zod";
+import { Parametro, ParametroZ, Unidad, UnidadZ } from "@/utils/types";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import { withZodSchema } from "formik-validator-zod";
+import { FunctionComponent, useEffect, useState } from "react";
+import CampoParametro from "./CampoParametro";
+import BotonCrearUnidad from "./BotonCrearUnidad";
+import Select from "react-tailwindcss-select";
+import { Options, SelectValue } from "react-tailwindcss-select/dist/components/type";
 
 interface FormularioParametroProps {
     parametros: Parametro[];
@@ -13,29 +15,48 @@ interface FormularioParametroProps {
 }
 
 const FormularioParametro: FunctionComponent<FormularioParametroProps> = (FormularioParametroProps) => {
+    const [unidades, setUnidades] = useState<Unidad[]>([]);
+    const [fetchUnidades, setFetchUnidades] = useState(true);
+    useEffect(() => {
+        fetch('/api/unidades')
+            .then(response => response.json())
+            .then(data => setUnidades(data.unidades))
+            .catch(error => console.error(error));
+        setFetchUnidades(false);
+    }, [fetchUnidades, setFetchUnidades])
+
     const mySchema = ParametroZ.extend({
-        unidades: z.array(UnidadZ).nonempty()
+        unidades: z.array(UnidadZ),
     });
+
+    const initialValues: z.infer<typeof mySchema> = {
+        id: 0,
+        nombre: '',
+        abreviatura: '',
+        tipo_campo: 'numerico',
+        unidades: [{ id: 0, unidad: '', conversion: undefined, id_unidad_conversion: undefined }],
+        valorMaximo: undefined,
+        valorMinimo: undefined,
+        opciones: '',
+    }
+
+
+    const [unidad, setUnidad] = useState<SelectValue>({} as SelectValue);
+    
+    const options: Options = unidades.length !== 0 ? unidades.map((unidad) => {
+        return { label: unidad.unidad, value: unidad.id.toString() }
+    }) : [{ label: 'No hay unidades', value: '0' }];
 
     return (
         <Formik
-            initialValues={{
-                id: 0,
-                nombre: '',
-                abreviatura: '',
-                tipo_campo: 'numerico',
-                unidades: [],
-                valorMaximo: undefined,
-                valorMinimo: undefined,
-                opciones: '',
-            }}
-            validationSchema={withZodSchema(mySchema)}
+            initialValues={initialValues}
+            validate={withZodSchema(mySchema)}
             onSubmit={values => {
                 // same shape as initial values
                 console.log(values);
             }}
         >
-            {({ errors, touched }) => (
+            {({ values, handleBlur, setFieldValue, isSubmitting }) => (
                 <Form className="flex md:max-w-screen-md lg:max-w-screen-lg flex-col items-center rounded-lg p-12 py-12 bg-white gap-8">
                     <div className="w-full flex flex-row gap-4">
                         <div className="w-full flex flex-col gap-2">
@@ -44,91 +65,87 @@ const FormularioParametro: FunctionComponent<FormularioParametroProps> = (Formul
                                 type="text"
                                 name="nombre"
                                 placeholder="Ingrese un nombre del parametro"
-                                className="rounded-lg"
                             />
-                            {errors.nombre && touched.nombre ? (
-                                <div>{errors.nombre}</div>
-                            ) : null}
+                            <ErrorMessage component="p" name="nombre" />
                         </div>
                         <div className="w-full flex flex-col gap-2">
                             <label htmlFor="abreviatura">Abreviatura</label>
                             <Field
                                 type="text"
-                                id="abreviatura"
                                 name="abreviatura"
                                 placeholder="Ingrese una abreviatura de la calculadora"
-                                className="rounded-lg"
+
                             />
-                            {errors.abreviatura && touched.abreviatura ? (
-                                <div>{errors.abreviatura}</div>
-                            ) : null}
+                            <ErrorMessage component="p" name="abreviatura" />
                         </div>
                     </div>
 
                     <div className="w-full flex flex-col gap-2">
                         <label htmlFor="tipo_campo">Tipo de campo</label>
-                        <select
+                        <Field
                             name="tipo_campo"
-                            id="tipo_campo"
-                            value={tipo_campo}
-                            onChange={cambiarTipoCampo}
-                            className="rounded-lg">
+                            as="select"
+                        >
                             <option value="numerico">Numerico</option>
                             <option value="seleccion">Selección</option>
                             <option value="radio">Radio</option>
-                        </select>
+                        </Field>
+                        <ErrorMessage component="p" name="tipo_campo" />
                     </div>
 
-                    {tipo_campo === 'numerico' && <>
-                        <div>
-                            <div className="w-full flex flex-col gap-2">
-                                <label htmlFor="unidades">Unidad</label>
-                            </div>
-
+                    {values.tipo_campo === 'numerico' && <>
+                        <div className="w-full flex flex-col gap-2">
+                            <label htmlFor="unidades">Unidad</label>
+                            <Select
+                                value={unidad}
+                                options={options}
+                                isMultiple={true}
+                                onChange={(value) => setFieldValue}
+                                primaryColor="blue"
+                            />
+                            <ErrorMessage component="p" name="unidades" />
                         </div>
+                        <BotonCrearUnidad unidades={values.unidades} fetchUnidades={fetchUnidades} setFetchUnidades={setFetchUnidades} />
+
                         <div className="w-full sm:grid sm:grid-cols-2 sm:gap-2">
                             <div className="w-full flex flex-col gap-2">
                                 <label htmlFor="minimo">Valor mínimo</label>
-                                <input
+                                <Field
                                     type="number"
                                     id="valorMinimo"
                                     name="valorMinimo"
                                     placeholder="Ingrese el valor mínimo"
-                                    value={valorMinimo}
-                                    onChange={manejarCambio}
-                                    className="rounded-lg"
+
                                 />
+                                <ErrorMessage component="p" name="valorMinimo" />
                             </div>
                             <div className="w-full flex flex-col gap-2">
                                 <label htmlFor="maximo">Valor máximo</label>
-                                <input
+                                <Field
                                     type="number"
                                     id="valorMaximo"
                                     name="valorMaximo"
                                     placeholder="Ingrese el valor máximo"
-                                    value={valorMaximo}
-                                    onChange={manejarCambio}
-                                    className="rounded-lg"
+
                                 />
+                                <ErrorMessage component="p" name="valorMaximo" />
                             </div>
                         </div>
                     </>}
 
-                    {(tipo_campo === 'seleccion' || tipo_campo === 'radio') && <div className="w-full flex flex-col gap-2">
+                    {(values.tipo_campo === 'seleccion' || values.tipo_campo === 'radio') && <div className="w-full flex flex-col gap-2">
                         <label htmlFor="opciones">Opciones</label>
-                        <textarea
+                        <label className="text-xs text-gray-500">Ingrese las opciones separadas por coma</label>
+                        <Field
                             name="opciones"
-                            id="opciones"
                             placeholder="Ingrese las opciones separadas por coma"
-                            value={opciones}
-                            onChange={manejarCambio}
-                            className="bg-white"
-                        ></textarea>
+                        />
+                        <ErrorMessage component="p" name="opciones" />
                     </div>}
 
                     <div className="w-full flex flex-col gap-2 text-center">
                         <h2 className="font-semibold">Vista previa</h2>
-                        <CampoParametro parametro={parametro} />
+                        <CampoParametro parametro={values as Parametro} />
                     </div>
                 </Form>
             )}

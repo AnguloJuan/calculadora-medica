@@ -7,16 +7,16 @@ export async function GET(request: NextRequest) {
     const conexion = await conectarBd();
     try {
         const [unidades] = await conexion.query<RowDataPacket[]>(
-            'SELECT * FROM `unidades` ORDER BY `name` ASC;'
+            'SELECT * FROM `unidad` ORDER BY `unidad` ASC;'
         );
 
         if (unidades.length === 0) {
-            NextResponse.json([], { status: 500 });
+            return NextResponse.json([], { status: 500 });
         }
 
-        NextResponse.json({ unidades }, { status: 200 });
+        return NextResponse.json({ unidades }, { status: 200 });
     } catch (error) {
         console.log(error);
-        NextResponse.json([], { status: 500 });
+        return NextResponse.json([], { status: 500 });
     }
 }

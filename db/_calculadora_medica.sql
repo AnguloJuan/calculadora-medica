@@ -38,10 +38,8 @@ CREATE TABLE IF NOT EXISTS unidad (
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     unidad VARCHAR(10) NOT NULL,
     conversion FLOAT,
-    id_parametro INT NOT NULL,
-    id_unidad_convesion INT,
-    CONSTRAINT FK_id_unidades_metricas_parametro FOREIGN KEY (id_parametro) REFERENCES parametro(id),
-    CONSTRAINT FK_id_unidades_conversion_unidad FOREIGN KEY (id_unidad_convesion) REFERENCES unidades_metricas(id)
+    id_unidad_conversion INT,
+    CONSTRAINT FK_id_unidades_conversion_unidad FOREIGN KEY (id_unidad_conversion) REFERENCES unidad(id)
 );
 
 CREATE TABLE IF NOT EXISTS parametros_unidades (

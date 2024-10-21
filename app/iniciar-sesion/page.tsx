@@ -1,5 +1,5 @@
 'use client'
-import { authenticate } from "@/utils/actions";
+import { authenticateAction } from "@/utils/actions";
 import Image from "next/image";
 import { useFormState, useFormStatus } from "react-dom";
 
@@ -20,7 +20,7 @@ function LoginButton() {
 }
 
 export default function LogIn() {
-  const [errorMessage, dispatch] = useFormState(authenticate, undefined)
+  const [errorMessage, dispatch] = useFormState(authenticateAction, undefined)
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
