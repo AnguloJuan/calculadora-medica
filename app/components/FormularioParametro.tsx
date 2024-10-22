@@ -1,13 +1,13 @@
 'use client'
 import { z } from "@/utils/es-zod";
 import { Parametro, ParametroZ, Unidad, UnidadZ } from "@/utils/types";
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import { ErrorMessage, Field, FieldHelperProps, FieldInputProps, FieldProps, Form, Formik } from "formik";
 import { withZodSchema } from "formik-validator-zod";
 import { FunctionComponent, useEffect, useState } from "react";
 import CampoParametro from "./CampoParametro";
 import BotonCrearUnidad from "./BotonCrearUnidad";
-import Select from "react-tailwindcss-select";
-import { Options, SelectValue } from "react-tailwindcss-select/dist/components/type";
+import DebugFormik from "./DebugFormik";
+
 
 interface FormularioParametroProps {
     parametros: Parametro[];
@@ -20,7 +20,7 @@ const FormularioParametro: FunctionComponent<FormularioParametroProps> = (Formul
     useEffect(() => {
         fetch('/api/unidades')
             .then(response => response.json())
-            .then(data => setUnidades(data.unidades))
+            .then(data => { setUnidades(data.unidades); console.log(data) })
             .catch(error => console.error(error));
         setFetchUnidades(false);
     }, [fetchUnidades, setFetchUnidades])
@@ -34,7 +34,7 @@ const FormularioParametro: FunctionComponent<FormularioParametroProps> = (Formul
         nombre: '',
         abreviatura: '',
         tipo_campo: 'numerico',
-        unidades: [{ id: 0, unidad: '', conversion: undefined, id_unidad_conversion: undefined }],
+        unidades: [],
         valorMaximo: undefined,
         valorMinimo: undefined,
         opciones: '',
@@ -42,10 +42,33 @@ const FormularioParametro: FunctionComponent<FormularioParametroProps> = (Formul
 
 
     const [unidad, setUnidad] = useState<SelectValue>({} as SelectValue);
-    
-    const options: Options = unidades.length !== 0 ? unidades.map((unidad) => {
-        return { label: unidad.unidad, value: unidad.id.toString() }
+
+    const options: Options = unidades.length !== 0 ? unidades.map((unidad: Unidad) => {
+        return { label: unidad.unidad, value: JSON.stringify(unidad) }
     }) : [{ label: 'No hay unidades', value: '0' }];
+
+    const customSelect = ({
+        field, // { name, value, onChange, onBlur }
+        form: { touched, errors }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
+        ...props
+    }: FieldProps) => (
+        <>
+            <label htmlFor="unidades">Unidades</label>
+            <Select
+                isSearchable={true}
+                searchInputPlaceholder={unidades.length !== 0 ? "Seleccione una unidad" : "No hay unidades"}
+                placeholder={"Seleccione una unidad"}
+                value={field.value}
+                options={options}
+                isMultiple={true}
+                noOptionsMessage={'No hay unidades'}
+                onChange={(value) => field.onChange({ target: { value: value } })}
+                primaryColor="blue"
+            />
+            <ErrorMessage component="p" name="unidades" />
+            <BotonCrearUnidad onChange={field.onChange} fetchUnidades={fetchUnidades} setFetchUnidades={setFetchUnidades} />
+        </>
+    );
 
     return (
         <Formik
@@ -56,7 +79,7 @@ const FormularioParametro: FunctionComponent<FormularioParametroProps> = (Formul
                 console.log(values);
             }}
         >
-            {({ values, handleBlur, setFieldValue, isSubmitting }) => (
+            {({ values, setFieldValue, isSubmitting }) => (
                 <Form className="flex md:max-w-screen-md lg:max-w-screen-lg flex-col items-center rounded-lg p-12 py-12 bg-white gap-8">
                     <div className="w-full flex flex-row gap-4">
                         <div className="w-full flex flex-col gap-2">
@@ -95,17 +118,8 @@ const FormularioParametro: FunctionComponent<FormularioParametroProps> = (Formul
 
                     {values.tipo_campo === 'numerico' && <>
                         <div className="w-full flex flex-col gap-2">
-                            <label htmlFor="unidades">Unidad</label>
-                            <Select
-                                value={unidad}
-                                options={options}
-                                isMultiple={true}
-                                onChange={(value) => setFieldValue}
-                                primaryColor="blue"
-                            />
-                            <ErrorMessage component="p" name="unidades" />
+                            <Field name="unidades" component={customSelect} />
                         </div>
-                        <BotonCrearUnidad unidades={values.unidades} fetchUnidades={fetchUnidades} setFetchUnidades={setFetchUnidades} />
 
                         <div className="w-full sm:grid sm:grid-cols-2 sm:gap-2">
                             <div className="w-full flex flex-col gap-2">
@@ -147,6 +161,7 @@ const FormularioParametro: FunctionComponent<FormularioParametroProps> = (Formul
                         <h2 className="font-semibold">Vista previa</h2>
                         <CampoParametro parametro={values as Parametro} />
                     </div>
+                    <DebugFormik {...values} />
                 </Form>
             )}
         </Formik>

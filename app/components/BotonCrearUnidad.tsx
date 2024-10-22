@@ -8,13 +8,12 @@ import Modal from "./Modal";
 import FormularioUnidad from "./FormularioUnidad";
 
 interface UnidadProps {
-    unidades?: Unidad[];
-    setUnidades?: (unidades: Unidad[]) => void;
+    onChange: (e: any) => void;
     fetchUnidades: boolean;
     setFetchUnidades: (fetchUnidades: boolean) => void;
 }
 
-export default function BotonCrearUnidad({ unidades, setUnidades, fetchUnidades, setFetchUnidades }: UnidadProps) {
+export default function BotonCrearUnidad({ onChange, fetchUnidades, setFetchUnidades }: UnidadProps) {
     const [abierto, setAbierto] = useState(false);
     const [isClient, setIsClient] = useState(false);
 
@@ -35,7 +34,7 @@ export default function BotonCrearUnidad({ unidades, setUnidades, fetchUnidades,
                 abierto={abierto}
                 setAbierto={() => setAbierto(!abierto)}
             >
-                <FormularioUnidad unidadesParametro={unidades} setUnidadesParametro={setUnidades} setAbierto={setAbierto} fetchUnidades={fetchUnidades} setFetchUnidades={setFetchUnidades} />
+                <FormularioUnidad onChange={onChange} setAbierto={setAbierto} fetchUnidades={fetchUnidades} setFetchUnidades={setFetchUnidades} />
             </Modal>,
             document.body
         )}

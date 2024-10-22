@@ -8,25 +8,27 @@ import { withZodSchema } from "formik-validator-zod";
 import { IconPlus, IconX } from "@tabler/icons-react";
 import { crearUnidadAction } from "@/utils/actions";
 import { Each } from "./EachOf";
+import { useToast } from "./Toast";
 
 interface FormularioUnidadProps {
-    unidadesParametro?: Unidad[];
-    setUnidadesParametro?: (unidadesParametro: Unidad[]) => void;
+    onChange: (e: any) => void;
     setAbierto: (abierto: boolean) => void;
     fetchUnidades: boolean;
     setFetchUnidades: (fetchUnidades: boolean) => void;
 }
 
-export default function FormularioUnidad({ unidadesParametro, setUnidadesParametro, setAbierto }: FormularioUnidadProps) {
+export default function FormularioUnidad({ onChange, setAbierto, fetchUnidades, setFetchUnidades }: FormularioUnidadProps) {
     const [unidades, setUnidades] = useState<Unidad[]>([]);
-    const [fetchUnidades, setFetchUnidades] = useState(true);
+    const [doFethcUnidades, setDoFetchUnidades] = useState<boolean>(fetchUnidades || true);
+    const { addToast } = useToast();
     useEffect(() => {
         fetch('/api/unidades')
             .then(response => response.json())
             .then(data => setUnidades(data.unidades))
             .catch(error => console.error(error));
-        setFetchUnidades(false);
-    }, [fetchUnidades, setFetchUnidades])
+        setFetchUnidades && setFetchUnidades(false);
+        setDoFetchUnidades(false)
+    }, [setDoFetchUnidades, setFetchUnidades, doFethcUnidades])
 
     const unidadSchema = UnidadZ;
     const initialValues = {
@@ -51,10 +53,13 @@ export default function FormularioUnidad({ unidadesParametro, setUnidadesParamet
                     resultado.then((res) => {
                         if (res.error) {
                             console.error(res.error);
+                            addToast('Error al crear la unidad', 'error');
                             return;
                         }
-                        // unidadesParametro && setUnidadesParametro && setUnidadesParametro([...unidadesParametro, { id: res.id, unidad: values.unidad, conversion: values.conversion, id_unidad_conversion: values.id_unidad_conversion } as Unidad]);
 
+
+                        setFetchUnidades(true);
+                        addToast('Unidad creada correctamente', 'success');
                         setAbierto(false);
                     })
                 }}
