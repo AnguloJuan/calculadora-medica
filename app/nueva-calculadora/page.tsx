@@ -1,5 +1,5 @@
 import { crearCalculadoraAction } from "@/utils/actions";
-import obtenerParametros from "@/utils/parametros";
+import { PARAMETROS } from "@/utils/constantes";
 import { AREA, Parametro } from "@/utils/types";
 import { NextRequest } from "next/server";
 import { Each } from "../components/EachOf";
@@ -8,8 +8,6 @@ import AgregarParametros from "./AgregarParametros";
 import BotonGuardarCalculadora from "./BotonGuardarCalculadora";
 
 export default async function NuevaCalculadora({ request }: { request: NextRequest }) {
-    const listaParametros = await obtenerParametros();
-
     return (
         <div className="w-full items-center flex justify-center my-8">
             <form
@@ -95,7 +93,7 @@ export default async function NuevaCalculadora({ request }: { request: NextReque
                 <div className="w-full flex flex-col gap-6">
                     <h2 className="w-full text-xl font-semibold text-center">Parámetros</h2>
 
-                    {Array.isArray(listaParametros) ? <AgregarParametros listaParametros={listaParametros ? listaParametros : [] as Parametro[]} />
+                    {Array.isArray(PARAMETROS) ? <AgregarParametros listaParametros={PARAMETROS ? PARAMETROS : [] as Parametro[]} />
                         : <p>Cargando...</p>}
 
                     <fieldset className="w-full">

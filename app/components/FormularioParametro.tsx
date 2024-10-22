@@ -1,35 +1,38 @@
 'use client'
 import { z } from "@/utils/es-zod";
 import { Parametro, ParametroZ, Unidad, UnidadZ } from "@/utils/types";
-import { ErrorMessage, Field, FieldHelperProps, FieldInputProps, FieldProps, Form, Formik } from "formik";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import { withZodSchema } from "formik-validator-zod";
 import { FunctionComponent, useEffect, useState } from "react";
 import CampoParametro from "./CampoParametro";
-import BotonCrearUnidad from "./BotonCrearUnidad";
+import { ReactSelect } from "./CustomSelect";
 import DebugFormik from "./DebugFormik";
+import BotonCrearUnidad from "./BotonCrearUnidad";
+import { useToast } from "./Toast";
+import { ObtenerUnidadesAction } from "@/utils/actions";
 
 
 interface FormularioParametroProps {
-    parametros: Parametro[];
-    setParametros: (parametros: Parametro[]) => void;
+    parametros?: Parametro[];
+    setParametros?: (parametros: Parametro[]) => void;
 }
 
 const FormularioParametro: FunctionComponent<FormularioParametroProps> = (FormularioParametroProps) => {
+    const { addToast } = useToast();
     const [unidades, setUnidades] = useState<Unidad[]>([]);
     const [fetchUnidades, setFetchUnidades] = useState(true);
     useEffect(() => {
-        fetch('/api/unidades')
-            .then(response => response.json())
-            .then(data => { setUnidades(data.unidades); console.log(data) })
+        ObtenerUnidadesAction()
+            .then(data => setUnidades(data))
             .catch(error => console.error(error));
         setFetchUnidades(false);
     }, [fetchUnidades, setFetchUnidades])
 
-    const mySchema = ParametroZ.extend({
+    const parametroSchema = ParametroZ.extend({
         unidades: z.array(UnidadZ),
     });
 
-    const initialValues: z.infer<typeof mySchema> = {
+    const initialValues: z.infer<typeof parametroSchema> = {
         id: 0,
         nombre: '',
         abreviatura: '',
@@ -41,45 +44,45 @@ const FormularioParametro: FunctionComponent<FormularioParametroProps> = (Formul
     }
 
 
-    const [unidad, setUnidad] = useState<SelectValue>({} as SelectValue);
 
-    const options: Options = unidades.length !== 0 ? unidades.map((unidad: Unidad) => {
+    const options = unidades.length !== 0 ? unidades.map((unidad: Unidad) => {
         return { label: unidad.unidad, value: JSON.stringify(unidad) }
-    }) : [{ label: 'No hay unidades', value: '0' }];
+    }) : [];
 
-    const customSelect = ({
-        field, // { name, value, onChange, onBlur }
-        form: { touched, errors }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
-        ...props
-    }: FieldProps) => (
-        <>
-            <label htmlFor="unidades">Unidades</label>
-            <Select
-                isSearchable={true}
-                searchInputPlaceholder={unidades.length !== 0 ? "Seleccione una unidad" : "No hay unidades"}
-                placeholder={"Seleccione una unidad"}
-                value={field.value}
-                options={options}
-                isMultiple={true}
-                noOptionsMessage={'No hay unidades'}
-                onChange={(value) => field.onChange({ target: { value: value } })}
-                primaryColor="blue"
-            />
-            <ErrorMessage component="p" name="unidades" />
-            <BotonCrearUnidad onChange={field.onChange} fetchUnidades={fetchUnidades} setFetchUnidades={setFetchUnidades} />
-        </>
-    );
+    // const hendleSubmit = async (values: Parametro) => {
+    //     try {
+    //         const datosParametro = new FormData();
+    //         datosParametro.set('nombre', parametro.nombre);
+    //         datosParametro.set('tipo_campo', parametro.tipo_campo);
+    //         datosParametro.set('abreviatura', parametro.abreviatura?.toString() || '');
+    //         datosParametro.set('valorMinimo', parametro.valorMinimo?.toString() || '');
+    //         datosParametro.set('valorMaximo', parametro.valorMaximo?.toString() || '');
+    //         datosParametro.set('opciones', parametro.opciones?.toString() || '');
+
+    //         const respuesta = await crearParametroAction(datosParametro);
+    //         if (respuesta.id) {
+    //             const parametroConId = { ...parametro, id: respuesta.id };
+    //             setParametro({ ...parametro, id: respuesta.id });
+    //             setParametros && parametros && setParametros([...parametros, parametroConId]);
+    //             addToast(respuesta.message || 'Parámetro guardado con éxito', 'success');
+    //             setAbierto(false);
+    //         } else {
+    //             addToast('Ocurrió un error inesperado en el servidor', 'error');
+    //         }
+    //     } catch (err) {
+    //         addToast('Ocurrió un error inesperado', 'error');
+    //     }
+    // }
 
     return (
         <Formik
             initialValues={initialValues}
-            validate={withZodSchema(mySchema)}
+            validate={withZodSchema(parametroSchema)}
             onSubmit={values => {
-                // same shape as initial values
-                console.log(values);
+
             }}
         >
-            {({ values, setFieldValue, isSubmitting }) => (
+            {({ values, setFieldValue, isSubmitting, handleBlur }) => (
                 <Form className="flex md:max-w-screen-md lg:max-w-screen-lg flex-col items-center rounded-lg p-12 py-12 bg-white gap-8">
                     <div className="w-full flex flex-row gap-4">
                         <div className="w-full flex flex-col gap-2">
@@ -118,7 +121,20 @@ const FormularioParametro: FunctionComponent<FormularioParametroProps> = (Formul
 
                     {values.tipo_campo === 'numerico' && <>
                         <div className="w-full flex flex-col gap-2">
-                            <Field name="unidades" component={customSelect} />
+                            <ReactSelect
+                                name="unidades"
+                                options={options}
+                                noOptionsMessage={() => "No hay unidades disponibles"}
+                                isMulti={true}
+                                onBlur={handleBlur}
+                                placeholder={"Seleccione una unidad"}
+                                value={values.unidades.map((unidad: Unidad) => ({ label: unidad.unidad, value: JSON.stringify(unidad) }))}
+                                onChange={(selectedOption: any) => {
+                                    setFieldValue('unidades', selectedOption.map((option: any) => JSON.parse(option.value)))
+                                }}
+                            />
+                            <ErrorMessage component="p" name="unidades" />
+                            <BotonCrearUnidad setFieldValue={setFieldValue} fetchUnidades={fetchUnidades} setFetchUnidades={setFetchUnidades} sholdClose />
                         </div>
 
                         <div className="w-full sm:grid sm:grid-cols-2 sm:gap-2">

@@ -4,6 +4,7 @@ import { ResultSetHeader } from "mysql2";
 import { redirect } from "next/navigation";
 import { conectarBd } from "../db/conectarDb";
 import { logIn } from "./auth";
+import { ActualizarParametros, ActualizarUnidades, PARAMETROS, UNIDADES } from "./constantes";
 import { Parametro } from "./types";
 
 export async function authenticateAction(_currentState: unknown, formData: FormData) {
@@ -160,6 +161,13 @@ export async function editarParametroAction(formulario: FormData) {
     }
 }
 
+export async function ActualizarParametrosAction() {
+    ActualizarParametros();
+}
+export async function ObtenerParametrosAction() {
+    return PARAMETROS;
+}
+
 export async function crearUnidadAction(formulario: FormData) {
     const conexion = await conectarBd();
     const unidad = {
@@ -169,7 +177,7 @@ export async function crearUnidadAction(formulario: FormData) {
     };
 
     const conversion = unidad.conversion !== '' ? unidad.conversion : null
-    const id_unidad_conversion = unidad.id_unidad_conversion !== '' ? unidad.id_unidad_conversion : null
+    const id_unidad_conversion = unidad.id_unidad_conversion !== '0' ? unidad.id_unidad_conversion : null
 
     try {
         const insert = await conexion.query<ResultSetHeader>(
@@ -186,6 +194,13 @@ export async function crearUnidadAction(formulario: FormData) {
         console.log(err);
         return { error: 'Fallo al intentar guardar la unidad', status: 500 };
     }
+}
+
+export async function ActualizarUnidadesAction() {
+    ActualizarUnidades();
+}
+export async function ObtenerUnidadesAction() {
+    return UNIDADES;
 }
 
 // export async function obtenerParametros() {

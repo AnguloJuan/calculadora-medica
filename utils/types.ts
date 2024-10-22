@@ -16,7 +16,7 @@ interface Calculadora {
 interface Parametro {
     id: number;
     nombre: string;
-    abreviatura: string;
+    abreviatura?: string;
     tipo_campo: 'numerico' | 'seleccion' | 'radio';
     valorMaximo?: number;
     valorMinimo?: number;
@@ -55,7 +55,7 @@ const ParametroZ = z.object({
     unidad_metrica: z.string().optional(),
     valorMaximo: z.number().optional(),
     valorMinimo: z.number().optional(),
-    opciones: z.string().optional()
+    opciones: z.string().min(1).optional()
 }) satisfies z.ZodType<Parametro>;
 
 const EvidenciaZ = z.object({

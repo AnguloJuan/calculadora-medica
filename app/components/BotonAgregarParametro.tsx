@@ -64,7 +64,7 @@ const BotonAgregarParametro: FunctionComponent<BotonAgregarParametroProps> = ({ 
             const datosParametro = new FormData();
             datosParametro.set('nombre', parametro.nombre);
             datosParametro.set('tipo_campo', parametro.tipo_campo);
-            datosParametro.set('abreviatura', parametro.abreviatura);
+            datosParametro.set('abreviatura', parametro.abreviatura?.toString() || '');
             datosParametro.set('valorMinimo', parametro.valorMinimo?.toString() || '');
             datosParametro.set('valorMaximo', parametro.valorMaximo?.toString() || '');
             datosParametro.set('opciones', parametro.opciones?.toString() || '');
@@ -96,22 +96,22 @@ const BotonAgregarParametro: FunctionComponent<BotonAgregarParametroProps> = ({ 
                 titulo={'Crear nuevo parámetro'}
                 abierto={abierto}
                 setAbierto={() => setAbierto(!abierto)}
-                botonesAccion={<>
-                    <Boton
-                        type="button"
-                        tipo="danger"
-                        onClick={() => setAbierto(false)}
-                    >
-                        <IconX stroke={2} />
-                        Cancelar
-                    </Boton>
-                    <Boton type="button" tipo="success" onClick={crearParametro}>
-                        <IconPlus stroke={2} />
-                        Guardar
-                    </Boton>
-                </>}
+                // botonesAccion={<>
+                //     <Boton
+                //         type="button"
+                //         tipo="danger"
+                //         onClick={() => setAbierto(false)}
+                //     >
+                //         <IconX stroke={2} />
+                //         Cancelar
+                //     </Boton>
+                //     <Boton type="button" tipo="success" onClick={crearParametro}>
+                //         <IconPlus stroke={2} />
+                //         Guardar
+                //     </Boton>
+                // </>}
             >
-                <FormularioParametro parametro={parametro} setParametro={setParametro} />
+                <FormularioParametro parametros={parametros} setParametros={setParametros} />
             </Modal>,
             document.body
         )}

@@ -27,9 +27,7 @@ const BotonEditarParametro: FunctionComponent<BotonEditarParametroProps> = ({ pa
 
     const validarDatos = () => {
         // Validaciones de los campos del formulario
-        if (!parametro.nombre || !parametro.tipo_campo
-            || (parametro.tipo_campo === 'numerico' && !parametro.unidad_metrica)
-        ) {
+        if (!parametro.nombre || !parametro.tipo_campo) {
             addToast('Por favor llene todos los campos obligatorios', 'error')
             return false;
         }
@@ -58,8 +56,7 @@ const BotonEditarParametro: FunctionComponent<BotonEditarParametroProps> = ({ pa
             datosParametro.set('id', parametro.id.toString());
             datosParametro.set('nombre', parametro.nombre);
             datosParametro.set('tipo_campo', parametro.tipo_campo);
-            datosParametro.set('abreviatura', parametro.abreviatura);
-            datosParametro.set('unidad_metrica', parametro.unidad_metrica?.toString() || '');
+            datosParametro.set('abreviatura', parametro.abreviatura?.toString() || '');
             datosParametro.set('valorMinimo', parametro.valorMinimo?.toString() || '');
             datosParametro.set('valorMaximo', parametro.valorMaximo?.toString() || '');
             datosParametro.set('opciones', parametro.opciones?.toString() || '');
@@ -113,7 +110,7 @@ const BotonEditarParametro: FunctionComponent<BotonEditarParametroProps> = ({ pa
                     </Boton>
                 </>}
             >
-                <FormularioParametro parametro={parametro} setParametro={setParametro} />
+                <FormularioParametro parametros={parametros} setParametros={setParametros} />
             </Modal>,
             document.body
         )}
