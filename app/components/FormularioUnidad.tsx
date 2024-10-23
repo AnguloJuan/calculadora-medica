@@ -1,39 +1,40 @@
 'use client'
 
+import { crearUnidadAction, obtenerUnidadesAction } from "@/utils/actions";
+import { z } from "@/utils/es-zod";
 import { Unidad, UnidadZ } from "@/utils/types";
-import { Boton } from "./Botones";
-import { useEffect, useState } from "react";
+import { IconPlus, IconX } from "@tabler/icons-react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { withZodSchema } from "formik-validator-zod";
-import { IconPlus, IconX } from "@tabler/icons-react";
-import { ActualizarUnidadesAction, crearUnidadAction, ObtenerUnidadesAction } from "@/utils/actions";
+import { useEffect, useState } from "react";
+import { Boton } from "./Botones";
 import { Each } from "./EachOf";
 import { useToast } from "./Toast";
-import { z } from "@/utils/es-zod";
-import { ReactSelect } from "./CustomSelect";
-import { ActionMeta } from "react-select";
 
 interface FormularioUnidadProps {
     setFieldValue?: (field: string, value: any, shouldValidate?: boolean | undefined) => void;
+    unidadesParametro?: Unidad[];
+    setOpciones?: (opciones: { value: Unidad, label: string }[]) => void;
     setAbierto?: (abierto: boolean) => void;
-    setFetchUnidades?: (fetchUnidades: boolean) => void;
-    unidadesParametro: Unidad[];
     shouldClose: boolean;
 }
 
-export default function FormularioUnidad({ setFieldValue, setAbierto, setFetchUnidades, unidadesParametro, shouldClose }: FormularioUnidadProps) {
+export default function FormularioUnidad({ setFieldValue, unidadesParametro, setOpciones, setAbierto, shouldClose }: FormularioUnidadProps) {
     const [unidades, setUnidades] = useState<Unidad[]>([]);
-    const [doFethcUnidades, setDoFetchUnidades] = useState<boolean>(true);
     const [fetching, setFetching] = useState(true);
     const { addToast } = useToast();
     useEffect(() => {
         setFetching(true);
-        ObtenerUnidadesAction()
-            .then(data => setUnidades(data))
+        obtenerUnidadesAction()
+            .then(data => {
+                if (!('error' in data)) {
+                    setUnidades(data);
+                    console.log(data);
+                }
+            })
             .catch(error => console.error(error))
             .finally(() => setFetching(false));
-        setDoFetchUnidades(false)
-    }, [doFethcUnidades])
+    }, [])
 
     const unidadSchema = UnidadZ;
     const initialValues: z.infer<typeof unidadSchema> = {
@@ -56,16 +57,16 @@ export default function FormularioUnidad({ setFieldValue, setAbierto, setFetchUn
                 addToast('Error al crear la unidad', 'error');
                 return;
             }
+            const unidadCreada: Unidad = { id: res.id, unidad: values.unidad, conversion: values.conversion, id_unidad_conversion: values.id_unidad_conversion };
+            setUnidades([...unidades, unidadCreada]);
 
-            ActualizarUnidadesAction().then(() => {
-                setFetchUnidades && setFetchUnidades(true); // Actualizar el estado de las unidades en el formulario padre
-                setDoFetchUnidades(true);
-            });
-            // Actualizar el estado de las unidades en el formulario padre
-            setFieldValue &&
-                setFieldValue('unidades', [...unidadesParametro, 
-                    { id: res.id, unidad: values.unidad, conversion: values.conversion, id_unidad_conversion: values.id_unidad_conversion }
-                ]);
+            // Actualizar el estado de las unidades en el formulario crear parámetro
+            setFieldValue && unidadesParametro &&
+                setFieldValue('unidades', [...unidadesParametro, unidadCreada]);
+                
+            const opciones = unidades.map((unidad) => ({ value: unidad, label: unidad.unidad }));
+            setOpciones && unidadesParametro &&
+                setOpciones([...opciones, { value: unidadCreada, label: unidadCreada.unidad }]);
 
             setAbierto && setAbierto(false);
             addToast('Unidad creada correctamente', 'success');

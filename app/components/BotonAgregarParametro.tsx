@@ -1,7 +1,8 @@
 'use client'
+
 import { crearParametroAction } from "@/utils/actions";
 import { Parametro } from "@/utils/types";
-import { IconPlus, IconX } from "@tabler/icons-react";
+import { IconPlus } from "@tabler/icons-react";
 import { FunctionComponent, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Boton } from "./Botones";
@@ -96,20 +97,20 @@ const BotonAgregarParametro: FunctionComponent<BotonAgregarParametroProps> = ({ 
                 titulo={'Crear nuevo parámetro'}
                 abierto={abierto}
                 setAbierto={() => setAbierto(!abierto)}
-                // botonesAccion={<>
-                //     <Boton
-                //         type="button"
-                //         tipo="danger"
-                //         onClick={() => setAbierto(false)}
-                //     >
-                //         <IconX stroke={2} />
-                //         Cancelar
-                //     </Boton>
-                //     <Boton type="button" tipo="success" onClick={crearParametro}>
-                //         <IconPlus stroke={2} />
-                //         Guardar
-                //     </Boton>
-                // </>}
+            // botonesAccion={<>
+            //     <Boton
+            //         type="button"
+            //         tipo="danger"
+            //         onClick={() => setAbierto(false)}
+            //     >
+            //         <IconX stroke={2} />
+            //         Cancelar
+            //     </Boton>
+            //     <Boton type="button" tipo="success" onClick={crearParametro}>
+            //         <IconPlus stroke={2} />
+            //         Guardar
+            //     </Boton>
+            // </>}
             >
                 <FormularioParametro parametros={parametros} setParametros={setParametros} setAbierto={setAbierto} />
             </Modal>,

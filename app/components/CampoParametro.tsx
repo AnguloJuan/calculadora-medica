@@ -8,15 +8,27 @@ import { Each } from "./EachOf";
 
 interface CampoParametroProps {
     parametro: Parametro;
-    setParametro?: (parametro: Parametro) => void;
+    setParametros?: (parametros: Parametro[]) => void;
+    parametros?: Parametro[];
     unidades?: Unidad[];
 }
 
-const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, setParametro, unidades }: CampoParametroProps) => {
+const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, setParametros, parametros, unidades }: CampoParametroProps) => {
     const opciones = parametro.opciones?.split(',');
     const [valor, setValor] = useState<string | number>(
         parametro.tipo_campo === 'numerico' ? 0 : ''
     );
+
+    // Acutalizar unidadActual del parametro en el estado parametros
+    function actualizarUnidadActual(unidad: Unidad) {
+        if (!parametros || !setParametros) return;
+
+        const index = parametros?.findIndex((param) => param.id === parametro.id);
+        const acutalizarParametos = [...parametros];
+        // Crear nuevo objeto con unidad actualizada
+        acutalizarParametos[index] = { ...parametro, unidadActual: unidad };
+        setParametros(acutalizarParametos);
+    }
 
     return (
         <div className={`w-full grid grid-cols-2 gap-y-8 sm:grid-cols-6
@@ -50,7 +62,7 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, set
                                     onChange={(e) => {
                                         const unidad = unidades.find((unidad) => unidad.id === Number(e.target.value));
                                         if (unidad) {
-                                            setParametro && setParametro({ ...parametro, unidadActual: unidad });
+                                            actualizarUnidadActual(unidad);
                                         }
                                     }}
                                 >

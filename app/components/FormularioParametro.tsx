@@ -1,11 +1,11 @@
 'use client'
-import { crearParametroAction, ObtenerUnidadesAction } from "@/utils/actions";
+import { crearParametroAction, obtenerUnidadesAction } from "@/utils/actions";
 import { z } from "@/utils/es-zod";
 import { Parametro, ParametroZ, Unidad, UnidadZ } from "@/utils/types";
 import { IconPlus, IconX } from "@tabler/icons-react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { withZodSchema } from "formik-validator-zod";
-import { FunctionComponent, use, useEffect, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import BotonCrearUnidad from "./BotonCrearUnidad";
 import { Boton } from "./Botones";
 import CampoParametro from "./CampoParametro";
@@ -22,25 +22,23 @@ interface FormularioParametroProps {
 const FormularioParametro: FunctionComponent<FormularioParametroProps> = ({ parametros, setParametros, setAbierto }: FormularioParametroProps) => {
     const { addToast } = useToast();
     const [unidades, setUnidades] = useState<Unidad[]>([]);
-    const [fetchUnidades, setFetchUnidades] = useState(true);
     const [fetching, setFetching] = useState(true);
     const [opciones, setOpciones] = useState<{ value: Unidad, label: string }[]>([]);
     const [seleccionado, setSeleccionado] = useState<Unidad | null>(null);
 
     useEffect(() => {
         setFetching(true);
-        ObtenerUnidadesAction()
-            .then(data => setUnidades(data))
+        obtenerUnidadesAction()
+            .then(data => {
+                if (!('error' in data)) {
+                    setUnidades(data); console.log(data);
+                }
+            })
             .catch(error => console.error(error))
             .finally(() => setFetching(false));
-        setFetchUnidades(false);
-    }, [fetchUnidades, setFetchUnidades])
+    }, [])
 
-    useEffect(() => {
-        setOpciones(unidades.map(unidad => ({ value: unidad, label: unidad.unidad })));
-    }, [unidades])
-
-    // useEffect(() => {
+    // useEffect(() => { // cuando se selecciona una unidad, se elimina de las opciones que no sean conversiones
     //     if (seleccionado) {
     //         setOpciones(opciones.filter(opcion => opcion.value.id_unidad_conversion !== seleccionado.id));
     //     } else {
@@ -145,12 +143,17 @@ const FormularioParametro: FunctionComponent<FormularioParametroProps> = ({ para
                                     placeholder={"Seleccione una unidad"}
                                     className="w-full"
                                     value={values.unidades.map(unidad => ({ value: unidad, label: unidad.unidad }))}
-                                    onChange={(value: any) => {
-                                        setFieldValue('unidades', value.map((unidad: { value: Unidad, label: string }) => unidad.value)); console.log(values);
-                                    }}
+                                    onChange={(value: any) =>
+                                        setFieldValue('unidades', value.map((unidad: { value: Unidad, label: string }) => unidad.value))
+                                    }
                                 />
                                 <ErrorMessage component="p" name="unidades" />
-                                <BotonCrearUnidad setFieldValue={setFieldValue} setFetchUnidades={setFetchUnidades} sholdClose />
+                                <BotonCrearUnidad
+                                    setFieldValue={setFieldValue}
+                                    unidadesParametro={values.unidades}
+                                    setOpciones={setOpciones}
+                                    shouldClose={true}
+                                />
                             </div>
 
                             <div className="w-full sm:grid sm:grid-cols-2 sm:gap-2">

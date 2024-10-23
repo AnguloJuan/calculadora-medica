@@ -1,6 +1,6 @@
 'use client'
 
-import { ObtenerUnidadesPorParametroAction } from "@/utils/actions";
+import { obtenerUnidadesPorParametroAction } from "@/utils/actions";
 import { Parametro, UnidadPorParametro } from "@/utils/types";
 import { IconTrash } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
@@ -22,7 +22,7 @@ export default function ListaParametros({ parametros, setParametros, sesion }: L
         for (let i = 0; i < parametros.length; i++) {
             formData.append('parametroIds', parametros[i].id.toString());
         }
-        ObtenerUnidadesPorParametroAction(formData)
+        obtenerUnidadesPorParametroAction(formData)
             .then(data => {
                 if ('error' in data) {
                     console.error(data.error);
@@ -54,7 +54,7 @@ export default function ListaParametros({ parametros, setParametros, sesion }: L
             <Each
                 of={parametros}
                 render={(parametro) => (<div className="flex flex-row gap-2">
-                    <CampoParametro key={parametro.id} parametro={parametro} unidades={
+                    <CampoParametro key={parametro.id} parametro={parametro} setParametros={setParametros} unidades={
                         unidadesPorParametro.find((unidad) => unidad.id_parametro === parametro.id)?.unidades || []
                     } />
                     {sesion === 'admin' && (

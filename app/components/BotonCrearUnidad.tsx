@@ -1,19 +1,20 @@
 'use client'
 import { Unidad } from "@/utils/types";
-import { IconPlus, IconX } from "@tabler/icons-react";
+import { IconPlus } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Boton } from "./Botones";
-import Modal from "./Modal";
 import FormularioUnidad from "./FormularioUnidad";
+import Modal from "./Modal";
 
 interface UnidadProps {
-    setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => void;
-    setFetchUnidades: (fetchUnidades: boolean) => void;
-    sholdClose: boolean;
+    setFieldValue?: (field: string, value: any, shouldValidate?: boolean | undefined) => void;
+    unidadesParametro?: Unidad[];
+    setOpciones?: (opciones: { value: Unidad, label: string }[]) => void;
+    shouldClose: boolean;
 }
 
-export default function BotonCrearUnidad({ setFieldValue, setFetchUnidades }: UnidadProps) {
+export default function BotonCrearUnidad({ setFieldValue, unidadesParametro, setOpciones, shouldClose }: UnidadProps) {
     const [abierto, setAbierto] = useState(false);
     const [isClient, setIsClient] = useState(false);
 
@@ -34,7 +35,13 @@ export default function BotonCrearUnidad({ setFieldValue, setFetchUnidades }: Un
                 abierto={abierto}
                 setAbierto={() => setAbierto(!abierto)}
             >
-                <FormularioUnidad setFieldValue={setFieldValue} setAbierto={setAbierto} setFetchUnidades={setFetchUnidades} shouldClose />
+                <FormularioUnidad
+                    setFieldValue={setFieldValue}
+                    setAbierto={setAbierto}
+                    setOpciones={setOpciones}
+                    unidadesParametro={unidadesParametro}
+                    shouldClose={shouldClose}
+                />
             </Modal>,
             document.body
         )}

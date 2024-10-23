@@ -4,7 +4,6 @@ import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { redirect } from "next/navigation";
 import { conectarBd } from "../db/conectarDb";
 import { logIn } from "./auth";
-import { ActualizarParametros, ActualizarUnidades, PARAMETROS, UNIDADES } from "./constantes";
 import { Parametro, Unidad, UnidadPorParametro } from "./types";
 
 export async function authenticateAction(_currentState: unknown, formData: FormData) {
@@ -24,6 +23,7 @@ export async function authenticateAction(_currentState: unknown, formData: FormD
     redirect('/nueva-calculadora')
 }
 
+// Calculadoras
 export async function crearCalculadoraAction(formulario: FormData) {
     var kebabCase = require('lodash/kebabCase');
     const conexion = await conectarBd();
@@ -87,6 +87,20 @@ export async function crearCalculadoraAction(formulario: FormData) {
     }
 }
 
+// Parametros
+interface Parametros extends RowDataPacket, Parametro { }
+export async function obtenerParametrosAction() {
+    const conexion = await conectarBd();
+    try {
+        const [parametros] = await conexion.query<Parametros[]>(
+            'SELECT * FROM `parametro` ORDER BY `nombre` ASC;'
+        );
+        return parametros;
+    } catch (err) {
+        console.log(err);
+        return { error: 'Fallo al intentar obtener los parámetros', status: 500 };
+    }
+}
 export async function crearParametroAction(formulario: FormData) {
     const conexion = await conectarBd();
     const parametro = {
@@ -122,7 +136,6 @@ export async function crearParametroAction(formulario: FormData) {
         return { error: 'Fallo al intentar guardar el parámetro', status: 500 };
     }
 }
-
 export async function editarParametroAction(formulario: FormData) {
     const conexion = await conectarBd();
     const parametro = {
@@ -161,13 +174,22 @@ export async function editarParametroAction(formulario: FormData) {
     }
 }
 
-export async function ActualizarParametrosAction() {
-    ActualizarParametros();
-}
-export async function ObtenerParametrosAction() {
-    return PARAMETROS;
-}
 
+// Unidades
+interface Unidades extends RowDataPacket, Unidad { }
+export async function obtenerUnidadesAction() {
+    const conexion = await conectarBd();
+    try {
+        const [unidades] = await conexion.query<Unidades[]>(
+            'SELECT * FROM `unidad` ORDER BY `unidad` ASC;'
+        );
+        // replace unidades with the new ones
+        return unidades;
+    } catch (err) {
+        console.log(err);
+        return { error: 'Fallo al intentar obtener las unidades', status: 500 };
+    }
+}
 export async function crearUnidadAction(formulario: FormData) {
     const conexion = await conectarBd();
     const unidad = {
@@ -195,16 +217,7 @@ export async function crearUnidadAction(formulario: FormData) {
         return { error: 'Fallo al intentar guardar la unidad', status: 500 };
     }
 }
-
-export async function ActualizarUnidadesAction() {
-    ActualizarUnidades();
-}
-export async function ObtenerUnidadesAction() {
-    return UNIDADES;
-}
-
-export async function ObtenerUnidadesPorParametroAction(formulario: FormData) {
-    interface Unidades extends RowDataPacket, Unidad { }
+export async function obtenerUnidadesPorParametroAction(formulario: FormData) {
     const conexion = await conectarBd();
     const parametroIds = formulario.getAll('parametroIds') || [];
     const query = 'SELECT `unidad` FROM `unidad` JOIN `parametros_unidades` WHERE `id_parametro` = ? ORDER BY `unidad` ASC;'
