@@ -86,7 +86,7 @@ const BotonAgregarParametro: FunctionComponent<BotonAgregarParametroProps> = ({ 
 
     return (<>
         <div className="w-full col-span-2">
-            <Boton tipo="success" type="button" onClick={() => setAbierto(true)}>
+            <Boton variante="success" type="button" onClick={() => setAbierto(true)}>
                 <IconPlus stroke={2} />
                 Crear nuevo parámetro
             </Boton>
@@ -111,7 +111,7 @@ const BotonAgregarParametro: FunctionComponent<BotonAgregarParametroProps> = ({ 
                 //     </Boton>
                 // </>}
             >
-                <FormularioParametro parametros={parametros} setParametros={setParametros} />
+                <FormularioParametro parametros={parametros} setParametros={setParametros} setAbierto={setAbierto} />
             </Modal>,
             document.body
         )}

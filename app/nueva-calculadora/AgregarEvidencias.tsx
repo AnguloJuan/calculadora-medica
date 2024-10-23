@@ -23,7 +23,7 @@ export default function AgregarEvidencias() {
                 />
                 <Boton
                     type="button"
-                    tipo="success"
+                    variante="success"
                     onClick={() => {
                         if (evidencia === '') {
                             return;
@@ -44,7 +44,7 @@ export default function AgregarEvidencias() {
                             <p className="text-sm font-light self-center">{evidencia}</p>
                             <Boton
                                 type="button"
-                                tipo="danger"
+                                variante="danger"
                                 onClick={() => {
                                     setEvidencias(evidencias.filter(e => e !== evidencia));
                                 }}

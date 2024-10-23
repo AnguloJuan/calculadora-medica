@@ -2,11 +2,11 @@ import React, { ReactNode } from "react";
 
 interface BotonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     children?: ReactNode,
-    tipo?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark'
+    variante?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark'
     estilo?: string
 }
 
-const Boton: React.FC<BotonProps> = ({ tipo, children, estilo, ...props }) => {
+const Boton: React.FC<BotonProps> = ({ variante, children, estilo, ...props }) => {
     const styleType = {
         primary: 'bg-blue-600 border-blue-700 text-white hover:bg-blue-700 focus:ring-blue-500',
         secondary: 'bg-gray-600 border-gray-700 text-white hover:bg-gray-700 focus:ring-gray-500',
@@ -21,7 +21,7 @@ const Boton: React.FC<BotonProps> = ({ tipo, children, estilo, ...props }) => {
     return (<button
         {...props}
         className={`inline-flex flex-row text-white px-4 py-2 rounded-lg items-center gap-2 w-full justify-center border border-transparent shadow-sm 
-                 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:w-auto ${styleType[tipo || 'default']} ${estilo}`}
+                 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:w-auto ${styleType[variante || 'default']} ${estilo}`}
     >
         {children}
     </button>

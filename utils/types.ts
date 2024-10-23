@@ -21,6 +21,7 @@ interface Parametro {
     valorMaximo?: number;
     valorMinimo?: number;
     opciones?: string;
+    unidadActual?: Unidad;
 }
 
 interface Evidencia {
@@ -35,6 +36,11 @@ interface Unidad {
     conversion?: number,
     id_unidad_conversion?: number
 }
+
+interface UnidadPorParametro {
+    id_parametro: number;
+    unidades: Unidad[];
+};
 
 const CalculadoraZ = z.object({
     id: z.coerce.number(),
@@ -52,7 +58,7 @@ const ParametroZ = z.object({
     nombre: z.string().min(1),
     abreviatura: z.string(),
     tipo_campo: z.enum(['numerico', 'seleccion', 'radio']),
-    unidad_metrica: z.string().optional(),
+    unidad: z.string().optional(),
     valorMaximo: z.number().optional(),
     valorMinimo: z.number().optional(),
     opciones: z.string().min(1).optional()
@@ -72,4 +78,4 @@ const UnidadZ = z.object({
 }) satisfies z.ZodType<Unidad>;
 
 export { CalculadoraZ, EvidenciaZ, ParametroZ, UnidadZ, AREA };
-export type { Calculadora, Evidencia, Parametro, Unidad };
+export type { Calculadora, Evidencia, Parametro, Unidad, UnidadPorParametro };

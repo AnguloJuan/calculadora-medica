@@ -1,11 +1,13 @@
 'use client'
 
-import { Parametro } from "@/utils/types";
+import { ObtenerUnidadesPorParametroAction } from "@/utils/actions";
+import { Parametro, UnidadPorParametro } from "@/utils/types";
 import { IconTrash } from "@tabler/icons-react";
+import { useEffect, useState } from "react";
 import BotonEditarParametro from "./BotonEditarParametro";
+import { Boton } from "./Botones";
 import CampoParametro from "./CampoParametro";
 import { Each } from "./EachOf";
-import { Boton } from "./Botones";
 
 interface ListaParametrosProps {
     parametros: Parametro[];
@@ -14,6 +16,23 @@ interface ListaParametrosProps {
 }
 
 export default function ListaParametros({ parametros, setParametros, sesion }: ListaParametrosProps) {
+    const [unidadesPorParametro, setUnidadesPorParametro] = useState<UnidadPorParametro[]>([]);
+    useEffect(() => {
+        const formData = new FormData();
+        for (let i = 0; i < parametros.length; i++) {
+            formData.append('parametroIds', parametros[i].id.toString());
+        }
+        ObtenerUnidadesPorParametroAction(formData)
+            .then(data => {
+                if ('error' in data) {
+                    console.error(data.error);
+                } else {
+                    setUnidadesPorParametro(data);
+                }
+            })
+            .catch(error => console.error(error));
+    }, [parametros]);
+
     const BotonEliminar = ({ id }: { id: number }) => {
         const EliminarParametro = () => {
             const nuevosParametros = parametros.filter((parametro) => parametro.id !== id);
@@ -22,7 +41,7 @@ export default function ListaParametros({ parametros, setParametros, sesion }: L
         return (
             <Boton
                 type="button"
-                tipo="danger"
+                variante="danger"
                 onClick={EliminarParametro}
             >
                 <IconTrash stroke={2} />
@@ -35,7 +54,9 @@ export default function ListaParametros({ parametros, setParametros, sesion }: L
             <Each
                 of={parametros}
                 render={(parametro) => (<div className="flex flex-row gap-2">
-                    <CampoParametro key={parametro.id} parametro={parametro} />
+                    <CampoParametro key={parametro.id} parametro={parametro} unidades={
+                        unidadesPorParametro.find((unidad) => unidad.id_parametro === parametro.id)?.unidades || []
+                    } />
                     {sesion === 'admin' && (
                         <div className="flex flex-row gap-1">
                             <BotonEliminar id={parametro.id} />

@@ -11,7 +11,7 @@ export default function Calcular({ formula }: { formula: string }) {
         //calcular resultado usando formula
     }
     return (<>
-        <Boton type="button" tipo="primary" estilo="mt-8" onClick={calcularResultado}>Calcular</Boton>
+        <Boton type="button" variante="primary" estilo="mt-8" onClick={calcularResultado}>Calcular</Boton>
 
         <div className="flex flex-col gap-4">
             <p className="text-lg">Resultado:</p>

@@ -1,11 +1,11 @@
 'use server'
 
-import { ResultSetHeader } from "mysql2";
+import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { redirect } from "next/navigation";
 import { conectarBd } from "../db/conectarDb";
 import { logIn } from "./auth";
 import { ActualizarParametros, ActualizarUnidades, PARAMETROS, UNIDADES } from "./constantes";
-import { Parametro } from "./types";
+import { Parametro, Unidad, UnidadPorParametro } from "./types";
 
 export async function authenticateAction(_currentState: unknown, formData: FormData) {
     try {
@@ -93,17 +93,17 @@ export async function crearParametroAction(formulario: FormData) {
         nombre: formulario.get('nombre'),
         abreviatura: formulario.get('abreviatura'),
         tipo_campo: formulario.get('tipo_campo'),
-        unidad_metrica: formulario.get('unidad_metrica'),
         valorMinimo: formulario.get('valorMinimo'),
         valorMaximo: formulario.get('valorMaximo'),
         opciones: formulario.get('opciones')
     };
+    const unidades = formulario.get('unidad')
     try {
         let insert;
         if (parametro.tipo_campo === 'numerico') {
             insert = await conexion.query<ResultSetHeader>(
-                'INSERT INTO `parametro` (`nombre`, `abreviatura`, `tipo_campo`, `unidad_metrica`, `valorMinimo`, `valorMaximo`) VALUES (?, ?, ?, ?, ? , ?)',
-                [parametro.nombre, parametro.abreviatura, parametro.tipo_campo, parametro.unidad_metrica, parametro.valorMinimo, parametro.valorMaximo]
+                'INSERT INTO `parametro` (`nombre`, `abreviatura`, `tipo_campo`, `valorMinimo`, `valorMaximo`) VALUES (?, ?, ?, ? , ?)',
+                [parametro.nombre, parametro.abreviatura, parametro.tipo_campo, parametro.valorMinimo, parametro.valorMaximo]
             );
         } else {
             insert = await conexion.query<ResultSetHeader>(
@@ -130,18 +130,18 @@ export async function editarParametroAction(formulario: FormData) {
         nombre: formulario.get('nombre'),
         abreviatura: formulario.get('abreviatura'),
         tipo_campo: formulario.get('tipo_campo'),
-        unidad_metrica: formulario.get('unidad_metrica'),
         valorMinimo: formulario.get('valorMinimo'),
         valorMaximo: formulario.get('valorMaximo'),
         opciones: formulario.get('opciones')
     };
+    const unidades = formulario.get('unidades')
 
     try {
         let update;
         if (parametro.tipo_campo === 'numerico') {
             update = await conexion.query<ResultSetHeader>(
-                'UPDATE `parametro` SET `nombre` = ?, `abreviatura` = ?, `tipo_campo` = ?, `unidad_metrica` = ?, `valorMinimo` = ?, `valorMaximo` = ? WHERE `id` = ?',
-                [parametro.nombre, parametro.abreviatura, parametro.tipo_campo, parametro.unidad_metrica, parametro.valorMinimo, parametro.valorMaximo, parametro.id]
+                'UPDATE `parametro` SET `nombre` = ?, `abreviatura` = ?, `tipo_campo` = ?, `valorMinimo` = ?, `valorMaximo` = ? WHERE `id` = ?',
+                [parametro.nombre, parametro.abreviatura, parametro.tipo_campo, parametro.valorMinimo, parametro.valorMaximo, parametro.id]
             );
         } else {
             update = await conexion.query<ResultSetHeader>(
@@ -203,17 +203,31 @@ export async function ObtenerUnidadesAction() {
     return UNIDADES;
 }
 
-// export async function obtenerParametros() {
-//     interface Parametros extends RowDataPacket, Parametro { }
+export async function ObtenerUnidadesPorParametroAction(formulario: FormData) {
+    interface Unidades extends RowDataPacket, Unidad { }
+    const conexion = await conectarBd();
+    const parametroIds = formulario.getAll('parametroIds') || [];
+    const query = 'SELECT `unidad` FROM `unidad` JOIN `parametros_unidades` WHERE `id_parametro` = ? ORDER BY `unidad` ASC;'
 
-//     const conexion = await conectarBd();
-//     try {
-//         const [parametros] = await conexion.query<Parametros[]>(
-//             'SELECT * FROM `parametro` ORDER BY `nombre` ASC;'
-//         );
-//         return parametros;
-//     } catch (err) {
-//         console.log(err);
-//         return { error: 'Fallo al intentar obtener los parámetros', status: 500 };
-//     }
-// }
+    if (parametroIds.length === 0) {
+        return { error: 'Falta el id del parametro', status: 400 };
+    }
+
+    let unidadesPorParametro: UnidadPorParametro[] = [{}] as UnidadPorParametro[];
+
+    try {
+        for (let i = 0; i < parametroIds.length; i++) {
+            const id = parseInt(parametroIds[i].toString());
+            const [unidades] = await conexion.query<Unidades[]>(
+                query,
+                [id]
+            );
+            unidadesPorParametro.push({ id_parametro: id, unidades: unidades });
+        }
+
+        return unidadesPorParametro;
+    } catch (err) {
+        console.log(err);
+        return { error: 'Fallo al intentar obtener los unidades por parametro', status: 500 };
+    }
+}

@@ -17,10 +17,11 @@ interface FormularioUnidadProps {
     setFieldValue?: (field: string, value: any, shouldValidate?: boolean | undefined) => void;
     setAbierto?: (abierto: boolean) => void;
     setFetchUnidades?: (fetchUnidades: boolean) => void;
+    unidadesParametro: Unidad[];
     shouldClose: boolean;
 }
 
-export default function FormularioUnidad({ setFieldValue, setAbierto, setFetchUnidades }: FormularioUnidadProps) {
+export default function FormularioUnidad({ setFieldValue, setAbierto, setFetchUnidades, unidadesParametro, shouldClose }: FormularioUnidadProps) {
     const [unidades, setUnidades] = useState<Unidad[]>([]);
     const [doFethcUnidades, setDoFetchUnidades] = useState<boolean>(true);
     const [fetching, setFetching] = useState(true);
@@ -56,15 +57,17 @@ export default function FormularioUnidad({ setFieldValue, setAbierto, setFetchUn
                 return;
             }
 
+            ActualizarUnidadesAction().then(() => {
+                setFetchUnidades && setFetchUnidades(true); // Actualizar el estado de las unidades en el formulario padre
+                setDoFetchUnidades(true);
+            });
             // Actualizar el estado de las unidades en el formulario padre
             setFieldValue &&
-                setFieldValue('unidades', [...unidades,
-                { id: res.id, unidad: values.unidad, conversion: values.conversion, id_unidad_conversion: values.id_unidad_conversion }
+                setFieldValue('unidades', [...unidadesParametro, 
+                    { id: res.id, unidad: values.unidad, conversion: values.conversion, id_unidad_conversion: values.id_unidad_conversion }
                 ]);
-            setFetchUnidades ? setFetchUnidades(true) : setDoFetchUnidades(true);
-            setAbierto && setAbierto(false);
 
-            ActualizarUnidadesAction();
+            setAbierto && setAbierto(false);
             addToast('Unidad creada correctamente', 'success');
         })
     }
@@ -91,16 +94,30 @@ export default function FormularioUnidad({ setFieldValue, setAbierto, setFetchUn
                         {fetching ? (<p>Cargando...</p>) : unidades.length > 0 ?
                             (<div className="w-full flex flex-col gap-2">
                                 <label htmlFor="id_unidad_conversion">Unidad de conversion</label>
-                                <ReactSelect
+                                {/* <ReactSelect
                                     id="id_unidad_conversion"
                                     name="id_unidad_conversion"
+                                    value={values.id_unidad_conversion ? { label: unidades.find((unidad) => unidad.id === values.id_unidad_conversion)?.unidad, value: values.id_unidad_conversion } : null}
                                     options={unidades.map((unidad) => {
                                         return { label: unidad.unidad, value: unidad.id }
                                     })}
                                     onChange={(value: any, actionMeta: ActionMeta<any>) => {
                                         setFieldValue('id_unidad_conversion', value.value)
                                     }}
-                                />
+                                /> */}
+                                <Field
+                                    as="select"
+                                    name="id_unidad_conversion"
+                                    onChange={(e: any) => setFieldValue('id_unidad_conversion', parseFloat(e.target.value))}
+                                >
+                                    <option value={0}>Selecciona la unidad para conversión</option>
+                                    <Each
+                                        of={unidades}
+                                        render={(unidad) => (
+                                            <option value={unidad.id}>{unidad.unidad}</option>
+                                        )}
+                                    />
+                                </Field>
                                 <ErrorMessage component="p" name="id_unidad_conversion" />
                             </div>) : <p>No hay unidades para hacer conversión</p>}
                         {values.id_unidad_conversion && (
@@ -117,13 +134,13 @@ export default function FormularioUnidad({ setFieldValue, setAbierto, setFetchUn
                         <div className="w-full flex flex-row justify-evenly">
                             <Boton
                                 type="button"
-                                tipo="danger"
+                                variante="danger"
                                 onClick={() => setAbierto && setAbierto(false)}
                             >
                                 <IconX stroke={2} />
                                 Cancelar
                             </Boton>
-                            <Boton type="submit" tipo="success">
+                            <Boton type="submit" variante="success">
                                 <IconPlus stroke={2} />
                                 Guardar
                             </Boton>

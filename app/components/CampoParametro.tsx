@@ -1,6 +1,6 @@
 'use client'
 
-import { Parametro } from "@/utils/types";
+import { Parametro, Unidad } from "@/utils/types";
 import { Radio, RadioGroup } from "@headlessui/react";
 import { IconCircle } from "@tabler/icons-react";
 import { FunctionComponent, useState } from "react";
@@ -8,10 +8,11 @@ import { Each } from "./EachOf";
 
 interface CampoParametroProps {
     parametro: Parametro;
+    setParametro?: (parametro: Parametro) => void;
+    unidades?: Unidad[];
 }
 
-const CampoParametro: FunctionComponent<CampoParametroProps> = (CampoParametroProps) => {
-    const { parametro } = CampoParametroProps;
+const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, setParametro, unidades }: CampoParametroProps) => {
     const opciones = parametro.opciones?.split(',');
     const [valor, setValor] = useState<string | number>(
         parametro.tipo_campo === 'numerico' ? 0 : ''
@@ -35,7 +36,30 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = (CampoParametroPr
                         className="sm:col-span-3 mt-0 rounded-s-lg"
                     />
                     <div className="h-full col-span-1 text-center self-center p-2 bg-slate-300 border border-gray-300 rounded-e-lg">
-                        <span className="text-sm/6">{parametro.unidad_metrica}</span>
+                        {/* {unidades?.map((unidad, index) => (
+                            <p key={index} className="text-sm/6">{unidad.unidad}</p>
+                        ))} */}
+                        {unidades && (
+                            unidades.length === 1 ? (
+                                <span className="text-sm/6">{unidades[0].unidad}</span>
+                            ) : unidades.length > 1 && (
+                                <select
+                                    id={`unidad_${parametro.nombre}`}
+                                    name={`unidad_${parametro.nombre}`}
+                                    className="text-sm/6"
+                                    onChange={(e) => {
+                                        const unidad = unidades.find((unidad) => unidad.id === Number(e.target.value));
+                                        if (unidad) {
+                                            setParametro && setParametro({ ...parametro, unidadActual: unidad });
+                                        }
+                                    }}
+                                >
+                                    {unidades.map((unidad, index) => (
+                                        <option key={index} value={unidad.id}>{unidad.unidad}</option>
+                                    ))}
+                                </select>
+                            )
+                        )}
                     </div>
                 </div>
             )}
@@ -75,7 +99,7 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = (CampoParametroPr
                                         value={opcion}
                                         // if current value is checked then set the value to "" else set the value to the current value
                                         onClick={() => setValor(valor === opcion ? '' : opcion)}
-                                        
+
                                         className="group relative flex w-full cursor-pointer rounded-lg col-span-1 bg-white border-gray-300 outline-gray-300 py-4 px-5 outline-none outline-offset-0 transition focus:outline-blue-500 data-[focus]:border-blue-500 data-[checked]:border-blue-500 data-[checked]:outline-blue-500"
                                     >
                                         <div className="flex w-full items-center justify-between">
