@@ -18,9 +18,10 @@ interface FormularioParametroProps {
     parametros?: Parametro[];
     setParametros?: (parametros: Parametro[]) => void;
     setAbierto: (abierto: boolean) => void;
+    accion?: 'guardar' | 'actualizar';
 }
 
-const FormularioParametro: FunctionComponent<FormularioParametroProps> = ({ parametros, setParametros, setAbierto }: FormularioParametroProps) => {
+const FormularioParametro: FunctionComponent<FormularioParametroProps> = ({ parametros, setParametros, setAbierto, accion }: FormularioParametroProps) => {
     const { addToast } = useToast();
     const [fetching, setFetching] = useState(true);
     const [opciones, setOpciones] = useState<{ value: Unidad, label: string }[]>([]);
@@ -44,8 +45,10 @@ const FormularioParametro: FunctionComponent<FormularioParametroProps> = ({ para
     //     }
     // }, [opciones, unidades, seleccionado])
 
-    type parametroSchema = typeof ParametroNumericoSchema | typeof ParametroSeleccionSchema
-    const initialValues: z.infer<parametroSchema> = {
+    interface parametroSchema extends Parametro {
+        unidades: Unidad[];
+    }
+    const initialValues: parametroSchema = {
         id: 0,
         nombre: '',
         abreviatura: '',
@@ -56,7 +59,7 @@ const FormularioParametro: FunctionComponent<FormularioParametroProps> = ({ para
         opciones: '',
     }
 
-    const hendleSubmit = async (values: z.infer<parametroSchema>) => {
+    const hendleSubmit = async (values: parametroSchema) => {
         try {
             const datosParametro = new FormData();
             datosParametro.set('nombre', values.nombre);
@@ -65,26 +68,25 @@ const FormularioParametro: FunctionComponent<FormularioParametroProps> = ({ para
             if (values.tipo_campo === 'numerico') {
                 datosParametro.set('valorMinimo', values.valorMinimo?.toString() || '');
                 datosParametro.set('valorMaximo', values.valorMaximo?.toString() || '');
-                datosParametro.set('unidades', JSON.stringify(values.unidades.map(unidad => unidad.id)));
+                datosParametro.set('unidades', JSON.stringify(values.unidades));
             } else datosParametro.set('opciones', values.opciones?.toString() || '');
 
             const respuesta = await crearParametroAction(datosParametro);
-            console.log(1);
 
-            // if (respuesta.id) {
-            //     const parametroConId = { ...values, id: respuesta.id };
-            //     setParametros && parametros && setParametros([...parametros, parametroConId]);
-            //     addToast('Parámetro guardado con éxito', 'success');
-            //     setAbierto(false);
-            // } else {
-            //     addToast('Ocurrió un error inesperado en el servidor', 'error');
-            // }
+            if (respuesta.id) {
+                const parametroConId = { ...values, id: respuesta.id };
+                setParametros && parametros && setParametros([...parametros, parametroConId]);
+                addToast('Parámetro guardado con éxito', 'success');
+                setAbierto(false);
+            } else {
+                addToast('Ocurrió un error inesperado en el servidor', 'error');
+            }
         } catch (err) {
             addToast('Ocurrió un error inesperado', 'error');
         }
     }
 
-    const handleValidation = (values: z.infer<parametroSchema>) => {
+    const handleValidation = (values: any) => {
         if (values.tipo_campo === 'numerico') {
             return withZodSchema(ParametroNumericoSchema)(values);
         } else {
@@ -98,7 +100,7 @@ const FormularioParametro: FunctionComponent<FormularioParametroProps> = ({ para
             validate={handleValidation}
             onSubmit={hendleSubmit}
         >
-            {({ values, setFieldValue, handleBlur, isSubmitting, dirty, isValid, errors }) => (
+            {({ values, setFieldValue, handleBlur, isSubmitting, dirty, isValid, errors, touched }) => (
                 <Form className="flex md:max-w-screen-md lg:max-w-screen-lg flex-col items-center rounded-lg p-12 py-12 bg-white gap-8">
                     <div className="w-full flex flex-row gap-4">
                         <div className="w-full flex flex-col gap-2">
@@ -147,7 +149,7 @@ const FormularioParametro: FunctionComponent<FormularioParametroProps> = ({ para
                                     onBlur={handleBlur}
                                     placeholder={"Seleccione una unidad"}
                                     className="w-full"
-                                    value={values.unidades.map(unidad => ({ value: unidad, label: unidad.unidad }))}
+                                    value={(values.unidades ?? []).map(unidad => ({ value: unidad, label: unidad.unidad }))}
                                     onChange={(value: any) =>
                                         setFieldValue('unidades', value.map((unidad: { value: Unidad, label: string }) => unidad.value))
                                     }
@@ -159,7 +161,9 @@ const FormularioParametro: FunctionComponent<FormularioParametroProps> = ({ para
                                     shouldClose={true}
                                 />
                             </div>
-                            <ErrorMessage component="p" name="unidades" />
+                            {errors.unidades ? (
+                                <p>{Array.isArray(errors.unidades) ? errors.unidades.join(', ') : errors.unidades}</p>
+                            ) : null}
 
 
                             <div className="w-full sm:grid sm:grid-cols-2 sm:gap-2">
@@ -215,12 +219,15 @@ const FormularioParametro: FunctionComponent<FormularioParametroProps> = ({ para
                             <IconX stroke={2} />
                             Cancelar
                         </Boton>
-                        <Boton type="submit" variante={isSubmitting || dirty || !isValid ? 'disabled' : 'success'} disabled={isSubmitting || dirty || !isValid}>
-                            <IconPlus stroke={2} />
-                            Guardar
+                        <Boton
+                            type="submit"
+                            variante={isSubmitting || !isValid ? 'disabled' : accion === 'guardar' ? 'success' : 'warning'}
+                            disabled={isSubmitting || !isValid}>
+                            <IconPlus stroke={2}
+                            />
+                            {accion === 'guardar' ? 'Guardar' : 'Actualizar'}
                         </Boton>
                     </div>
-                    <span>{JSON.stringify(errors)}</span>
                 </Form>
             )}
         </Formik>

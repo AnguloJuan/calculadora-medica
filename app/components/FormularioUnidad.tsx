@@ -33,15 +33,14 @@ export default function FormularioUnidad({ setFieldValue, unidadesParametro, set
             .finally(() => setFetching(false));
     }, [])
 
-    const unidadSchema = UnidadZ;
-    const initialValues: z.infer<typeof unidadSchema> = {
+    const initialValues: z.infer<typeof UnidadZ> = {
         id: 0,
         unidad: '',
         conversion: undefined,
         id_unidad_conversion: undefined
     }
 
-    const handleSubmit = async (values: z.infer<typeof unidadSchema>) => {
+    const handleSubmit = async (values: z.infer<typeof UnidadZ>) => {
         const formData = new FormData();
         formData.append('unidad', values.unidad);
         formData.append('conversion', values.conversion ? values.conversion.toString() : '');
@@ -76,7 +75,7 @@ export default function FormularioUnidad({ setFieldValue, unidadesParametro, set
         <div className="w-full flex flex-col gap-2">
             <Formik
                 initialValues={initialValues}
-                validate={withZodSchema(unidadSchema)}
+                validate={withZodSchema(UnidadZ)}
                 onSubmit={handleSubmit}
 
             >
@@ -126,6 +125,7 @@ export default function FormularioUnidad({ setFieldValue, unidadesParametro, set
                                 <Field
                                     type="number"
                                     name="conversion"
+                                    value={values.conversion}
                                     placeholder="Ingrese la conversion con la unidad seleccionada"
                                 />
                                 <ErrorMessage component="p" name="conversion" />

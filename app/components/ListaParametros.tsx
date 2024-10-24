@@ -4,7 +4,7 @@ import { obtenerUnidadesPorParametroAction } from "@/utils/actions";
 import { Parametro, UnidadPorParametro } from "@/utils/types";
 import { IconTrash } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
-import BotonEditarParametro from "./BotonEditarParametro";
+import BotonActualizarParametro from "./BotonActualizarParametro";
 import { Boton } from "./Botones";
 import CampoParametro from "./CampoParametro";
 import { Each } from "./EachOf";
@@ -56,7 +56,7 @@ export default function ListaParametros({ parametros, setParametros, sesion }: L
                     {sesion === 'admin' && (
                         <div className="flex flex-row gap-1">
                             <BotonEliminar id={parametro.id} />
-                            <BotonEditarParametro parametro={parametro} parametros={parametros} setParametros={setParametros} />
+                            <BotonActualizarParametro parametro={parametro} parametros={parametros} setParametros={setParametros} />
                         </div>
                     )}
                 </div>)}

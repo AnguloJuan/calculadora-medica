@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS parametro (
     opciones VARCHAR(360)
 );
 
-CREATE TABLE IF NOT EXISTS calculadoras_parametros (
+CREATE TABLE IF NOT EXISTS calculadora_parametro (
 	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	id_calculadora INT NOT NULL,
     id_parametro INT NOT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS unidad (
     CONSTRAINT FK_id_unidades_conversion_unidad FOREIGN KEY (id_unidad_conversion) REFERENCES unidad(id)
 );
 
-CREATE TABLE IF NOT EXISTS parametros_unidades (
+CREATE TABLE IF NOT EXISTS parametro_unidad (
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     id_unidad INT NOT NULL,
     id_parametro INT NOT NULL,

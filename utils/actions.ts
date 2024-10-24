@@ -111,47 +111,45 @@ export async function crearParametroAction(formulario: FormData) {
         valorMaximo: formulario.get('valorMaximo'),
         opciones: formulario.get('opciones')
     };
-    const unidades = formulario.get('unidad')
+    const unidades = JSON.parse(formulario.get('unidades')?.toString() || '[]') as Unidad[]
 
-    console.log(1, parametro, unidades);
-    
+    try {
+        let insertParametro;
+        if (parametro.tipo_campo === 'numerico') {
+            insertParametro = await conexion.query<ResultSetHeader>(
+                'INSERT INTO `parametro` (`nombre`, `abreviatura`, `tipo_campo`, `valorMinimo`, `valorMaximo`) VALUES (?, ?, ?, ? , ?)',
+                [parametro.nombre, parametro.abreviatura, parametro.tipo_campo, parametro.valorMinimo, parametro.valorMaximo]
+            );
+        } else {
+            insertParametro = await conexion.query<ResultSetHeader>(
+                'INSERT INTO `parametro` (`nombre`, `abreviatura`, `tipo_campo`, `opciones`) VALUES (?, ?, ?, ?)',
+                [parametro.nombre, parametro.abreviatura, parametro.tipo_campo, parametro.opciones]
+            );
+        }
 
-    // try {
-    //     let insert;
-    //     if (parametro.tipo_campo === 'numerico') {
-    //         insert = await conexion.query<ResultSetHeader>(
-    //             'INSERT INTO `parametro` (`nombre`, `abreviatura`, `tipo_campo`, `valorMinimo`, `valorMaximo`) VALUES (?, ?, ?, ? , ?)',
-    //             [parametro.nombre, parametro.abreviatura, parametro.tipo_campo, parametro.valorMinimo, parametro.valorMaximo]
-    //         );
-    //     } else {
-    //         insert = await conexion.query<ResultSetHeader>(
-    //             'INSERT INTO `parametro` (`nombre`, `abreviatura`, `tipo_campo`, `opciones`) VALUES (?, ?, ?, ?)',
-    //             [parametro.nombre, parametro.abreviatura, parametro.tipo_campo, parametro.opciones]
-    //         );
-    //     }
+        if (insertParametro[0].affectedRows !== 1) {
+            return { error: 'Fallo inesperado guardando el parámetro', status: 500 };
+        }
 
-    //     if (insert[0].affectedRows !== 1) {
-    //         return { error: 'Fallo inesperado guardando el parámetro', status: 500 };
-    //     }
+        let insertUnidades;
+        if (unidades) {
+            for (let i = 0; i < unidades.length; i++) {
+                const insertUnidades = await conexion.query<ResultSetHeader>(
+                    'INSERT INTO `parametro_unidad` (`id_parametro`, `id_unidad`) VALUES (?, ?)',
+                    [insertParametro[0].insertId, unidades[i].id]
+                );
 
-    //     if (unidades) {
-    //         for (let i = 0; i < unidades.length; i++) {
-    //             const insertUnidades = await conexion.query<ResultSetHeader>(
-    //                 'INSERT INTO `parametros_unidades` (`id_parametro`, `id_unidad`) VALUES (?, ?)',
-    //                 [insert[0].insertId, unidades[i]]
-    //             );
+                if (insertUnidades[0].affectedRows !== 1) {
+                    return { error: 'Fallo inesperado guardando las unidades del parámetro', status: 500 };
+                }
+            }
+        }
 
-    //             if (insertUnidades[0].affectedRows !== 1) {
-    //                 return { error: 'Fallo inesperado guardando las unidades del parámetro', status: 500 };
-    //             }
-    //         }
-    //     }
-
-    //     return { message: 'Parámetro guardado con exito', id: insert[0].insertId, status: 200 };
-    // } catch (err) {
-    //     console.log(err);
-    //     return { error: 'Fallo al intentar guardar el parámetro', status: 500 };
-    // }
+        return { message: 'Parámetro guardado con exito', id: insertParametro[0].insertId, status: 200 };
+    } catch (err) {
+        console.log(err);
+        return { error: 'Fallo al intentar guardar el parámetro', status: 500 };
+    }
 }
 export async function editarParametroAction(formulario: FormData) {
     const conexion = await conectarBd();
@@ -237,13 +235,17 @@ export async function crearUnidadAction(formulario: FormData) {
 export async function obtenerUnidadesPorParametroAction(formulario: FormData) {
     const conexion = await conectarBd();
     const parametroIds = formulario.getAll('parametroIds') || [];
-    const query = 'SELECT `unidad` FROM `unidad` JOIN `parametros_unidades` WHERE `id_parametro` = ? ORDER BY `unidad` ASC;'
 
     if (parametroIds.length === 0) {
         return { error: 'Falta el id del parametro', status: 400 };
     }
 
-    let unidadesPorParametro: UnidadPorParametro[] = [{}] as UnidadPorParametro[];
+    let unidadesPorParametro = [{}] as UnidadPorParametro[];
+    const query = `
+    SELECT * FROM \`parametro_unidad\` as \`pu\`
+        INNER JOIN \`unidad\` as \`u\` ON pu.id = u.id
+        AND \`id_parametro\` = ?
+    ORDER BY u.unidad ASC;`;
 
     try {
         for (let i = 0; i < parametroIds.length; i++) {
@@ -252,6 +254,8 @@ export async function obtenerUnidadesPorParametroAction(formulario: FormData) {
                 query,
                 [id]
             );
+            console.log(unidades);
+
             unidadesPorParametro.push({ id_parametro: id, unidades: unidades });
         }
 

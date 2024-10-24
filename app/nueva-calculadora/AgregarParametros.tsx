@@ -1,7 +1,7 @@
 'use client'
 import { Parametro } from "@/utils/types";
 import { useState } from "react";
-import BotonAgregarParametro from "../components/BotonAgregarParametro";
+import BotonCrearParametro from "../components/BotonCrearParametro";
 import ListaParametros from "../components/ListaParametros";
 import SeleccionAgregarParametro from "./SeleccionAgregarParametro";
 
@@ -17,7 +17,7 @@ export default function AgregarParametros({ listaParametros }: ParametrosProps) 
                 <label htmlFor="parametros_existentes">Agregar parámetro</label>
                 <div className="w-full grid grid-cols-2 gap-y-8 sm:grid-cols-6 gap-8">
                     <SeleccionAgregarParametro parametros={listaParametros} parametrosCalculadora={parametros} setParametrosCalculadora={setParametros} />
-                    <BotonAgregarParametro parametros={parametros} setParametros={setParametros} />
+                    <BotonCrearParametro parametros={parametros} setParametros={setParametros} />
                 </div>
             </fieldset>
             <ListaParametros parametros={parametros} setParametros={setParametros} sesion="admin" />
