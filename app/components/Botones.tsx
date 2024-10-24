@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 
 interface BotonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     children?: ReactNode,
-    variante?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark'
+    variante?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'disabled'
     estilo?: string
 }
 
@@ -16,6 +16,7 @@ const Boton: React.FC<BotonProps> = ({ variante, children, estilo, ...props }) =
         info: 'bg-blue-600 border-blue-700 text-white hover:bg-blue-700 focus:ring-blue-500',
         light: 'bg-gray-200 border-gray-300 text-gray-800 hover:bg-gray-300 focus:ring-gray-500',
         dark: 'bg-gray-800 border-gray-900 text-white hover:bg-gray-900 focus:ring-gray-500',
+        disabled: 'bg-gray-400 border-gray-500 text-white hover:bg-gray-500 focus:ring-gray-500',
         default: 'bg-gray-400 border-gray-500 text-white hover:bg-gray-500 focus:ring-gray-500',
     }
     return (<button

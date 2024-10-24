@@ -24,11 +24,7 @@ export default function ListaParametros({ parametros, setParametros, sesion }: L
         }
         obtenerUnidadesPorParametroAction(formData)
             .then(data => {
-                if ('error' in data) {
-                    console.error(data.error);
-                } else {
-                    setUnidadesPorParametro(data);
-                }
+                if (!('error' in data)) setUnidadesPorParametro(data);
             })
             .catch(error => console.error(error));
     }, [parametros]);

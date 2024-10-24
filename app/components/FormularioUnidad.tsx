@@ -27,10 +27,7 @@ export default function FormularioUnidad({ setFieldValue, unidadesParametro, set
         setFetching(true);
         obtenerUnidadesAction()
             .then(data => {
-                if (!('error' in data)) {
-                    setUnidades(data);
-                    console.log(data);
-                }
+                if (!('error' in data)) setUnidades(data)
             })
             .catch(error => console.error(error))
             .finally(() => setFetching(false));
@@ -57,19 +54,21 @@ export default function FormularioUnidad({ setFieldValue, unidadesParametro, set
                 addToast('Error al crear la unidad', 'error');
                 return;
             }
-            const unidadCreada: Unidad = { id: res.id, unidad: values.unidad, conversion: values.conversion, id_unidad_conversion: values.id_unidad_conversion };
-            setUnidades([...unidades, unidadCreada]);
 
-            // Actualizar el estado de las unidades en el formulario crear parámetro
-            setFieldValue && unidadesParametro &&
-                setFieldValue('unidades', [...unidadesParametro, unidadCreada]);
-                
-            const opciones = unidades.map((unidad) => ({ value: unidad, label: unidad.unidad }));
-            setOpciones && unidadesParametro &&
-                setOpciones([...opciones, { value: unidadCreada, label: unidadCreada.unidad }]);
+            if (res.id) {
+                const unidadCreada: Unidad = { id: res.id, unidad: values.unidad, conversion: values.conversion, id_unidad_conversion: values.id_unidad_conversion };
+                setUnidades([...unidades, unidadCreada]);
 
-            setAbierto && setAbierto(false);
-            addToast('Unidad creada correctamente', 'success');
+                // Actualizar el estado de las unidades en el formulario crear parámetro
+                const opciones = unidades.map((unidad) => ({ value: unidad, label: unidad.unidad }));
+                setOpciones && unidadesParametro &&
+                    setOpciones([...opciones, { value: unidadCreada, label: unidadCreada.unidad }]);
+                setFieldValue && unidadesParametro &&
+                    setFieldValue('unidades', [...unidadesParametro, unidadCreada]);
+
+                setAbierto && setAbierto(false);
+                addToast('Unidad creada correctamente', 'success');
+            } else addToast('Error al crear unidad', 'success');
         })
     }
 

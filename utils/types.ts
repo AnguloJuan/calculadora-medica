@@ -53,17 +53,6 @@ const CalculadoraZ = z.object({
     enlace: z.string()
 }) satisfies z.ZodType<Calculadora>;
 
-const ParametroZ = z.object({
-    id: z.number(),
-    nombre: z.string().min(1),
-    abreviatura: z.string(),
-    tipo_campo: z.enum(['numerico', 'seleccion', 'radio']),
-    unidad: z.string().optional(),
-    valorMaximo: z.number().optional(),
-    valorMinimo: z.number().optional(),
-    opciones: z.string().min(1).optional()
-}) satisfies z.ZodType<Parametro>;
-
 const EvidenciaZ = z.object({
     id: z.number(),
     cita: z.string().min(1),
@@ -76,6 +65,17 @@ const UnidadZ = z.object({
     conversion: z.number().optional(),
     id_unidad_conversion: z.number().optional()
 }) satisfies z.ZodType<Unidad>;
+
+const ParametroZ = z.object({
+    id: z.number(),
+    nombre: z.string().min(1),
+    abreviatura: z.string(),
+    tipo_campo: z.enum(['numerico', 'seleccion', 'radio']),
+    valorMaximo: z.number().optional(),
+    valorMinimo: z.number().optional(),
+    opciones: z.string().min(1).optional(),
+    unidadActual: UnidadZ.optional()
+}) satisfies z.ZodType<Parametro>;
 
 export { CalculadoraZ, EvidenciaZ, ParametroZ, UnidadZ, AREA };
 export type { Calculadora, Evidencia, Parametro, Unidad, UnidadPorParametro };

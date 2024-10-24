@@ -26,10 +26,11 @@ CREATE TABLE IF NOT EXISTS parametro (
     opciones VARCHAR(360)
 );
 
-CREATE TABLE IF NOT EXISTS calculadora_parametros (
+CREATE TABLE IF NOT EXISTS calculadoras_parametros (
 	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	id_calculadora INT NOT NULL,
     id_parametro INT NOT NULL,
+    requerido BOOLEAN NOT NULL,
     CONSTRAINT FK_id_parametros_calculadora FOREIGN KEY (id_calculadora) REFERENCES calculadora(id),
     CONSTRAINT FK_id_parametros_parametro FOREIGN KEY (id_parametro) REFERENCES parametro(id)
 );
