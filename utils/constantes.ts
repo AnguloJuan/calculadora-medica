@@ -20,7 +20,7 @@ async function ActualizarParametros() {
             // replace parametros with the new ones
             PARAMETROS.splice(0, PARAMETROS.length, ...parametros);
         } catch (err) {
-            console.log(err);
+            console.error(err);
             return { error: 'Fallo al intentar obtener los parámetros', status: 500 };
         }
     }
@@ -38,7 +38,7 @@ async function ActualizarUnidades() {
             // replace unidades with the new ones
             UNIDADES.splice(0, UNIDADES.length, ...unidades);
         } catch (err) {
-            console.log(err);
+            console.error(err);
             return { error: 'Fallo al intentar obtener las unidades', status: 500 };
         }
     }

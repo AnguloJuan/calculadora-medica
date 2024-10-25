@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
 
         return NextResponse.json({ unidades }, { status: 200 });
     } catch (error) {
-        console.log(error);
+        console.error(error);
         return NextResponse.json({ unidades: [] }, { status: 500 });
     }
 }

@@ -82,7 +82,7 @@ export async function crearCalculadoraAction(formulario: FormData) {
 
         return { message: 'Calculadora guardada con exito', enlace: enlace, status: 200 };
     } catch (err) {
-        console.log(err);
+        console.error(err);
         return { error: 'Fallo al intentar guardar la calculadora', status: 500 };
     }
 }
@@ -97,7 +97,7 @@ export async function obtenerParametrosAction() {
         );
         return parametros;
     } catch (err) {
-        console.log(err);
+        console.error(err);
         return { error: 'Fallo al intentar obtener los parámetros', status: 500 };
     }
 }
@@ -147,7 +147,7 @@ export async function crearParametroAction(formulario: FormData) {
 
         return { message: 'Parámetro guardado con exito', id: insertParametro[0].insertId, status: 200 };
     } catch (err) {
-        console.log(err);
+        console.error(err);
         return { error: 'Fallo al intentar guardar el parámetro', status: 500 };
     }
 }
@@ -184,7 +184,7 @@ export async function editarParametroAction(formulario: FormData) {
 
         return { message: 'Parámetro actualizado con exito', status: 200 };
     } catch (err) {
-        console.log(err);
+        console.error(err);
         return { error: 'Fallo al intentar actualizar el parámetro', status: 500 };
     }
 }
@@ -201,7 +201,7 @@ export async function obtenerUnidadesAction() {
         // replace unidades with the new ones
         return unidades;
     } catch (err) {
-        console.log(err);
+        console.error(err);
         return { error: 'Fallo al intentar obtener las unidades', status: 500 };
     }
 }
@@ -228,7 +228,7 @@ export async function crearUnidadAction(formulario: FormData) {
 
         return { id: insert[0].insertId, status: 200 };
     } catch (err) {
-        console.log(err);
+        console.error(err);
         return { error: 'Fallo al intentar guardar la unidad', status: 500 };
     }
 }
@@ -254,14 +254,13 @@ export async function obtenerUnidadesPorParametroAction(formulario: FormData) {
                 query,
                 [id]
             );
-            console.log(unidades);
 
             unidadesPorParametro.push({ id_parametro: id, unidades: unidades });
         }
 
         return unidadesPorParametro;
     } catch (err) {
-        console.log(err);
+        console.error(err);
         return { error: 'Fallo al intentar obtener los unidades por parametro', status: 500 };
     }
 }

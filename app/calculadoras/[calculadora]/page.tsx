@@ -4,12 +4,14 @@ import { conectarBd } from "@/db/conectarDb";
 import { Calculadora, Parametro } from "@/utils/types";
 import { redirect } from "next/navigation";
 import { NextRequest } from "next/server";
+import { RowDataPacket } from "mysql2";
 
 export default async function CalculadoraPage({ params, request }: { params: { calculadora: string }, request: NextRequest }) {
     const conexion = await conectarBd();
     async function obtenerCalculadora() {
+        interface RowsCalculadora extends RowDataPacket, Calculadora { }
         try {
-            const [rows, fields] = await conexion.query('SELECT * FROM calculadora WHERE enlace = ?', [params.calculadora]);
+            const [rows] = await conexion.query<RowsCalculadora[]>('SELECT * FROM calculadora WHERE enlace = ?', [params.calculadora]);
 
             if (rows.length === 0) {
                 redirect('/404');
@@ -17,8 +19,7 @@ export default async function CalculadoraPage({ params, request }: { params: { c
 
             return rows[0];
         } catch (error) {
-            console.log(error);
-
+            console.error(error);
             redirect('/404');
         }
     }
@@ -26,17 +27,20 @@ export default async function CalculadoraPage({ params, request }: { params: { c
     const calculadora: Calculadora = await obtenerCalculadora();
 
     async function obtenerParametrosCalculadora() {
+        interface Parametros extends RowDataPacket, Parametro { }
         try {
-            const [parametrosRows, fields] = await conexion.query('SELECT * FROM `parametro` JOIN `parametros` WHERE id_calculadora = ?', [calculadora.id]);
-
+            const [parametrosRows] = await conexion.query<Parametros[]>(
+                'SELECT * FROM `parametro` JOIN `parametros` WHERE id_calculadora = ?',
+                [calculadora.id]
+            );
 
             if (parametrosRows.length === 0) {
                 redirect('/404');
             }
 
-            return parametrosRows as Parametro[];
+            return parametrosRows;
         } catch (error) {
-            console.log(error);
+            console.error(error);
             redirect('/404');
         }
     }
