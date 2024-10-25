@@ -1,5 +1,5 @@
 import { crearCalculadoraAction } from "@/utils/actions";
-import { PARAMETROS } from "@/utils/constantes";
+import { ActualizarParametros, PARAMETROS } from "@/utils/constantes";
 import { AREA, Parametro } from "@/utils/types";
 import { NextRequest } from "next/server";
 import { Each } from "../components/EachOf";
@@ -8,6 +8,11 @@ import AgregarParametros from "./AgregarParametros";
 import BotonGuardarCalculadora from "./BotonGuardarCalculadora";
 
 export default async function NuevaCalculadora({ request }: { request: NextRequest }) {
+    let parametrosActualizados = false;
+    if (PARAMETROS.length === 0 && !parametrosActualizados) {
+        await ActualizarParametros();
+        parametrosActualizados = true;
+    }
     return (
         <div className="w-full items-center flex justify-center my-8">
             <form

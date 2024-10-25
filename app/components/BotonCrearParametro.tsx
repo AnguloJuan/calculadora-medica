@@ -3,7 +3,7 @@
 import { crearParametroAction } from "@/utils/actions";
 import { Parametro } from "@/utils/types";
 import { IconPlus } from "@tabler/icons-react";
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, memo, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Boton } from "./Botones";
 import FormularioParametro from "./FormularioParametro";
@@ -43,4 +43,4 @@ const BotonCrearParametro: FunctionComponent<BotonAgregarParametroProps> = ({ pa
     </>);
 }
 
-export default BotonCrearParametro;
+export default memo(BotonCrearParametro);

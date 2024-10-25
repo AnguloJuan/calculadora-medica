@@ -1,6 +1,6 @@
 'use client'
 import { Parametro } from "@/utils/types";
-import { useState } from "react";
+import { memo, useState } from "react";
 import BotonCrearParametro from "../components/BotonCrearParametro";
 import ListaParametros from "../components/ListaParametros";
 import SeleccionAgregarParametro from "./SeleccionAgregarParametro";
@@ -9,7 +9,7 @@ interface ParametrosProps {
     listaParametros: Parametro[];
 }
 
-export default function AgregarParametros({ listaParametros }: ParametrosProps) {
+function AgregarParametros({ listaParametros }: ParametrosProps) {
     const [parametros, setParametros] = useState<Parametro[]>([]);
     return (
         <>
@@ -33,3 +33,5 @@ export default function AgregarParametros({ listaParametros }: ParametrosProps) 
         </>
     )
 }
+
+export default memo(AgregarParametros);

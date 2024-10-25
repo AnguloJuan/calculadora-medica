@@ -1,22 +1,20 @@
 'use client'
-import { editarParametroAction } from "@/utils/actions";
 import { Parametro, Unidad } from "@/utils/types";
-import { IconPencil, IconX } from "@tabler/icons-react";
-import { FunctionComponent, useEffect, useState } from "react";
+import { IconPencil } from "@tabler/icons-react";
+import { FunctionComponent, memo, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Boton } from "./Botones";
 import FormularioParametro from "./FormularioParametro";
 import Modal from "./Modal";
-import { useToast } from "./Toast";
 
 type BotonEditarParametroProps = {
     parametro: Parametro;
-    unidades?: Unidad[];
+    unidadesParametro?: Unidad[];
     parametros?: Parametro[];
     setParametros?: (parametros: Parametro[]) => void;
 }
 
-const BotonActualizarParametro: FunctionComponent<BotonEditarParametroProps> = ({ parametro, unidades, parametros, setParametros }: BotonEditarParametroProps) => {
+const BotonActualizarParametro: FunctionComponent<BotonEditarParametroProps> = ({ parametro, unidadesParametro, parametros, setParametros }: BotonEditarParametroProps) => {
     const [abierto, setAbierto] = useState(false);
     const [isClient, setIsClient] = useState(false);
 
@@ -109,11 +107,11 @@ const BotonActualizarParametro: FunctionComponent<BotonEditarParametroProps> = (
                 //     </Boton>
                 // </>}
             >
-                <FormularioParametro parametros={parametros} setParametros={setParametros} setAbierto={setAbierto} accion="actualizar" parametro={parametro} />
+                <FormularioParametro parametros={parametros} setParametros={setParametros} setAbierto={setAbierto} accion="actualizar" parametro={parametro} unidadesParametro={unidadesParametro} />
             </Modal>,
             document.body
         )}
     </>);
 }
 
-export default BotonActualizarParametro;
+export default memo(BotonActualizarParametro);

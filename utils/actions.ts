@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { conectarBd } from "../db/conectarDb";
 import { logIn } from "./auth";
 import { Parametro, Unidad, UnidadPorParametro } from "./types";
+import { ActualizarParametros } from "./constantes";
 
 export async function authenticateAction(_currentState: unknown, formData: FormData) {
     try {
@@ -118,7 +119,7 @@ export async function crearParametroAction(formulario: FormData) {
         if (parametro.tipo_campo === 'numerico') {
             insertParametro = await conexion.query<ResultSetHeader>(
                 'INSERT INTO `parametro` (`nombre`, `abreviatura`, `tipo_campo`, `valorMinimo`, `valorMaximo`) VALUES (?, ?, ?, ? , ?)',
-                [parametro.nombre, parametro.abreviatura, parametro.tipo_campo, parametro.valorMinimo, parametro.valorMaximo]
+                [parametro.nombre, parametro.abreviatura, parametro.tipo_campo, parametro.valorMinimo !== '' ? parametro.valorMinimo : null, parametro.valorMaximo !== '' ? parametro.valorMaximo : null]
             );
         } else {
             insertParametro = await conexion.query<ResultSetHeader>(
@@ -162,14 +163,14 @@ export async function editarParametroAction(formulario: FormData) {
         valorMaximo: formulario.get('valorMaximo'),
         opciones: formulario.get('opciones')
     };
-    const unidades = formulario.get('unidades')
+    const unidades = JSON.parse(formulario.get('unidades')?.toString() || '[]') as Unidad[]
 
     try {
         let update;
         if (parametro.tipo_campo === 'numerico') {
             update = await conexion.query<ResultSetHeader>(
                 'UPDATE `parametro` SET `nombre` = ?, `abreviatura` = ?, `tipo_campo` = ?, `valorMinimo` = ?, `valorMaximo` = ? WHERE `id` = ?',
-                [parametro.nombre, parametro.abreviatura, parametro.tipo_campo, parametro.valorMinimo, parametro.valorMaximo, parametro.id]
+                [parametro.nombre, parametro.abreviatura, parametro.tipo_campo, parametro.valorMinimo !== '' ? parametro.valorMinimo : null, parametro.valorMaximo !== '' ? parametro.valorMaximo : null, parametro.id]
             );
         } else {
             update = await conexion.query<ResultSetHeader>(
@@ -182,11 +183,34 @@ export async function editarParametroAction(formulario: FormData) {
             return { error: 'Fallo inesperado actualizando el parámetro', status: 500 };
         }
 
+        // let deleteUnidades = await conexion.query<ResultSetHeader>(
+        //     'DELETE FROM `parametro_unidad` WHERE `id_parametro` = ? AND `id_unidad` NOT IN (?)',
+        //     [parametro.id, unidades.map((unidad) => unidad.id)]
+        // );
+
+        // if (deleteUnidades[0].affectedRows < 0) {
+        //     return { error: 'Fallo inesperado eliminando las unidades del parámetro', status: 500 };
+        // }
+
+        // for (let i = 0; i < unidades.length; i++) {
+        //     const insertUnidades = await conexion.query<ResultSetHeader>(
+        //         'INSERT INTO `parametro_unidad` (`id_parametro`, `id_unidad`) VALUES (?, ?)',
+        //         [parametro.id, unidades[i].id]
+        //     );
+
+        //     if (insertUnidades[0].affectedRows !== 1) {
+        //         return { error: 'Fallo inesperado guardando las unidades del parámetro', status: 500 };
+        //     }
+        // }
+
         return { message: 'Parámetro actualizado con exito', status: 200 };
     } catch (err) {
         console.error(err);
         return { error: 'Fallo al intentar actualizar el parámetro', status: 500 };
     }
+}
+export async function actualizarParametrosServidorAction() {
+    ActualizarParametros();
 }
 
 

@@ -1,7 +1,7 @@
 'use client'
 import { Unidad } from "@/utils/types";
 import { IconPlus } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Boton } from "./Botones";
 import FormularioUnidad from "./FormularioUnidad";
@@ -14,7 +14,7 @@ interface UnidadProps {
     shouldClose: boolean;
 }
 
-export default function BotonCrearUnidad({ setFieldValue, unidadesParametro, setOpciones, shouldClose }: UnidadProps) {
+function BotonCrearUnidad({ setFieldValue, unidadesParametro, setOpciones, shouldClose }: UnidadProps) {
     const [abierto, setAbierto] = useState(false);
     const [isClient, setIsClient] = useState(false);
 
@@ -47,3 +47,5 @@ export default function BotonCrearUnidad({ setFieldValue, unidadesParametro, set
         )}
     </>)
 }
+
+export default memo(BotonCrearUnidad);

@@ -6,7 +6,7 @@ import { Unidad, UnidadZ } from "@/utils/types";
 import { IconPlus, IconX } from "@tabler/icons-react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { withZodSchema } from "formik-validator-zod";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { Boton } from "./Botones";
 import { Each } from "./EachOf";
 import { useToast } from "./Toast";
@@ -19,7 +19,7 @@ interface FormularioUnidadProps {
     shouldClose: boolean;
 }
 
-export default function FormularioUnidad({ setFieldValue, unidadesParametro, setOpciones, setAbierto, shouldClose }: FormularioUnidadProps) {
+function FormularioUnidad({ setFieldValue, unidadesParametro, setOpciones, setAbierto, shouldClose }: FormularioUnidadProps) {
     const [unidades, setUnidades] = useState<Unidad[]>([]);
     const [fetching, setFetching] = useState(true);
     const { addToast } = useToast();
@@ -151,3 +151,5 @@ export default function FormularioUnidad({ setFieldValue, unidadesParametro, set
         </div>
     </>)
 };
+
+export default memo(FormularioUnidad);

@@ -1,6 +1,7 @@
 'use client'
 import { Parametro } from "@/utils/types";
 import { Each } from "../components/EachOf";
+import { memo } from "react";
 
 interface AgregarParametroProps {
     parametros: Parametro[];
@@ -9,7 +10,7 @@ interface AgregarParametroProps {
     setParametrosCalculadora: (parametros: Parametro[]) => void;
 }
 
-export default function SeleccionAgregarParametro({ parametros, parametrosCalculadora, setParametrosCalculadora }: AgregarParametroProps) {
+function SeleccionAgregarParametro({ parametros, parametrosCalculadora, setParametrosCalculadora }: AgregarParametroProps) {
 
     const agregar = async (idParametro: number) => {
         if (idParametro === 0) {
@@ -45,3 +46,5 @@ export default function SeleccionAgregarParametro({ parametros, parametrosCalcul
         </select>
     </>);
 }
+
+export default memo(SeleccionAgregarParametro);
