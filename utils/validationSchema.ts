@@ -1,5 +1,4 @@
 import { z } from "@/utils/es-zod";
-import { UnidadZ } from "./types";
 
 const ParametroNumerico = z.object({
     id: z.number(),
@@ -7,8 +6,8 @@ const ParametroNumerico = z.object({
     abreviatura: z.string().optional(),
     tipo_campo: z.enum(['numerico', 'seleccion', 'radio']),
     unidades: z.array(z.object({})).nonempty('Debe seleccionar al menos una unidad'),
-    valorMaximo: z.number().optional(),
-    valorMinimo: z.number().optional()
+    valorMaximo: z.coerce.number().optional(),
+    valorMinimo: z.coerce.number().optional()
 })
 
 const ParametroSeleccion = z.object({

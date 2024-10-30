@@ -33,7 +33,7 @@ export async function crearCalculadoraAction(formulario: FormData) {
         descripcion: formulario.get('descripcion'),
         descripcion_corta: formulario.get('descripcion_corta'),
         resultados_recomendaciones: formulario.get('resultados_recomendaciones'),
-        area: formulario.get('area'),
+        categoria: formulario.get('categoria'),
         enlace: formulario.get('enlace') || null,
         formula: formulario.get('formula'),
         evidencias: JSON.parse(formulario.get('evidencias')?.toString() || '[]') as string[],
@@ -50,8 +50,8 @@ export async function crearCalculadoraAction(formulario: FormData) {
 
     try {
         const insertCalculadora = await conexion.query<ResultSetHeader>(
-            'INSERT INTO `calculadora` (`nombre`, `descripcion`, `descripcion_corta`, `resultados_recomendaciones`, `area`, `formula`, `enlace`) VALUES (?, ?, ?, ?, ?, ?, ?)',
-            [calculadora.nombre, calculadora.descripcion, calculadora.descripcion_corta, calculadora.resultados_recomendaciones, calculadora.area, calculadora.formula, enlace]
+            'INSERT INTO `calculadora` (`nombre`, `descripcion`, `descripcion_corta`, `resultados_recomendaciones`, `categoria`, `formula`, `enlace`) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            [calculadora.nombre, calculadora.descripcion, calculadora.descripcion_corta, calculadora.resultados_recomendaciones, calculadora.categoria, calculadora.formula, enlace]
         );
 
         if (insertCalculadora[0].affectedRows !== 1) {
@@ -60,7 +60,7 @@ export async function crearCalculadoraAction(formulario: FormData) {
 
         for (let i = 0; i < calculadora.parametros.length; i++) {
             const insertParametros = await conexion.query<ResultSetHeader>(
-                'INSERT INTO `parametros` (`id_calculadora`, `id_parametro`) VALUES (?, ?)',
+                'INSERT INTO `calculadora_parametro` (`id_calculadora`, `id_parametro`) VALUES (?, ?)',
                 [insertCalculadora[0].insertId, calculadora.parametros[i].id]
             );
 
@@ -180,28 +180,22 @@ export async function editarParametroAction(formulario: FormData) {
         }
 
         if (update[0].affectedRows !== 1) {
+            console.error(update);
             return { error: 'Fallo inesperado actualizando el parámetro', status: 500 };
         }
 
-        // let deleteUnidades = await conexion.query<ResultSetHeader>(
-        //     'DELETE FROM `parametro_unidad` WHERE `id_parametro` = ? AND `id_unidad` NOT IN (?)',
-        //     [parametro.id, unidades.map((unidad) => unidad.id)]
-        // );
-
-        // if (deleteUnidades[0].affectedRows < 0) {
-        //     return { error: 'Fallo inesperado eliminando las unidades del parámetro', status: 500 };
-        // }
-
-        // for (let i = 0; i < unidades.length; i++) {
-        //     const insertUnidades = await conexion.query<ResultSetHeader>(
-        //         'INSERT INTO `parametro_unidad` (`id_parametro`, `id_unidad`) VALUES (?, ?)',
-        //         [parametro.id, unidades[i].id]
-        //     );
-
-        //     if (insertUnidades[0].affectedRows !== 1) {
-        //         return { error: 'Fallo inesperado guardando las unidades del parámetro', status: 500 };
-        //     }
-        // }
+        // insert new units if any
+        for (let i = 0; i < unidades.length; i++) {
+            await conexion.query<ResultSetHeader>(
+                'INSERT IGNORE INTO `parametro_unidad` (`id_parametro`, `id_unidad`) VALUES (?, ?)',
+                [parametro.id, unidades[i].id]
+            );
+        }
+        // delete all the units that are not in the new list
+        await conexion.query<ResultSetHeader>(
+            'DELETE FROM `parametro_unidad` WHERE `id_parametro` = ? AND `id_unidad` NOT IN (?)',
+            [parametro.id, unidades.map((unidad) => unidad.id)]
+        );
 
         return { message: 'Parámetro actualizado con exito', status: 200 };
     } catch (err) {

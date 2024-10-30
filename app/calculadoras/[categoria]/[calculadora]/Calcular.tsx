@@ -1,5 +1,6 @@
+'use client'
 import { useRef } from "react";
-import { Boton } from "../../components/Botones";
+import { Boton } from "../../../components/Botones";
 
 export default function Calcular({ formula }: { formula: string }) {
     const resultado = useRef<HTMLParagraphElement | null>(null);

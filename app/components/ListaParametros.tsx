@@ -64,7 +64,9 @@ function ListaParametros({ parametros, setParametros, sesion }: ListaParametrosP
                                     setParametros={setParametros}
                                     unidadesParametro={
                                         unidadesParametro
-                                    } />
+                                    }
+                                    setUnidadesPorParametro={setUnidadesPorParametro}
+                                />
                             </div>
                         )}
                     </div>)

@@ -1,5 +1,5 @@
 import ListaParametros from "@/app/components/ListaParametros";
-import Calcular from "@/app/calculadoras/[calculadora]/Calcular";
+import Calcular from "@/app/calculadoras/[categoria]/[calculadora]/Calcular";
 import { conectarBd } from "@/db/conectarDb";
 import { Calculadora, Parametro } from "@/utils/types";
 import { redirect } from "next/navigation";
@@ -30,7 +30,7 @@ export default async function CalculadoraPage({ params, request }: { params: { c
         interface Parametros extends RowDataPacket, Parametro { }
         try {
             const [parametrosRows] = await conexion.query<Parametros[]>(
-                'SELECT * FROM `parametro` JOIN `parametros` WHERE id_calculadora = ?',
+                'SELECT * FROM `calculadora_parametro` JOIN `parametro` WHERE id_calculadora = ?',
                 [calculadora.id]
             );
 

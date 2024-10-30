@@ -1,6 +1,6 @@
 'use client'
 import { actualizarParametrosServidorAction, crearParametroAction, editarParametroAction, obtenerUnidadesAction } from "@/utils/actions";
-import { Parametro, Unidad } from "@/utils/types";
+import { Parametro, Unidad, UnidadPorParametro } from "@/utils/types";
 import { ParametroNumerico as ParametroNumericoSchema, ParametroSeleccion as ParametroSeleccionSchema } from "@/utils/validationSchema";
 import { IconPencil, IconPlus, IconX } from "@tabler/icons-react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
@@ -20,9 +20,12 @@ interface FormularioParametroProps {
     accion?: 'guardar' | 'actualizar';
     parametro?: Parametro;
     unidadesParametro?: Unidad[];
+    setUnidadesPorParametro?: (unidadesPorParametro: UnidadPorParametro[]) => void;
 }
 
-const FormularioParametro: FunctionComponent<FormularioParametroProps> = ({ parametros, setParametros, setAbierto, accion, parametro, unidadesParametro }: FormularioParametroProps) => {
+const FormularioParametro: FunctionComponent<FormularioParametroProps> = (
+    { parametros, setParametros, setAbierto, accion, parametro, unidadesParametro, setUnidadesPorParametro }: FormularioParametroProps
+) => {
     const { addToast } = useToast();
     const [fetching, setFetching] = useState(true);
     const [opciones, setOpciones] = useState<{ value: Unidad, label: string }[]>([]);
@@ -69,20 +72,21 @@ const FormularioParametro: FunctionComponent<FormularioParametroProps> = ({ para
     interface parametroSchema extends Parametro {
         unidades: Unidad[];
     }
-    const parametroInicial = useMemo(() => parametro ? { ...parametro, unidades: unidadesParametro || [] } : undefined, [parametro, unidadesParametro]);
-    const initialValues: parametroSchema = parametroInicial || {
-        id: 0,
-        nombre: '',
-        abreviatura: '',
-        tipo_campo: 'numerico',
-        unidades: [],
-        valorMaximo: undefined,
-        valorMinimo: undefined,
-        opciones: '',
+
+    const initialValues: parametroSchema = {
+        id: parametro?.id || 0,
+        nombre: parametro?.nombre || '',
+        abreviatura: parametro?.abreviatura || '',
+        tipo_campo: parametro?.tipo_campo || 'numerico',
+        valorMaximo: parametro?.valorMaximo !== null ? parametro?.valorMaximo : undefined,
+        valorMinimo: parametro?.valorMinimo !== null ? parametro?.valorMinimo : undefined,
+        opciones: parametro?.opciones || '',
+        unidades: unidadesParametro || []
     }
 
-    const hendleSubmit = useCallback(async (values: parametroSchema) => {
+    const handleSubmit = useCallback(async (values: parametroSchema) => {
         const datosParametro = new FormData();
+        datosParametro.set('id', values.id.toString());
         datosParametro.set('nombre', values.nombre);
         datosParametro.set('tipo_campo', values.tipo_campo);
         datosParametro.set('abreviatura', values.abreviatura?.toString() || '');
@@ -107,8 +111,10 @@ const FormularioParametro: FunctionComponent<FormularioParametroProps> = ({ para
                 respuesta = await editarParametroAction(datosParametro);
                 if (respuesta.status === 200) {
                     if (parametros && setParametros) {
-                        const nuevosParametros = parametros.map(param => param.id === values.id ? values : param);
-                        setParametros(nuevosParametros);
+                        const index = parametros.findIndex(param => param.id === values.id);
+                        parametros[index] = values;
+                        setUnidadesPorParametro && setUnidadesPorParametro([{ id_parametro: values.id, unidades: values.unidades }]);
+                        setParametros([...parametros]);
                     }
                     addToast('Parámetro actualizado con éxito', 'success');
                     setAbierto(false);
@@ -119,7 +125,7 @@ const FormularioParametro: FunctionComponent<FormularioParametroProps> = ({ para
         } catch (err) {
             addToast('Ocurrió un error inesperado', 'error');
         }
-    }, [accion, addToast, parametros, setParametros, setAbierto])
+    }, [accion, addToast, parametros, setParametros, setAbierto, setUnidadesPorParametro])
 
     const handleValidation = useCallback((values: any) => {
         // todo: validar que las unidades sean únicas, que el valor mínimo sea menor que el máximo
@@ -134,7 +140,7 @@ const FormularioParametro: FunctionComponent<FormularioParametroProps> = ({ para
         <Formik
             initialValues={initialValues}
             validate={handleValidation}
-            onSubmit={hendleSubmit}
+            onSubmit={handleSubmit}
         >
             {({ values, setFieldValue, handleBlur, isSubmitting, dirty, isValid, errors, touched }) => (
                 <Form className="flex md:max-w-screen-md lg:max-w-screen-lg flex-col items-center rounded-lg p-12 py-12 bg-white gap-8">
@@ -210,11 +216,8 @@ const FormularioParametro: FunctionComponent<FormularioParametroProps> = ({ para
                                         id="valorMinimo"
                                         name="valorMinimo"
                                         placeholder="Ingrese el valor mínimo"
-                                        value={values.valorMinimo === null ? undefined : values.valorMinimo}
+                                        value={values.valorMinimo}
                                         className={"rounded-lg"}
-                                        onChange={(e: any) => setFieldValue('valorMinimo',
-                                            e.target.value === '' ? undefined : parseFloat(e.target.value))
-                                        }
                                     />
                                     <ErrorMessage component="p" name="valorMinimo" className='text-red-500 text-sm' />
                                 </div>
@@ -225,11 +228,8 @@ const FormularioParametro: FunctionComponent<FormularioParametroProps> = ({ para
                                         id="valorMaximo"
                                         name="valorMaximo"
                                         placeholder="Ingrese el valor máximo"
-                                        value={values.valorMaximo === null ? '' : values.valorMaximo}
+                                        value={values.valorMaximo}
                                         className={"rounded-lg"}
-                                        onChange={(e: any) => setFieldValue('valorMaximo',
-                                            e.target.value === '' ? undefined : parseFloat(e.target.value))
-                                        }
                                     />
                                     <ErrorMessage component="p" name="valorMaximo" className='text-red-500 text-sm' />
                                 </div>
@@ -250,7 +250,7 @@ const FormularioParametro: FunctionComponent<FormularioParametroProps> = ({ para
 
                     <div className="w-full flex flex-col gap-2 text-center">
                         <h2 className="font-semibold">Vista previa</h2>
-                        <CampoParametro parametro={values as Parametro} unidades={values.unidades} />
+                        <CampoParametro parametro={values as Parametro} unidades={values.unidades} form={'nosubmit'} />
                     </div>
                     <div className="w-full flex flex-row justify-evenly">
                         <Boton
@@ -263,8 +263,8 @@ const FormularioParametro: FunctionComponent<FormularioParametroProps> = ({ para
                         </Boton>
                         <Boton
                             type="submit"
-                            variante={isSubmitting || !isValid ? 'disabled' : accion === 'guardar' ? 'success' : 'warning'}
-                            disabled={isSubmitting || !isValid}>
+                            variante={isSubmitting || !isValid || !dirty ? 'disabled' : accion === 'guardar' ? 'success' : 'warning'}
+                            disabled={isSubmitting || !isValid || !dirty}>
                             {accion === 'guardar' ? (<>
                                 <IconPlus stroke={2} />
                                 Guardar
@@ -274,7 +274,7 @@ const FormularioParametro: FunctionComponent<FormularioParametroProps> = ({ para
                             </>)}
                         </Boton>
                     </div>
-                    {<pre>{JSON.stringify(errors, null, 2)}</pre>}
+                    {<pre>{JSON.stringify(values, null, 2)}</pre>}
                 </Form>
             )}
         </Formik>

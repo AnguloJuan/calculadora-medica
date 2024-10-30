@@ -1,6 +1,6 @@
 import { crearCalculadoraAction } from "@/utils/actions";
 import { ActualizarParametros, PARAMETROS } from "@/utils/constantes";
-import { AREA, Parametro } from "@/utils/types";
+import { CATEGORIA, Parametro } from "@/utils/types";
 import { NextRequest } from "next/server";
 import { Each } from "../components/EachOf";
 import AgregarEvidencias from "./AgregarEvidencias";
@@ -65,16 +65,16 @@ export default async function NuevaCalculadora({ request }: { request: NextReque
                     </fieldset>
 
                     <fieldset className="w-full flex flex-col gap-2">
-                        <label htmlFor="area">Área a la que pertenece la calculadora</label>
+                        <label htmlFor="categoria">Categoria a la que pertenece la calculadora</label>
                         <select
-                            id="area"
-                            name="area"
+                            id="categoria"
+                            name="categoria"
                             className="rounded-lg"
                         >
                             <Each
-                                of={AREA.options}
-                                render={(area) => (
-                                    <option value={area}>{area}</option>
+                                of={CATEGORIA.options}
+                                render={(categoria) => (
+                                    <option value={categoria}>{categoria}</option>
                                 )}
                             />
                         </select>

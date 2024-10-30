@@ -1,6 +1,11 @@
 import { z } from "./es-zod";
 
-const AREA = z.enum(['Química sanguínea', 'Hematología', 'Perfil de lípidos', 'Proteínas', 'Otros']);
+var kebabCase = require('lodash/kebabCase');
+
+const CATEGORIA_OPTIONS = ['Química sanguínea', 'Hematología', 'Perfil de lípidos', 'Proteínas', 'Otros'];
+// convert de options of CATEGORIA_OPTIONS to an array of strings in kebabcase
+const CATEGORIA = z.enum(CATEGORIA_OPTIONS.map((categoria) => kebabCase(categoria)) as [string, ...string[]]);
+// const CATEGORIA = z.enum(['Química sanguínea', 'Hematología', 'Perfil de lípidos', 'Proteínas', 'Otros']);
 
 interface Calculadora {
     id: number,
@@ -8,7 +13,7 @@ interface Calculadora {
     descripcion: string,
     descripcion_corta: string,
     resultados_recomendaciones: string,
-    area: z.infer<typeof AREA>,
+    categoria: z.infer<typeof CATEGORIA>,
     formula: string,
     enlace: string
 }
@@ -48,7 +53,7 @@ const CalculadoraZ = z.object({
     descripcion: z.string().min(1),
     descripcion_corta: z.string().min(1),
     resultados_recomendaciones: z.string().min(1),
-    area: AREA,
+    categoria: CATEGORIA,
     formula: z.string().min(1),
     enlace: z.string()
 }) satisfies z.ZodType<Calculadora>;
@@ -77,5 +82,5 @@ const ParametroZ = z.object({
     unidadActual: UnidadZ.optional()
 }) satisfies z.ZodType<Parametro>;
 
-export { CalculadoraZ, EvidenciaZ, ParametroZ, UnidadZ, AREA };
+export { CalculadoraZ, EvidenciaZ, ParametroZ, UnidadZ, CATEGORIA };
 export type { Calculadora, Evidencia, Parametro, Unidad, UnidadPorParametro };

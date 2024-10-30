@@ -11,9 +11,10 @@ interface CampoParametroProps {
     setParametros?: (parametros: Parametro[]) => void;
     parametros?: Parametro[];
     unidades?: Unidad[];
+    form?: string;
 }
 
-const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, setParametros, parametros, unidades }: CampoParametroProps) => {
+const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, setParametros, parametros, unidades, form }: CampoParametroProps) => {
     const opciones = parametro.opciones?.split(',');
     const [valor, setValor] = useState<string | number>(
         parametro.tipo_campo === 'numerico' ? 0 : ''
@@ -45,6 +46,7 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, set
                         max={parametro.valorMaximo}
                         value={valor}
                         onChange={(e) => setValor(Number(e.target.value))}
+                        form={form}
                         className="sm:col-span-3 mt-0 rounded-s-lg"
                     />
                     <div className="h-full col-span-1 text-center self-center p-2 bg-slate-300 border border-gray-300 rounded-e-lg">
@@ -82,6 +84,7 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, set
                     name={`campo_${parametro.nombre}`}
                     value={valor}
                     onChange={(e) => setValor(e.target.value)}
+                    form={form}
                     className="sm:col-span-3"
                 >
                     <option value="">Seleccione un parámetro</option>
@@ -99,6 +102,7 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, set
                         value={valor}
                         onChange={setValor}
                         aria-label={parametro.nombre}
+                        form={form}
                         className={`${opciones.length > 3 ? 'space-y-2' : 'space-x-1'} 
                     ${opciones.length === 3 ? 'sm:grid sm:grid-cols-3' : opciones.length === 2 && 'grid grid-cols-2'}`}
                     >

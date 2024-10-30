@@ -62,12 +62,15 @@ export default function BotonGuardarCalculadora() {
             return;
         }
 
+        var kebabCase = require('lodash/kebabCase');
+        const { categoria } = datosFormulario;
+        const enlace = `${kebabCase(categoria)}/${respuesta.enlace}`;
         addToast(
             <>
                 Calculadora guardada exitosamente <br />
                 haz click para verla: {' '}
                 <Link
-                    href={`/calculadoras/${respuesta.enlace}`}
+                    href={`/calculadoras/${enlace}`}
                     className="underline text-blue-500 cursor-pointer hover:text-blue-700 transition-colors"
                 >
                     ver calculadora

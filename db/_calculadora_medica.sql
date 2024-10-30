@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS calculadora (
     descripcion_corta VARCHAR(120),
     resultados_recomendaciones VARCHAR(360),
     formula VARCHAR(360) NOT NULL,
-    area VARCHAR(60) NOT NULL,
+    categoria VARCHAR(60) NOT NULL,
     enlace VARCHAR(120) NOT NULL,
     fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     fecha_actualizacion DATETIME
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS calculadora_parametro (
 	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	id_calculadora INT NOT NULL,
     id_parametro INT NOT NULL,
-    requerido BOOLEAN NOT NULL,
+    requerido BOOLEAN NOT NULL DEFAULT 1,
     CONSTRAINT FK_id_parametros_calculadora FOREIGN KEY (id_calculadora) REFERENCES calculadora(id),
     CONSTRAINT FK_id_parametros_parametro FOREIGN KEY (id_parametro) REFERENCES parametro(id)
 );
