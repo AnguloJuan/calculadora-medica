@@ -22,7 +22,7 @@ const Boton: React.FC<BotonProps> = ({ variante, children, estilo, ...props }) =
     return (<button
         {...props}
         className={`inline-flex flex-row text-white px-4 py-2 rounded-lg items-center gap-2 w-full justify-center border border-transparent shadow-sm 
-                 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:w-auto ${styleType[variante || 'default']} ${estilo}`}
+                 focus:outline-none focus:ring-2 focus:ring-offset-1 sm:w-auto ${styleType[variante || 'default']} ${estilo}`}
     >
         {children}
     </button>

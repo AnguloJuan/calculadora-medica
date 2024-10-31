@@ -1,6 +1,6 @@
 import { crearCalculadoraAction } from "@/utils/actions";
 import { ActualizarParametros, PARAMETROS } from "@/utils/constantes";
-import { CATEGORIA, Parametro } from "@/utils/types";
+import { CATEGORIA, CATEGORIA_OPTIONS, Parametro } from "@/utils/types";
 import { NextRequest } from "next/server";
 import { Each } from "../components/EachOf";
 import AgregarEvidencias from "./AgregarEvidencias";
@@ -13,6 +13,8 @@ export default async function NuevaCalculadora({ request }: { request: NextReque
         await ActualizarParametros();
         parametrosActualizados = true;
     }
+
+    var kebabCase = require('lodash/kebabCase');
     return (
         <div className="w-full items-center flex justify-center my-8">
             <form
@@ -72,9 +74,9 @@ export default async function NuevaCalculadora({ request }: { request: NextReque
                             className="rounded-lg"
                         >
                             <Each
-                                of={CATEGORIA.options}
+                                of={CATEGORIA_OPTIONS}
                                 render={(categoria) => (
-                                    <option value={categoria}>{categoria}</option>
+                                    <option value={kebabCase(categoria)}>{categoria}</option>
                                 )}
                             />
                         </select>

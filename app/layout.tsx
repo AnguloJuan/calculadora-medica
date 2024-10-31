@@ -1,3 +1,4 @@
+import { CATEGORIA_OPTIONS } from '@/utils/types';
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { IconMenu2, IconUserFilled, IconX } from '@tabler/icons-react';
 import type { Metadata } from "next";
@@ -36,15 +37,15 @@ const user = {
   imageUrl:
     '/../../vercel.svg',
 }
-const navigation = [
-  { name: 'Quimica sanguínea', href: '#', current: true },
-  { name: 'Perfil lípidos', href: '#', current: false },
-  { name: 'Proteínas', href: '#', current: false },
-  { name: 'Hematologia', href: '#', current: false },
-]
+var kebabCase = require('lodash/kebabCase');
+const navigation = CATEGORIA_OPTIONS.map((categoria) => ({
+  name: categoria,
+  href: `/calculadoras/${kebabCase(categoria)}`,
+  current: false,
+}))
 const userNavigation = [
   { name: 'Dashboard', href: '/dashboard' },
-  { name: 'Cerrar sesión', href: '#' },
+  { name: 'Cerrar sesión', href: '/iniciar-sesion' },
 ]
 
 function classNames(...classes: string[]) {

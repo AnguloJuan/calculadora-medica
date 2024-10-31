@@ -82,5 +82,5 @@ const ParametroZ = z.object({
     unidadActual: UnidadZ.optional()
 }) satisfies z.ZodType<Parametro>;
 
-export { CalculadoraZ, EvidenciaZ, ParametroZ, UnidadZ, CATEGORIA };
+export { CalculadoraZ, EvidenciaZ, ParametroZ, UnidadZ, CATEGORIA, CATEGORIA_OPTIONS };
 export type { Calculadora, Evidencia, Parametro, Unidad, UnidadPorParametro };

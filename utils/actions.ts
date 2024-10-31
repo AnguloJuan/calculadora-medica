@@ -40,7 +40,7 @@ export async function crearCalculadoraAction(formulario: FormData) {
         parametros: JSON.parse(formulario.get('parametros')?.toString() || '[]') as Parametro[]
     };
 
-    const enlace = calculadora.enlace || kebabCase(calculadora.nombre);
+    const enlace = calculadora.enlace ? kebabCase(calculadora.enlace) : kebabCase(calculadora.nombre);
 
     if (calculadora.parametros.length === 0) {
         return { error: 'Por favor agregue al menos un parámetro', status: 400 };
