@@ -54,6 +54,7 @@ CREATE TABLE IF NOT EXISTS parametro_unidad (
 CREATE TABLE IF NOT EXISTS evidencia (
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     cita VARCHAR(500) NOT NULL,
+    enlace VARCHAR(120) NOT NULL,
     id_calculadora INT NOT NULL,
     CONSTRAINT FK_id_evidencia_calculadora FOREIGN KEY (id_calculadora) REFERENCES calculadora(id)
 );

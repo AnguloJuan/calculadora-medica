@@ -6,6 +6,7 @@ import Image from 'next/image';
 import NavOpcion from './components/NavOpcion';
 import Toast from "./components/Toast";
 import "./globals.css";
+import CerrarSesion from './components/CerrarSesion';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -39,7 +40,7 @@ const user = {
 }
 const userNavigation = [
   { name: 'Dashboard', href: '/dashboard' },
-  { name: 'Cerrar sesión', href: '/iniciar-sesion' },
+  { name: 'Cerrar sesión', href: '/cerrar-sesion' },
 ]
 
 function classNames(...classes: string[]) {

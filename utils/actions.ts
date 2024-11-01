@@ -6,6 +6,9 @@ import { conectarBd } from "../db/conectarDb";
 import { logIn } from "./auth";
 import { Parametro, Unidad, UnidadPorParametro } from "./types";
 import { ActualizarParametros } from "./constantes";
+import { NextRequest, NextResponse } from "next/server";
+import { cookies, headers } from "next/headers";
+import { getSessionData } from "./sessions";
 
 export async function authenticateAction(_currentState: unknown, formData: FormData) {
     try {
@@ -281,4 +284,17 @@ export async function obtenerUnidadesPorParametroAction(formulario: FormData) {
         console.error(err);
         return { error: 'Fallo al intentar obtener los unidades por parametro', status: 500 };
     }
+}
+
+export async function cerrarSesionAction() {
+    const session = headers().get('session');
+    // const session = await getSessionData(request);
+
+    const rol = cookies().has('session');
+    if (rol) {
+        cookies().delete('session');
+        console.log('Sesión cerrada');
+
+    }
+    return true;
 }

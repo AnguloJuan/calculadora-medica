@@ -91,6 +91,15 @@ export default async function NuevaCalculadora({ request }: { request: NextReque
                             className="rounded-lg"
                         />
                     </fieldset>
+                    <fieldset className="w-full flex flex-col gap-2">
+                        <label htmlFor="enlace_evidencia">Enlace de evidencia</label>
+                        <input
+                            type="file"
+                            id="enlace_evidencia"
+                            name="enlace_evidencia"
+                            className="rounded-lg"
+                        />
+                    </fieldset>
 
                     <AgregarEvidencias />
 

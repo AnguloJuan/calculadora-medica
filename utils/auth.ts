@@ -1,7 +1,6 @@
 import { conectarBd } from "@/db/conectarDb";
 import { ResultSetHeader } from "mysql2";
-import { cookies } from "next/headers";
-import { NextRequest } from "next/server";
+import { createSession } from "./sessions";
 
 interface Usuario extends ResultSetHeader {
     usuario: string;
@@ -38,17 +37,5 @@ export async function logIn(formData: FormData) {
 
     const user = rows[0];
 
-    // const encryptedSessionData = encrypt(sessionData) // Encrypt your session data
-    cookies().set('rol', user.rol, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: 60 * 60 * 24 * 7, // One week
-        path: '/',
-    })
-}
-
-export async function getSessionData(request: NextRequest) {
-    return cookies().get('rol')?.value
-    //   const encryptedSessionData = cookies().get('session')?.value
-    //   return encryptedSessionData ? JSON.parse(decrypt(encryptedSessionData)) : null
+    await createSession('admin');
 }
