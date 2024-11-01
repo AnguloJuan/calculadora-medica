@@ -1,11 +1,33 @@
 import { z } from "./es-zod";
 
-var kebabCase = require('lodash/kebabCase');
+// var kebabCase = require('lodash/kebabCase');
 
-const CATEGORIA_OPTIONS = ['Química sanguínea', 'Hematología', 'Perfil de lípidos', 'Proteínas', 'Otros'];
+// const CATEGORIA_OPTIONS = ['Química sanguínea', 'Hematología', 'Perfil de lípidos', 'Proteínas', 'Otros'];
 // convert de options of CATEGORIA_OPTIONS to an array of strings in kebabcase
-const CATEGORIA = z.enum(CATEGORIA_OPTIONS.map((categoria) => kebabCase(categoria)) as [string, ...string[]]);
+// const CATEGORIA = z.enum(CATEGORIA_OPTIONS.map((categoria) => kebabCase(categoria)) as [string, ...string[]]);
 // const CATEGORIA = z.enum(['Química sanguínea', 'Hematología', 'Perfil de lípidos', 'Proteínas', 'Otros']);
+const CATEGORIAS = [
+    {
+        nombre: 'Química sanguínea',
+        kebabCase: 'quimica-sanguinea'
+    },
+    {
+        nombre: 'Hematología',
+        kebabCase: 'hematologia'
+    },
+    {
+        nombre: 'Perfil de lípidos',
+        kebabCase: 'perfil-de-lipidos'
+    },
+    {
+        nombre: 'Proteínas',
+        kebabCase: 'proteinas'
+    },
+    {
+        nombre: 'Otros',
+        kebabCase: 'otros'
+    }
+]
 
 interface Calculadora {
     id: number,
@@ -13,7 +35,7 @@ interface Calculadora {
     descripcion: string,
     descripcion_corta: string,
     resultados_recomendaciones: string,
-    categoria: z.infer<typeof CATEGORIA>,
+    categoria: typeof CATEGORIAS[number]['kebabCase'],
     formula: string,
     enlace: string
 }
@@ -53,7 +75,7 @@ const CalculadoraZ = z.object({
     descripcion: z.string().min(1),
     descripcion_corta: z.string().min(1),
     resultados_recomendaciones: z.string().min(1),
-    categoria: CATEGORIA,
+    categoria:  z.enum(CATEGORIAS.map((categoria) => categoria.kebabCase) as [string, ...string[]]),
     formula: z.string().min(1),
     enlace: z.string()
 }) satisfies z.ZodType<Calculadora>;
@@ -82,5 +104,5 @@ const ParametroZ = z.object({
     unidadActual: UnidadZ.optional()
 }) satisfies z.ZodType<Parametro>;
 
-export { CalculadoraZ, EvidenciaZ, ParametroZ, UnidadZ, CATEGORIA, CATEGORIA_OPTIONS };
+export { CalculadoraZ, EvidenciaZ, ParametroZ, UnidadZ, CATEGORIAS };
 export type { Calculadora, Evidencia, Parametro, Unidad, UnidadPorParametro };

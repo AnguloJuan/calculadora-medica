@@ -1,7 +1,7 @@
 import { Each } from "@/app/components/EachOf";
 import TarjetaCalculadora from "@/app/components/tarjetaCalculadora";
 import { conectarBd } from "@/db/conectarDb";
-import { Calculadora } from "@/utils/types";
+import { Calculadora, CATEGORIAS } from "@/utils/types";
 import { RowDataPacket } from "mysql2";
 import { redirect } from "next/navigation";
 
@@ -12,10 +12,6 @@ export default async function CategoriaPage({ params }: { params: { categoria: s
     try {
       const [rows] = await conexion.query<RowsCalculadora[]>('SELECT * FROM calculadora WHERE categoria = ?', [params.categoria]);
 
-      if (rows.length === 0) {
-        redirect('/404');
-      }
-
       return rows;
     } catch (error) {
       console.error(error);
@@ -24,15 +20,19 @@ export default async function CategoriaPage({ params }: { params: { categoria: s
   }
 
   const calculadoras: Calculadora[] = await obtenerCalculadoras();
+  const categoria = params.categoria;
+  const nombreCategoria = CATEGORIAS.find((categoria) => categoria.kebabCase === params.categoria)?.nombre;
 
   return (<>
-    <h1 className="text-xl font-bold">{params.categoria}</h1>
-    <div className="w-full flex flex-col gap-4">
-      <Each of={calculadoras} render={(calculadora) => {
-        return (
-          <TarjetaCalculadora {...calculadora} />
-        )
-      }} />
+    <div className="w-full rounded-none bg-white flex flex-col items-center min-h-full pt-4 gap-4">
+      <h1 className="text-xl font-bold">{nombreCategoria}</h1>
+      <div className="w-full flex flex-col items-center gap-4">
+        <Each of={calculadoras} render={(calculadora) => {
+          return (
+            <TarjetaCalculadora {...calculadora} />
+          )
+        }} />
+      </div>
     </div>
   </>)
 }

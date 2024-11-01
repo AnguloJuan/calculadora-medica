@@ -2,6 +2,7 @@
 import { authenticateAction } from "@/utils/actions";
 import Image from "next/image";
 import { useFormState, useFormStatus } from "react-dom";
+import { Boton } from "../components/Botones";
 
 function LoginButton() {
   const { pending } = useFormStatus()
@@ -13,18 +14,20 @@ function LoginButton() {
   }
 
   return (
-    <button aria-disabled={pending} type="submit" onClick={handleClick}>
-      Iniciar sesión
-    </button>
+    <div className="w-full flex flex-col items-center mt-2">
+      <Boton aria-disabled={pending} type="submit" variante="success" onClick={handleClick}>
+        Iniciar sesión
+      </Boton>
+    </div>
   )
 }
 
 export default function LogIn() {
   const [errorMessage, dispatch] = useFormState(authenticateAction, undefined)
-  return (
-    <>
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+  return (<>
+    <div className="h-full min-h-full justify-center flex flex-col items-center sm:pt-8 bg-red-500">
+      <div className="flex flex-1 flex-col justify-center px-6 py-12 lg:px-8 bg-white rounded w-full md:max-w-screen-md ">
+        <div className="">
           <Image
             alt="Toronja Lab logo"
             src="/logo.png"
@@ -38,7 +41,7 @@ export default function LogIn() {
           </h2>
         </div>
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-sm">
           <form action={dispatch} className="space-y-6">
             <div>
               <label htmlFor="usuario" className="block text-sm font-medium leading-6 text-gray-900">
@@ -51,7 +54,7 @@ export default function LogIn() {
                   type="text"
                   required
                   autoComplete="username"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -69,7 +72,7 @@ export default function LogIn() {
                   type="password"
                   required
                   autoComplete="current-password"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -79,6 +82,6 @@ export default function LogIn() {
           </form>
         </div>
       </div>
-    </>
-  )
+    </div>
+  </>)
 }

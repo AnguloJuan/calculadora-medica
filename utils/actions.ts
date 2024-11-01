@@ -14,9 +14,9 @@ export async function authenticateAction(_currentState: unknown, formData: FormD
         if (error) {
             switch (error.message) {
                 case 'CredentialsSignin':
-                    return 'Invalid credentials.'
+                    return 'Credentiales invalidas.'
                 default:
-                    return 'Something went wrong.'
+                    return 'Algo salio mal.'
             }
         }
         throw error

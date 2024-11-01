@@ -8,6 +8,11 @@
   --background-end-rgb: 228, 80, 80;
 }
 
+* { padding: 0; margin: 0; }
+html, body {
+    min-height: 100% !important;
+    height: 100%;
+}
 
 body {
   color: rgb(var(--foreground-rgb));
@@ -24,6 +29,7 @@ body {
     ) 0 100vh; */
 
   margin: 0;
+  background: #ff5757;
 }
 
 @layer utilities {

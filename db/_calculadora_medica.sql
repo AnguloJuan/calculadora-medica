@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS calculadora (
     resultados_recomendaciones VARCHAR(360),
     formula VARCHAR(360) NOT NULL,
     categoria VARCHAR(60) NOT NULL,
-    enlace VARCHAR(120) NOT NULL,
+    enlace VARCHAR(120) NOT NULL UNIQUE,
     fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     fecha_actualizacion DATETIME
 );

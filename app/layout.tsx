@@ -1,9 +1,9 @@
-import { CATEGORIA_OPTIONS } from '@/utils/types';
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { IconMenu2, IconUserFilled, IconX } from '@tabler/icons-react';
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Image from 'next/image';
+import NavOpcion from './components/NavOpcion';
 import Toast from "./components/Toast";
 import "./globals.css";
 
@@ -20,8 +20,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="min-h-full">
-      <body className={`${inter.className} min-h-full`}>
+    <html lang="en" className="min-h-screen">
+      <body className={`${inter.className} min-h-screen`}>
         <NavBar />
         {children}
         <Toast />
@@ -37,12 +37,6 @@ const user = {
   imageUrl:
     '/../../vercel.svg',
 }
-var kebabCase = require('lodash/kebabCase');
-const navigation = CATEGORIA_OPTIONS.map((categoria) => ({
-  name: categoria,
-  href: `/calculadoras/${kebabCase(categoria)}`,
-  current: false,
-}))
 const userNavigation = [
   { name: 'Dashboard', href: '/dashboard' },
   { name: 'Cerrar sesión', href: '/iniciar-sesion' },
@@ -54,8 +48,8 @@ function classNames(...classes: string[]) {
 
 const NavBar = () => {
   return (
-    <div className="min-h-full">
-      <Disclosure as="nav" className="sticky top-0 z-40 w-full backdrop-blur flex-none transition-colors duration-500
+    <div className="w-full">
+      <Disclosure as="nav" className="sticky top-0 z-40 backdrop-blur flex-none transition-colors duration-500
              dark:border-slate-50/[0.06] bg-white supports-backdrop-blur:bg-white/95 dark:bg-slate-900/75
             border-b border-slate-900/10 lg:px-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -72,19 +66,7 @@ const NavBar = () => {
               </div>
               <div className="hidden md:block">
                 <div className="ml-10 flex items-baseline space-x-4">
-                  {navigation.map((item) => (
-                    <a
-                      key={item.name}
-                      href={item.href}
-                      aria-current={item.current ? 'page' : undefined}
-                      className={classNames(
-                        item.current ? 'bg-gray-900 text-white' : 'text-slate-700 dark:text-slate-300 hover:bg-gray-700 hover:text-white',
-                        'rounded-md px-3 py-2 text-sm font-medium',
-                      )}
-                    >
-                      {item.name}
-                    </a>
-                  ))}
+                  <NavOpcion />
                 </div>
               </div>
             </div>
@@ -151,20 +133,7 @@ const NavBar = () => {
 
         <DisclosurePanel className="md:hidden">
           <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
-            {navigation.map((item) => (
-              <DisclosureButton
-                key={item.name}
-                as="a"
-                href={item.href}
-                aria-current={item.current ? 'page' : undefined}
-                className={classNames(
-                  item.current ? 'bg-gray-900 text-white' : 'text-slate-700 dark:text-slate-300 hover:bg-gray-700 hover:text-white',
-                  'block rounded-md px-3 py-2 text-base font-medium',
-                )}
-              >
-                {item.name}
-              </DisclosureButton>
-            ))}
+            <NavOpcion mobile />
           </div>
           <div className="border-t border-slate-900/20 pb-3 pt-4">
             <div className="flex items-center px-5">

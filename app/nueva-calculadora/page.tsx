@@ -1,6 +1,6 @@
 import { crearCalculadoraAction } from "@/utils/actions";
 import { ActualizarParametros, PARAMETROS } from "@/utils/constantes";
-import { CATEGORIA, CATEGORIA_OPTIONS, Parametro } from "@/utils/types";
+import { CATEGORIAS, Parametro } from "@/utils/types";
 import { NextRequest } from "next/server";
 import { Each } from "../components/EachOf";
 import AgregarEvidencias from "./AgregarEvidencias";
@@ -74,9 +74,9 @@ export default async function NuevaCalculadora({ request }: { request: NextReque
                             className="rounded-lg"
                         >
                             <Each
-                                of={CATEGORIA_OPTIONS}
+                                of={CATEGORIAS}
                                 render={(categoria) => (
-                                    <option value={kebabCase(categoria)}>{categoria}</option>
+                                    <option value={categoria.kebabCase}>{categoria.nombre}</option>
                                 )}
                             />
                         </select>

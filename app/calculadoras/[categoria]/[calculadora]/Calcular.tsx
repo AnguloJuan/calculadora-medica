@@ -12,11 +12,11 @@ export default function Calcular({ formula }: { formula: string }) {
         //calcular resultado usando formula
     }
     return (<>
-        <Boton type="button" variante="primary" estilo="mt-8" onClick={calcularResultado}>Calcular</Boton>
+        <Boton type="button" variante="primary" onClick={calcularResultado}>Calcular</Boton>
 
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-row gap-4 w-full bg-slate-50 rounded p-8 py-4 ">
             <p className="text-lg">Resultado:</p>
-            <p className="text-lg font-bold" ref={resultado}>{resultado.current?.textContent}</p>
+            <p className="text-lg font-bold" ref={resultado}>40{resultado.current?.textContent}</p>
         </div>
     </>)
 }
