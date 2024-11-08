@@ -7,101 +7,101 @@ import { z } from "./es-zod";
 // const CATEGORIA = z.enum(CATEGORIA_OPTIONS.map((categoria) => kebabCase(categoria)) as [string, ...string[]]);
 // const CATEGORIA = z.enum(['Química sanguínea', 'Hematología', 'Perfil de lípidos', 'Proteínas', 'Otros']);
 const CATEGORIAS = [
-    {
-        nombre: 'Química sanguínea',
-        kebabCase: 'quimica-sanguinea'
-    },
-    {
-        nombre: 'Hematología',
-        kebabCase: 'hematologia'
-    },
-    {
-        nombre: 'Perfil de lípidos',
-        kebabCase: 'perfil-de-lipidos'
-    },
-    {
-        nombre: 'Proteínas',
-        kebabCase: 'proteinas'
-    },
-    {
-        nombre: 'Otros',
-        kebabCase: 'otros'
-    }
+  {
+    nombre: 'Química sanguínea',
+    kebabCase: 'quimica-sanguinea'
+  },
+  {
+    nombre: 'Hematología',
+    kebabCase: 'hematologia'
+  },
+  {
+    nombre: 'Perfil de lípidos',
+    kebabCase: 'perfil-de-lipidos'
+  },
+  {
+    nombre: 'Proteínas',
+    kebabCase: 'proteinas'
+  },
+  {
+    nombre: 'Otros',
+    kebabCase: 'otros'
+  }
 ]
 
 interface Calculadora {
-    id: number,
-    nombre: string,
-    descripcion: string,
-    descripcion_corta: string,
-    resultados_recomendaciones: string,
-    categoria: typeof CATEGORIAS[number]['kebabCase'],
-    formula: string,
-    enlace: string
+  id: number,
+  nombre: string,
+  descripcion: string,
+  descripcion_corta: string,
+  resultados_recomendaciones: string,
+  categoria: typeof CATEGORIAS[number]['kebabCase'],
+  formula: string,
+  enlace: string
 }
 
 interface Parametro {
-    id: number;
-    nombre: string;
-    abreviatura?: string;
-    tipo_campo: 'numerico' | 'seleccion' | 'radio';
-    valorMaximo?: number;
-    valorMinimo?: number;
-    opciones?: string;
-    unidadActual?: Unidad;
+  id: number;
+  nombre: string;
+  abreviatura?: string;
+  tipo_campo: 'numerico' | 'seleccion' | 'radio';
+  valorMaximo?: number;
+  valorMinimo?: number;
+  opciones?: string;
+  unidadActual?: Unidad;
 }
 
 interface Evidencia {
-    id: number,
-    cita: string,
-    id_calculadora: number
+  id: number,
+  cita: string,
+  id_calculadora: number
 }
 
 interface Unidad {
-    id: number,
-    unidad: string,
-    conversion?: number,
-    id_unidad_conversion?: number
+  id: number,
+  unidad: string,
+  conversion?: number,
+  id_unidad_conversion?: number
 }
 
 interface UnidadPorParametro {
-    id_parametro: number;
-    unidades: Unidad[];
+  id_parametro: number;
+  unidades: Unidad[];
 };
 
 const CalculadoraZ = z.object({
-    id: z.coerce.number(),
-    nombre: z.string().min(1),
-    descripcion: z.string().min(1),
-    descripcion_corta: z.string().min(1),
-    resultados_recomendaciones: z.string().min(1),
-    categoria:  z.enum(CATEGORIAS.map((categoria) => categoria.kebabCase) as [string, ...string[]]),
-    formula: z.string().min(1),
-    enlace: z.string()
+  id: z.coerce.number(),
+  nombre: z.string().min(1),
+  descripcion: z.string().min(1),
+  descripcion_corta: z.string().min(1),
+  resultados_recomendaciones: z.string().min(1),
+  categoria: z.enum(CATEGORIAS.map((categoria) => categoria.kebabCase) as [string, ...string[]]),
+  formula: z.string().min(1),
+  enlace: z.string()
 }) satisfies z.ZodType<Calculadora>;
 
 const EvidenciaZ = z.object({
-    id: z.number(),
-    cita: z.string().min(1),
-    id_calculadora: z.number()
+  id: z.number(),
+  cita: z.string().min(1),
+  id_calculadora: z.number()
 }) satisfies z.ZodType<Evidencia>;
 
 const UnidadZ = z.object({
-    id: z.number(),
-    unidad: z.string().min(1).max(10),
-    conversion: z.number().optional(),
-    id_unidad_conversion: z.number().optional()
+  id: z.number(),
+  unidad: z.string().min(1).max(10),
+  conversion: z.number().optional(),
+  id_unidad_conversion: z.number().optional()
 }) satisfies z.ZodType<Unidad>;
 
 const ParametroZ = z.object({
-    id: z.number(),
-    nombre: z.string().min(1),
-    abreviatura: z.string(),
-    tipo_campo: z.enum(['numerico', 'seleccion', 'radio']),
-    valorMaximo: z.number().optional(),
-    valorMinimo: z.number().optional(),
-    opciones: z.string().min(1).optional(),
-    unidadActual: UnidadZ.optional()
+  id: z.number(),
+  nombre: z.string().min(1),
+  abreviatura: z.string(),
+  tipo_campo: z.enum(['numerico', 'seleccion', 'radio']),
+  valorMaximo: z.number().optional(),
+  valorMinimo: z.number().optional(),
+  opciones: z.string().min(1).optional(),
+  unidadActual: UnidadZ.optional()
 }) satisfies z.ZodType<Parametro>;
 
 export { CalculadoraZ, EvidenciaZ, ParametroZ, UnidadZ, CATEGORIAS };

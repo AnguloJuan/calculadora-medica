@@ -8,50 +8,50 @@ import FormularioParametro from "./FormularioParametro";
 import Modal from "./Modal";
 
 type BotonEditarParametroProps = {
-    parametro: Parametro;
-    unidadesParametro?: Unidad[];
-    parametros?: Parametro[];
-    setParametros?: (parametros: Parametro[]) => void;
-    setUnidadesPorParametro?: (unidadesPorParametro: UnidadPorParametro[]) => void;
+  parametro: Parametro;
+  unidadesParametro?: Unidad[];
+  parametros?: Parametro[];
+  setParametros?: (parametros: Parametro[]) => void;
+  setUnidadesPorParametro?: (unidadesPorParametro: UnidadPorParametro[]) => void;
 }
 
 const BotonActualizarParametro: FunctionComponent<BotonEditarParametroProps> = (
-    { parametro, unidadesParametro, parametros, setParametros, setUnidadesPorParametro }: BotonEditarParametroProps
+  { parametro, unidadesParametro, parametros, setParametros, setUnidadesPorParametro }: BotonEditarParametroProps
 ) => {
-    const [abierto, setAbierto] = useState(false);
-    const [isClient, setIsClient] = useState(false);
+  const [abierto, setAbierto] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
-    useEffect(() => {
-        setIsClient(true)
-    }, [])
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
-    return (<>
-        <Boton
-            type="button"
-            variante="warning"
-            onClick={() => setAbierto(true)}
-        >
-            <IconPencil stroke={2} />
-        </Boton>
-        {isClient && createPortal(
-            <Modal
-                titulo={'Crear nuevo parámetro'}
-                abierto={abierto}
-                setAbierto={() => setAbierto(!abierto)}
-            >
-                <FormularioParametro
-                    parametros={parametros}
-                    setParametros={setParametros}
-                    setAbierto={setAbierto}
-                    accion="actualizar"
-                    parametro={parametro}
-                    unidadesParametro={unidadesParametro}
-                    setUnidadesPorParametro={setUnidadesPorParametro}
-                />
-            </Modal>,
-            document.body
-        )}
-    </>);
+  return (<>
+    <Boton
+      type="button"
+      variante="warning"
+      onClick={() => setAbierto(true)}
+    >
+      <IconPencil stroke={2} />
+    </Boton>
+    {isClient && createPortal(
+      <Modal
+        titulo={'Crear nuevo parámetro'}
+        abierto={abierto}
+        setAbierto={() => setAbierto(!abierto)}
+      >
+        <FormularioParametro
+          parametros={parametros}
+          setParametros={setParametros}
+          setAbierto={setAbierto}
+          accion="actualizar"
+          parametro={parametro}
+          unidadesParametro={unidadesParametro}
+          setUnidadesPorParametro={setUnidadesPorParametro}
+        />
+      </Modal>,
+      document.body
+    )}
+  </>);
 }
 
 export default memo(BotonActualizarParametro);

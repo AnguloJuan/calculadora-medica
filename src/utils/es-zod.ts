@@ -6,10 +6,10 @@ import translation from "zod-i18n-map/locales/es/zod.json";
 
 // lng and resources key depend on your locale.
 i18next.init({
-    lng: "es",
-    resources: {
-        es: { zod: translation },
-    },
+  lng: "es",
+  resources: {
+    es: { zod: translation },
+  },
 });
 z.setErrorMap(zodI18nMap);
 
