@@ -87,8 +87,9 @@ function FormularioUnidad({ setFieldValue, unidadesParametro, setOpciones, setAb
                 type="text"
                 name="unidad"
                 placeholder="Ingrese una unidad"
+                className='rounded-lg'
               />
-              <ErrorMessage component="p" name="unidad" />
+              <ErrorMessage component="p" name="unidad" className="text-red-500 text-sm" />
             </div>
             {fetching ? (<p>Cargando...</p>) : unidades.length > 0 ?
               (<div className="w-full flex flex-col gap-2">
@@ -107,6 +108,7 @@ function FormularioUnidad({ setFieldValue, unidadesParametro, setOpciones, setAb
                 <Field
                   as="select"
                   name="id_unidad_conversion"
+                  className='rounded-lg'
                   onChange={(e: any) => setFieldValue('id_unidad_conversion', parseFloat(e.target.value))}
                 >
                   <option value={0}>Selecciona la unidad para conversión</option>
@@ -125,6 +127,7 @@ function FormularioUnidad({ setFieldValue, unidadesParametro, setOpciones, setAb
                 <Field
                   type="number"
                   name="conversion"
+                  className='rounded-lg'
                   value={values.conversion}
                   placeholder="Ingrese la conversion con la unidad seleccionada"
                 />

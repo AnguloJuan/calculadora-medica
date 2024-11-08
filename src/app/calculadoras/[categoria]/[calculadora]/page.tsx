@@ -31,7 +31,7 @@ export default async function CalculadoraPage({ params, request }: { params: { c
     interface Parametros extends RowDataPacket, Parametro { }
     try {
       const [parametrosRows] = await conexion.query<Parametros[]>(
-        'SELECT * FROM `calculadora_parametro` JOIN `parametro` WHERE id_calculadora = ?',
+        'SELECT * FROM `calculadora_parametro` as `cp` RIGHT JOIN `parametro` as `p` ON cp.id_calculadora = p.id AND id_calculadora = ?',
         [calculadora.id]
       );
 

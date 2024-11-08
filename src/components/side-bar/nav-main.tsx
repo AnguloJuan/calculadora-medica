@@ -40,14 +40,14 @@ export function NavMain({
     <SidebarGroup>
       {/* <SidebarGroupLabel>Platform</SidebarGroupLabel> */}
       <SidebarMenu>
-        {items.map((item) => (
+        {items.map((item, index) => (
           // <Collapsible
           //   key={item.title}
           //   asChild
           //   defaultOpen={item.isActive}
           //   className="group/collapsible"
           // >
-          <Link href={item.url}>
+          <Link href={item.url} key={index}>
             <SidebarMenuItem>
               {/* <CollapsibleTrigger asChild> */}
               <SidebarMenuButton tooltip={item.title} className={item.url === ruta ? 'bg-stone-200' : ''}>

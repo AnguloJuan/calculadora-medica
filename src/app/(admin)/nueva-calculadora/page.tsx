@@ -8,15 +8,26 @@ import { Each } from "../../../components/EachOf";
 import AgregarEvidencias from "../../../components/nueva-calculadora/AgregarEvidencias";
 import AgregarParametros from "../../../components/nueva-calculadora/AgregarParametros";
 import BotonGuardarCalculadora from "../../../components/nueva-calculadora/BotonGuardarCalculadora";
+import { RowDataPacket } from "mysql2";
+import { conectarBd } from "@/db/conectarDb";
 
 export default async function NuevaCalculadora({ request }: { request: NextRequest }) {
-  let parametrosActualizados = false;
-  if (PARAMETROS.length === 0 && !parametrosActualizados) {
-    await ActualizarParametros();
-    parametrosActualizados = true;
+  const obtenerParametros = async () => {
+    const conexion = await conectarBd()
+    interface Parametros extends RowDataPacket, Parametro { }
+    try {
+      const [parametrosRows] = await conexion.query<Parametros[]>(
+        'SELECT * FROM `parametro`',
+      );
+
+      return parametrosRows;
+    } catch (error) {
+      console.error(error);
+    }
   }
 
-  var kebabCase = require('lodash/kebabCase');
+  const parametros = await obtenerParametros();
+
   return (
     <div className="w-full items-center flex justify-center my-8">
       <form
@@ -102,7 +113,7 @@ export default async function NuevaCalculadora({ request }: { request: NextReque
         <div className="w-full flex flex-col gap-6">
           <h2 className="w-full text-xl font-semibold text-center">Parámetros</h2>
 
-          {Array.isArray(PARAMETROS) ? <AgregarParametros listaParametros={PARAMETROS ? PARAMETROS : [] as Parametro[]} />
+          {Array.isArray(parametros) ? <AgregarParametros listaParametros={parametros ? parametros : [] as Parametro[]} />
             : <p>Cargando...</p>}
 
           <fieldset className="w-full">

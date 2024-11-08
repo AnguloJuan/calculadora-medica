@@ -272,18 +272,13 @@ export async function obtenerUnidadesPorParametroAction(formulario: FormData) {
     return { error: 'Falta el id del parametro', status: 400 };
   }
 
-  let unidadesPorParametro = [{}] as UnidadPorParametro[];
-  const query = `
-    SELECT * FROM \`parametro_unidad\` as \`pu\`
-        INNER JOIN \`unidad\` as \`u\` ON pu.id = u.id
-        AND \`id_parametro\` = ?
-    ORDER BY u.unidad ASC;`;
+  let unidadesPorParametro = [] as UnidadPorParametro[];
 
   try {
     for (let i = 0; i < parametroIds.length; i++) {
       const id = parseInt(parametroIds[i].toString());
       const [unidades] = await conexion.query<Unidades[]>(
-        query,
+        'SELECT * FROM `parametro_unidad` as `pu` RIGHT JOIN `unidad` as `u` ON pu.id_unidad = u.id AND `id_parametro` = ? WHERE pu.id IS NOT NULL;',
         [id]
       );
 
