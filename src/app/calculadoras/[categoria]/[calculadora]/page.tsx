@@ -63,13 +63,13 @@ export default async function CalculadoraPage({ params, request }: { params: { c
           </div>
 
           <div className="flex flex-col gap-8">
+            <div className="flex flex-col">
+              <h2 className="text-lg font-semibold ">Formula</h2>
+              <p className="text-sm">{calculadora.formula}</p>
+            </div>
             <div>
               <h2 className="text-lg font-semibold ">Acerca de {calculadora.nombre}</h2>
               <p className="">{calculadora.descripcion}</p>
-            </div>
-            <div className="flex flex-col">
-              <h2 className="text-lg font-semibold ">Formula</h2>
-              <p className="">{calculadora.formula}</p>
             </div>
 
             <div className="flex flex-col">
