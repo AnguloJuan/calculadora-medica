@@ -1,12 +1,12 @@
 'use client'
 
+import { ParametroNumericoSchema, ParametroSeleccionSchema } from "@/validationSchemas/ParametroSchema";
 import { IconPencil, IconPlus, IconX } from "@tabler/icons-react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { withZodSchema } from "formik-validator-zod";
 import { FunctionComponent, memo, useCallback, useEffect, useState } from "react";
 import { actualizarParametrosServidorAction, crearParametroAction, editarParametroAction, obtenerUnidadesAction } from "../utils/actions";
 import { Parametro, Unidad, UnidadPorParametro } from "../utils/types";
-import { ParametroNumericoSchema, ParametroSeleccionSchema } from "../utils/validationSchema";
 import BotonCrearUnidad from "./BotonCrearUnidad";
 import { Boton } from "./Botones";
 import CampoParametro from "./CampoParametro";

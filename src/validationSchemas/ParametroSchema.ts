@@ -1,4 +1,17 @@
-import { z } from "./es-zod";
+import { Parametro } from "@/utils/types";
+import { z } from "../lib/es-zod";
+import UnidadSchema from "./UnidadSchema";
+
+const ParametroSchema = z.object({
+  id: z.number(),
+  nombre: z.string().min(1),
+  abreviatura: z.string(),
+  tipo_campo: z.enum(['numerico', 'seleccion', 'radio']),
+  valorMaximo: z.number().optional(),
+  valorMinimo: z.number().optional(),
+  opciones: z.string().min(1).optional(),
+  unidadActual: UnidadSchema.optional()
+}) satisfies z.ZodType<Parametro>;
 
 const ParametroNumericoSchema = z.object({
   id: z.number(),
@@ -18,4 +31,5 @@ const ParametroSeleccionSchema = z.object({
   opciones: z.string().min(1)
 })
 
-export { ParametroNumericoSchema, ParametroSeleccionSchema };
+export { ParametroNumericoSchema, ParametroSchema, ParametroSeleccionSchema };
+

@@ -1,12 +1,13 @@
 'use client'
 
+import UnidadSchema from "@/validationSchemas/UnidadSchema";
 import { IconPlus, IconX } from "@tabler/icons-react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { withZodSchema } from "formik-validator-zod";
 import { memo, useEffect, useState } from "react";
+import { z } from "../lib/es-zod";
 import { crearUnidadAction, obtenerUnidadesAction } from "../utils/actions";
-import { z } from "../utils/es-zod";
-import { Unidad, UnidadZ } from "../utils/types";
+import { Unidad } from "../utils/types";
 import { Boton } from "./Botones";
 import { Each } from "./EachOf";
 import { useToast } from "./Toast";
@@ -33,14 +34,14 @@ function FormularioUnidad({ setFieldValue, unidadesParametro, setOpciones, setAb
       .finally(() => setFetching(false));
   }, [])
 
-  const initialValues: z.infer<typeof UnidadZ> = {
+  const initialValues: z.infer<typeof UnidadSchema> = {
     id: 0,
     unidad: '',
     conversion: undefined,
     id_unidad_conversion: undefined
   }
 
-  const handleSubmit = async (values: z.infer<typeof UnidadZ>) => {
+  const handleSubmit = async (values: z.infer<typeof UnidadSchema>) => {
     const formData = new FormData();
     formData.append('unidad', values.unidad);
     formData.append('conversion', values.conversion ? values.conversion.toString() : '');
@@ -75,7 +76,7 @@ function FormularioUnidad({ setFieldValue, unidadesParametro, setOpciones, setAb
     <div className="w-full flex flex-col gap-2">
       <Formik
         initialValues={initialValues}
-        validate={withZodSchema(UnidadZ)}
+        validate={withZodSchema(UnidadSchema)}
         onSubmit={handleSubmit}
 
       >

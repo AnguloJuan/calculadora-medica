@@ -1,9 +1,10 @@
 'use client'
 
 import { crearCalculadoraAction } from "@/utils/actions";
-import { CalculadoraZ, Parametro } from "@/utils/types";
+import { Parametro } from "@/utils/types";
 import { IconDeviceFloppy } from "@tabler/icons-react";
 import Link from "next/link";
+import CalculadoraSchema from "../../validationSchemas/CalculadoraSchema";
 import { Boton } from "../Botones";
 import { useToast } from "../Toast";
 
@@ -12,7 +13,7 @@ export default function BotonGuardarCalculadora() {
 
     const validarDatos = (datosFormulario: { [k: string]: FormDataEntryValue }) => {
 
-        const validarCalcudora = CalculadoraZ.safeParse(datosFormulario);
+        const validarCalcudora = CalculadoraSchema.safeParse(datosFormulario);
 
         if (!validarCalcudora.success) {
             // const errores = validarCalcudora.error.formErrors;

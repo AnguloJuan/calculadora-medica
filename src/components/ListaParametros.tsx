@@ -22,11 +22,13 @@ function ListaParametros({ parametros, setParametros, sesion }: ListaParametrosP
     for (let i = 0; i < parametros.length; i++) {
       formData.append('parametroIds', parametros[i].id.toString());
     }
+    console.log(parametros);
     obtenerUnidadesPorParametroAction(formData)
       .then(data => {
         if (!('error' in data)) setUnidadesPorParametro(data);
       })
       .catch(error => console.error(error));
+      
   }, [parametros]);
 
   const BotonEliminar = ({ id }: { id: number }) => {
