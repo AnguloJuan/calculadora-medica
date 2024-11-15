@@ -11,7 +11,7 @@ import BotonCrearUnidad from "./BotonCrearUnidad";
 import { Boton } from "./Botones";
 import CampoParametro from "./CampoParametro";
 import { ReactSelect } from "./CustomSelect";
-import { useToast } from "./Toast";
+import { useToast } from "../zustand/Toast";
 
 
 interface FormularioParametroProps {

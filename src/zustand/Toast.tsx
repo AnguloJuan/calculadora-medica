@@ -11,7 +11,7 @@ import { useEffect } from 'react';
 import type { } from 'redux-devtools'; // required for devtools typing
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { Each } from './EachOf';
+import { Each } from '@/components/EachOf';
 
 interface Toast {
   id: number;
