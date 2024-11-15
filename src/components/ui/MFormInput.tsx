@@ -16,13 +16,14 @@ interface InputFormProps<T extends FieldValues> {
   control: Control<T>;
   name: FieldPath<T>;
   label: string;
-  description: string;
-  input?: 'input' | 'textarea' | 'checkbox';
+  description?: string;
+  placeholder?: string;
+  input: 'input' | 'textarea';
   textInputProps?: InputProps;
   textAreaProps?: TextareaProps;
 }
 
-export default function FormInput<T extends FieldValues>({ control, name, label, description, input, textInputProps, textAreaProps }: InputFormProps<T>) {
+const MFormInput = <T extends FieldValues>({ control, name, label, description, input, placeholder, textInputProps, textAreaProps }: InputFormProps<T>) => {
   return (
     <FormField
       control={control}
@@ -32,17 +33,21 @@ export default function FormInput<T extends FieldValues>({ control, name, label,
           <FormLabel>{label}</FormLabel>
           <FormControl>
             {input === 'input' ? (
-              <Input {...field} {...textInputProps} />
+              <Input {...field} placeholder={placeholder} />
             ) : input === 'textarea' ? (
-              <Textarea {...field} {...textAreaProps} />
+              <Textarea {...field} placeholder={placeholder} />
             ) : null}
           </FormControl>
-          <FormDescription>
-            {description}
-          </FormDescription>
+          {description && (
+            <FormDescription>
+              {description}
+            </FormDescription>
+          )}
           <FormMessage />
         </FormItem>
       )}
     />
   )
 }
+
+export default MFormInput;
