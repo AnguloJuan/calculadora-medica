@@ -5,7 +5,7 @@ import UnidadSchema from "./UnidadSchema";
 const ParametroSchema = z.object({
   id: z.number(),
   nombre: z.string().min(1),
-  abreviatura: z.string(),
+  abreviatura: z.string().optional(),
   tipo_campo: z.enum(['numerico', 'seleccion', 'radio']),
   valorMaximo: z.number().optional(),
   valorMinimo: z.number().optional(),
