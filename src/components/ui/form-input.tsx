@@ -23,7 +23,7 @@ interface InputFormProps<T extends FieldValues> {
   textAreaProps?: TextareaProps;
 }
 
-const MFormInput = <T extends FieldValues>({ control, name, label, description, input, placeholder, textInputProps, textAreaProps }: InputFormProps<T>) => {
+const FormInput = <T extends FieldValues>({ control, name, label, description, input, placeholder, textInputProps, textAreaProps }: InputFormProps<T>) => {
   return (
     <FormField
       control={control}
@@ -33,9 +33,9 @@ const MFormInput = <T extends FieldValues>({ control, name, label, description, 
           <FormLabel>{label}</FormLabel>
           <FormControl>
             {input === 'input' ? (
-              <Input {...field} placeholder={placeholder} />
+              <Input {...field} placeholder={placeholder} {...textInputProps} />
             ) : input === 'textarea' ? (
-              <Textarea {...field} placeholder={placeholder} />
+              <Textarea {...field} placeholder={placeholder} {...textAreaProps} />
             ) : null}
           </FormControl>
           {description && (
@@ -50,4 +50,4 @@ const MFormInput = <T extends FieldValues>({ control, name, label, description, 
   )
 }
 
-export default MFormInput;
+export default FormInput;
