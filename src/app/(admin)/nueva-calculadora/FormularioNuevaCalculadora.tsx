@@ -3,14 +3,15 @@
 import { Each } from "@/components/EachOf";
 import AgregarEvidencias from "@/components/nueva-calculadora/AgregarEvidencias";
 import AgregarParametros from "@/components/nueva-calculadora/AgregarParametros";
-import { useToast } from "@/components/Toast";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import MFormInput from "@/components/ui/MFormInput";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import FormInput from "@/components/ui/form-input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { z } from "@/lib/es-zod";
 import { crearCalculadoraAction } from "@/utils/actions";
 import { CATEGORIAS, Parametro } from "@/utils/types";
 import CalculadoraSchema from "@/validationSchemas/CalculadoraSchema";
+import { useToast } from "@/zustand/Toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Save } from "lucide-react";
 import Link from "next/link";
@@ -79,7 +80,7 @@ const FormularioNuevaCalculadora = ({ parametros }: { parametros: Parametro[] | 
         <div className="w-full flex flex-col gap-6">
           <h2 className="w-full text-xl font-semibold text-center leading-none">Información general</h2>
           <fieldset className="w-full flex flex-col gap-2">
-            <MFormInput
+            <FormInput
               control={form.control}
               name="nombre"
               label="Título"
@@ -87,8 +88,75 @@ const FormularioNuevaCalculadora = ({ parametros }: { parametros: Parametro[] | 
               input="input"
             />
           </fieldset>
+
           <fieldset className="w-full flex flex-col gap-2">
-            <MFormInput
+            <FormField
+              name='categoria'
+              render={({ field }) => (<>
+                <FormItem>
+                  <FormLabel>Area</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecciona el area" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <Each of={CATEGORIAS} render={(categoria) => (
+                        <SelectItem key={categoria.kebabCase} value={categoria.kebabCase}>{categoria.nombre}</SelectItem>
+                      )} />
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    El area a la que pertenece la calculadora
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              </>
+              )}
+            />
+          </fieldset>
+
+          <fieldset className="w-full flex flex-col gap-2">
+            <FormField
+              control={form.control}
+              name='parametros'
+              render={({ field }) => (<>
+                <FormItem>
+                  <FormLabel>Parametros</FormLabel>
+                  <Select
+                    onValueChange={
+                      (value) => {
+                        const parametro = parametros?.find((parametro) => parametro.id === parseInt(value));
+                        if (parametro) {
+                          form.setValue('parametros', [...field.value, parametro]);
+                        }
+                      }
+                    }
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecciona el area" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <Each of={parametros!} render={(parametro) => (
+                        <SelectItem key={parametro.id} value={parametro.id.toString()}>{parametro.nombre}</SelectItem>
+                      )} />
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    El area a la que pertenece la calculadora
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              </>
+              )}
+            />
+          </fieldset>
+
+          <fieldset className="w-full flex flex-col gap-2">
+            <FormInput
               control={form.control}
               name="descripcion"
               label="Descripción"
@@ -97,7 +165,7 @@ const FormularioNuevaCalculadora = ({ parametros }: { parametros: Parametro[] | 
             />
           </fieldset>
           <fieldset className="w-full flex flex-col gap-2">
-            <MFormInput
+            <FormInput
               control={form.control}
               name="descripcion_corta"
               label="Descripción corta"
@@ -107,7 +175,7 @@ const FormularioNuevaCalculadora = ({ parametros }: { parametros: Parametro[] | 
             />
           </fieldset>
           <fieldset className="w-full flex flex-col gap-2">
-            <MFormInput
+            <FormInput
               control={form.control}
               name="resultados_recomendaciones"
               label="Resultados y recomendaciones"
@@ -116,32 +184,6 @@ const FormularioNuevaCalculadora = ({ parametros }: { parametros: Parametro[] | 
             />
           </fieldset>
 
-          <fieldset className="w-full flex flex-col gap-2">
-            <FormField
-              control={form.control}
-              name='categoria'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Area a la que pertenece la calculadora</FormLabel>
-                  <FormControl>
-                    <select
-                      id="categoria"
-                      name="categoria"
-                      className="rounded-lg"
-                    >
-                      <Each
-                        of={CATEGORIAS}
-                        render={(categoria) => (
-                          <option value={categoria.kebabCase}>{categoria.nombre}</option>
-                        )}
-                      />
-                    </select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </fieldset>
           <fieldset className="w-full flex flex-col gap-2">
             {/* <label htmlFor="enlace">Enlace</label>
             <input
@@ -152,20 +194,25 @@ const FormularioNuevaCalculadora = ({ parametros }: { parametros: Parametro[] | 
               className="rounded-lg"
             /> */}
           </fieldset>
-          <MFormInput control={form.control} name="evidencias" label="Evidencias" input="input" textInputProps={{ hidden: true }} />
+          <FormInput name="evidencias" control={form.control} label="Evidencias" input="input" textInputProps={{ hidden: true }} />
 
           <AgregarEvidencias />
 
         </div>
 
+        <fieldset className="w-full flex flex-col gap-2">
+
+        </fieldset>
+
+
         <div className="w-full flex flex-col gap-6">
-          <MFormInput control={form.control} name="parametros" label="Parámetros" input="input" textInputProps={{ hidden: true }} />
+          <FormInput name="parametros" control={form.control} label="Parámetros" input="input" textInputProps={{ hidden: true }} />
 
           {Array.isArray(parametros) ? <AgregarParametros listaParametros={parametros ? parametros : [] as Parametro[]} />
             : <p>Cargando...</p>}
 
           <fieldset className="w-full">
-            <MFormInput
+            <FormInput
               control={form.control}
               name="formula"
               label="Fórmula"
