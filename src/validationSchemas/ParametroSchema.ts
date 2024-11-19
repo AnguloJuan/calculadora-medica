@@ -10,7 +10,8 @@ const ParametroSchema = z.object({
   valorMaximo: z.number().optional(),
   valorMinimo: z.number().optional(),
   opciones: z.string().min(1).optional(),
-  unidadActual: UnidadSchema.optional()
+  unidades: z.array(UnidadSchema).nonempty('Debe seleccionar al menos una unidad'),
+  requerido: z.boolean().optional()
 }) satisfies z.ZodType<Parametro>;
 
 const ParametroNumericoSchema = z.object({

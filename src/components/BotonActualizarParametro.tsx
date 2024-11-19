@@ -4,7 +4,7 @@ import { FunctionComponent, memo, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Parametro, Unidad, UnidadPorParametro } from "../utils/types";
 import { Boton } from "./Botones";
-import FormularioParametro from "./FormularioParametro";
+import FormularioParametro from "./FormularioParametroBackup";
 import Modal from "./Modal";
 
 type BotonEditarParametroProps = {

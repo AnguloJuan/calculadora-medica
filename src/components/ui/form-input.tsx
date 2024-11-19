@@ -18,12 +18,12 @@ interface InputFormProps<T extends FieldValues> {
   label: string;
   description?: string;
   placeholder?: string;
-  input: 'input' | 'textarea';
+  input?: 'input' | 'textarea';
   textInputProps?: InputProps;
   textAreaProps?: TextareaProps;
 }
 
-const FormInput = <T extends FieldValues>({ control, name, label, description, input, placeholder, textInputProps, textAreaProps }: InputFormProps<T>) => {
+const FormInput = <T extends FieldValues>({ control, name, label, description, input = "input", placeholder, textInputProps, textAreaProps }: InputFormProps<T>) => {
   return (
     <FormField
       control={control}
