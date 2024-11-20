@@ -7,8 +7,8 @@ const ParametroSchema = z.object({
   nombre: z.string().min(1),
   abreviatura: z.string().optional(),
   tipo_campo: z.enum(['numerico', 'seleccion', 'radio']),
-  valorMaximo: z.number().optional(),
-  valorMinimo: z.number().optional(),
+  valorMaximo: z.coerce.number().optional(),
+  valorMinimo: z.coerce.number().optional(),
   opciones: z.string().min(1).optional(),
   unidades: z.array(UnidadSchema).nonempty('Debe seleccionar al menos una unidad').optional(),
   requerido: z.boolean().optional()
