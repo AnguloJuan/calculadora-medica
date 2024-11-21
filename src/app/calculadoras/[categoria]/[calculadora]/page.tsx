@@ -1,16 +1,17 @@
 
-import ListaParametros from "@/components/ListaParametros";
+import Calculadora from "@/components/Calculadora";
 import { conectarBd } from "@/db/conectarDb";
-import { Calculadora, Parametro } from "@/utils/types";
+import { z } from "@/lib/es-zod";
+import { Calculadora as ICalculadora, Parametro, Unidad } from "@/utils/types";
+import { ParametroSchema } from "@/validationSchemas/ParametroSchema";
 import { RowDataPacket } from "mysql2";
 import { redirect } from "next/navigation";
 import { NextRequest } from "next/server";
-import Calcular from "./Calcular";
 
 export default async function CalculadoraPage({ params, request }: { params: { calculadora: string }, request: NextRequest }) {
   const conexion = await conectarBd();
   async function obtenerCalculadora() {
-    interface RowsCalculadora extends RowDataPacket, Calculadora { }
+    interface RowsCalculadora extends RowDataPacket, ICalculadora { }
     try {
       const [rows] = await conexion.query<RowsCalculadora[]>('SELECT * FROM calculadora WHERE enlace = ?', [params.calculadora]);
 
@@ -24,10 +25,9 @@ export default async function CalculadoraPage({ params, request }: { params: { c
       redirect('/404');
     }
   }
+  const calculadora: ICalculadora = await obtenerCalculadora();
 
-  const calculadora: Calculadora = await obtenerCalculadora();
-
-  async function obtenerParametrosCalculadora() {
+  async function obtenerParametros() {
     interface Parametros extends RowDataPacket, Parametro { }
     try {
       const [parametrosRows] = await conexion.query<Parametros[]>(
@@ -36,17 +36,33 @@ export default async function CalculadoraPage({ params, request }: { params: { c
       );
 
       if (parametrosRows.length === 0) {
+        console.log('No se encontraron parametros');
         redirect('/404');
       }
 
-      return parametrosRows;
+      interface Unidades extends RowDataPacket, Unidad { }
+      const parametrosConUnidades = parametrosRows.map(async (parametro) => {
+        try {
+          const [unidadesRows] = await conexion.query<Unidades[]>(
+            'SELECT * FROM `parametro_unidad` as `pu` RIGHT JOIN `unidad` as `u` ON pu.id_unidad = u.id AND `id_parametro` = ? WHERE pu.id IS NOT NULL;',
+            [parametro.id],
+          );
+          return { ...parametro, unidades: unidadesRows }
+        } catch (error) {
+          console.error(error);
+          return undefined;
+        }
+      });
+
+      const resolvedParametros = await Promise.all(parametrosConUnidades);
+      return resolvedParametros.filter((parametro) => parametro !== undefined) as z.infer<typeof ParametroSchema>[];
     } catch (error) {
       console.error(error);
       redirect('/404');
     }
   }
 
-  const parametros: Parametro[] = await obtenerParametrosCalculadora();
+  const parametros: z.infer<typeof ParametroSchema>[] = await obtenerParametros();
 
   return (
     <div className="w-full h-full bg-white flex flex-col items-center">
@@ -56,8 +72,7 @@ export default async function CalculadoraPage({ params, request }: { params: { c
             <h1 className="text-xl font-bold self-center text-center">{calculadora.nombre}</h1>
             <div className="w-full flex flex-col gap-4">
               <form id="calculadora" className="flex flex-col gap-8">
-                <ListaParametros parametros={parametros} sesion="usuario" />
-                <Calcular formula={calculadora.formula} />
+                <Calculadora formula={calculadora.formula} parametros={parametros} />
               </form>
             </div>
           </div>

@@ -3,18 +3,22 @@
 import { Radio, RadioGroup } from "@headlessui/react";
 import { IconCircle } from "@tabler/icons-react";
 import { FunctionComponent, useState } from "react";
-import { Parametro, Unidad } from "../utils/types";
+import { Unidad } from "../utils/types";
 import { Each } from "./EachOf";
+import { ParametroSchema } from "@/validationSchemas/ParametroSchema";
+import { z } from "@/lib/es-zod";
+
+interface Parametro extends z.infer<typeof ParametroSchema> {
+  unidadActual?: Unidad;
+}
 
 interface CampoParametroProps {
   parametro: Parametro;
   setParametros?: (parametros: Parametro[]) => void;
   parametros?: Parametro[];
-  unidades?: Unidad[];
-  form?: string;
 }
 
-const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, setParametros, parametros, unidades, form }: CampoParametroProps) => {
+const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, setParametros, parametros }: CampoParametroProps) => {
   const opciones = parametro.opciones?.split(',');
   const [valor, setValor] = useState<string | number>(
     parametro.tipo_campo === 'numerico' ? 0 : ''
@@ -46,29 +50,28 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, set
             max={parametro.valorMaximo}
             value={valor}
             onChange={(e) => setValor(Number(e.target.value))}
-            form={form}
             className="sm:col-span-3 mt-0 rounded-s-lg"
           />
           <div className="h-full col-span-1 text-center self-center p-2 bg-slate-300 border border-gray-300 rounded-e-lg">
             {/* {unidades?.map((unidad, index) => (
                             <p key={index} className="text-sm/6">{unidad.unidad}</p>
                         ))} */}
-            {unidades && (
-              unidades.length === 1 ? (
-                <span className="text-sm/6">{unidades[0].unidad}</span>
-              ) : unidades.length > 1 && (
+            {parametro.unidades && (
+              parametro.unidades.length === 1 ? (
+                <span className="text-sm/6">{parametro.unidades[0].unidad}</span>
+              ) : parametro.unidades.length > 1 && (
                 <select
                   id={`unidad_${parametro.nombre}`}
                   name={`unidad_${parametro.nombre}`}
                   className="text-sm/6"
                   onChange={(e) => {
-                    const unidad = unidades.find((unidad) => unidad.id === Number(e.target.value));
+                    const unidad = parametro.unidades!.find((unidad) => unidad.id === Number(e.target.value));
                     if (unidad) {
                       actualizarUnidadActual(unidad);
                     }
                   }}
                 >
-                  {unidades.map((unidad, index) => (
+                  {parametro.unidades.map((unidad, index) => (
                     <option key={index} value={unidad.id}>{unidad.unidad}</option>
                   ))}
                 </select>
@@ -84,7 +87,6 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, set
           name={`campo_${parametro.nombre}`}
           value={valor}
           onChange={(e) => setValor(e.target.value)}
-          form={form}
           className="sm:col-span-3"
         >
           <option value="">Seleccione un parámetro</option>
@@ -102,7 +104,6 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, set
             value={valor}
             onChange={setValor}
             aria-label={parametro.nombre}
-            form={form}
             className={`${opciones.length > 3 ? 'space-y-2' : 'space-x-1'} 
                     ${opciones.length === 3 ? 'sm:grid sm:grid-cols-3' : opciones.length === 2 && 'grid grid-cols-2'}`}
           >
