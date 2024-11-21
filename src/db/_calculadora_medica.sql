@@ -6,12 +6,14 @@ USE calculadora_medica;
 CREATE TABLE IF NOT EXISTS calculadora (
 	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	nombre VARCHAR(60) NOT NULL,
-  descripcion VARCHAR(360) NOT NULL,
+  descripcion TEXT NOT NULL,
   descripcion_corta VARCHAR(120),
-  resultados_recomendaciones VARCHAR(360),
-  formula VARCHAR(360) NOT NULL,
+  resultados_recomendaciones TEXT,
+  formula VARCHAR(120) NOT NULL,
+  demostracion_formula TEXT,
   categoria VARCHAR(60) NOT NULL,
   enlace VARCHAR(120) NOT NULL UNIQUE,
+  unidad_resultado VARCHAR(10) NOT NULL,
   fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   fecha_actualizacion DATETIME
 );
