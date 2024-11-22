@@ -61,13 +61,19 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, set
                 <Select
                   name={`unidad_${parametro.nombre}`}
                   defaultValue={String(parametro.unidadActual?.id)}
+                  value={String(valor)}
+
                   onValueChange={(e) => {
                     const unidad = parametro.unidades!.find((unidad) => unidad.id === Number(e));
                     if (unidad) {
                       actualizarUnidadActual(unidad);
                     }
+                    setValor(e);
                   }}
                 >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
                   <SelectContent>
                     {parametro.unidades.map((unidad, index) => (
                       <SelectItem key={index} value={String(unidad.id)}>{unidad.unidad}</SelectItem>
