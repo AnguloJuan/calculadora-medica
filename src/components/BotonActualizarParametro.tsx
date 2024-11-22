@@ -3,9 +3,9 @@ import { IconPencil } from "@tabler/icons-react";
 import { FunctionComponent, memo, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Parametro, Unidad, UnidadPorParametro } from "../utils/types";
-import { Boton } from "./Botones";
 import FormularioParametro from "./FormularioParametroBackup";
 import Modal from "./Modal";
+import { Button } from "./ui/button";
 
 type BotonEditarParametroProps = {
   parametro: Parametro;
@@ -26,13 +26,13 @@ const BotonActualizarParametro: FunctionComponent<BotonEditarParametroProps> = (
   }, [])
 
   return (<>
-    <Boton
+    <Button
       type="button"
-      variante="warning"
+      variant={'warning'}
       onClick={() => setAbierto(true)}
     >
       <IconPencil stroke={2} />
-    </Boton>
+    </Button>
     {isClient && createPortal(
       <Modal
         titulo={'Crear nuevo parámetro'}

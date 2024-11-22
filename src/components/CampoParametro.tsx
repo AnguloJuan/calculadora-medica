@@ -10,7 +10,7 @@ import { Input } from "./ui/input"
 import { Label } from "./ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
 
-interface Parametro extends TypeParametroSchema {
+type Parametro = TypeParametroSchema & {
   unidadActual?: Unidad;
 }
 
@@ -22,7 +22,7 @@ interface CampoParametroProps {
 }
 
 const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, setParametros, parametros, onChange }) => {
-  const opciones = parametro.opciones?.split(',');
+  const opciones = (parametro.tipo_campo === 'seleccion' || parametro.tipo_campo === 'radio') ? parametro.opciones?.split(',') : undefined;
   const [valor, setValor] = useState<string | number>(
     parametro.tipo_campo === 'numerico' ? 0 : ''
   );
@@ -62,7 +62,7 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, set
                   name={`unidad_${parametro.nombre}`}
                   defaultValue={String(parametro.unidadActual?.id)}
                   onValueChange={(e) => {
-                    const unidad = parametro.unidades!.find((unidad) => unidad.id === Number(e));
+                    const unidad = parametro.unidades!.find((unidad) => unidad.id === Number(e)) ;
                     if (unidad) {
                       actualizarUnidadActual(unidad);
                     }

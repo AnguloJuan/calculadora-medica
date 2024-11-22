@@ -4,9 +4,9 @@ import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
 import { IconTrash } from "@tabler/icons-react";
 import { memo } from "react";
 import BotonActualizarParametro from "./BotonActualizarParametro";
-import { Boton } from "./Botones";
 import CampoParametro from "./CampoParametro";
 import { Each } from "./EachOf";
+import { Button } from "./ui/button";
 
 interface ListaParametrosProps {
   parametros: TypeParametroSchema[];
@@ -22,13 +22,13 @@ function ListaParametros({ parametros, sesion, onChange }: ListaParametrosProps)
       const nuevosParametros = parametros.filter((parametro) => parametro.id !== id);
     }
     return (
-      <Boton
+      <Button
         type="button"
-        variante="danger"
+        variant={'destructive'}
         onClick={EliminarParametro}
       >
         <IconTrash stroke={2} />
-      </Boton>
+      </Button>
     );
   }
 
