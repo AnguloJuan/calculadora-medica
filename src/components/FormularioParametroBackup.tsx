@@ -5,7 +5,7 @@ import { IconPencil, IconPlus, IconX } from "@tabler/icons-react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { withZodSchema } from "formik-validator-zod";
 import { FunctionComponent, memo, useCallback, useEffect, useState } from "react";
-import { actualizarParametrosServidorAction, crearParametroAction, editarParametroAction, obtenerUnidadesAction } from "../utils/actions";
+import { actualizarParametrosServidorAction, crearParametroAction, actualizarParametroAction, obtenerUnidadesAction } from "../utils/actions";
 import { Parametro, Unidad, UnidadPorParametro } from "../utils/types";
 import BotonCrearUnidad from "./BotonCrearUnidad";
 import { Boton } from "./Botones";
@@ -24,7 +24,7 @@ interface FormularioParametroProps {
   setUnidadesPorParametro?: (unidadesPorParametro: UnidadPorParametro[]) => void;
 }
 
-const FormularioParametro: FunctionComponent<FormularioParametroProps> = (
+const FormularioParametroBackup: FunctionComponent<FormularioParametroProps> = (
   { parametros, setParametros, setAbierto, accion, parametro, unidadesParametro, setUnidadesPorParametro }: FormularioParametroProps
 ) => {
   const { addToast } = useToast();
@@ -109,7 +109,7 @@ const FormularioParametro: FunctionComponent<FormularioParametroProps> = (
           setAbierto(false);
         }
       } else if (accion === 'actualizar') {
-        respuesta = await editarParametroAction(datosParametro);
+        respuesta = await actualizarParametroAction(datosParametro);
         if (respuesta.status === 200) {
           if (parametros && setParametros) {
             const index = parametros.findIndex(param => param.id === values.id);
@@ -282,4 +282,4 @@ const FormularioParametro: FunctionComponent<FormularioParametroProps> = (
   );
 }
 
-export default memo(FormularioParametro);
+export default memo(FormularioParametroBackup);
