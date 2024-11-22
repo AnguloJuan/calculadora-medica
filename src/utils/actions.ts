@@ -166,7 +166,7 @@ export async function crearParametroAction(formulario: FormData) {
     return { error: 'Fallo al intentar guardar el parámetro', status: 500 };
   }
 }
-export async function editarParametroAction(formulario: FormData) {
+export async function actualizarParametroAction(formulario: FormData) {
   const conexion = await conectarBd();
   const parametro = {
     id: formulario.get('id'),

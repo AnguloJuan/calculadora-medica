@@ -5,7 +5,7 @@ import { evaluate } from "mathjs";
 import { useCallback, useEffect, useState } from "react";
 import ListaParametros from "./ListaParametros";
 
-interface IParametro extends TypeParametroSchema {
+type IParametro = TypeParametroSchema & {
   unidadActual?: Unidad;
 }
 interface CalculadoraProps {
