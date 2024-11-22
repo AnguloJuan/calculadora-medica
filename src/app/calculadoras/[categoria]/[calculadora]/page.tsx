@@ -7,10 +7,16 @@ import { RowDataPacket } from "mysql2";
 import { redirect } from "next/navigation";
 import { NextRequest } from "next/server";
 
+interface RowsCalculadora extends RowDataPacket, ICalculadora { }
+interface Parametros extends RowDataPacket, Parametro { }
+interface Unidades extends RowDataPacket, Unidad { }
+interface IParametro extends TypeParametroSchema {
+  unidadActual?: Unidad;
+}
+
 export default async function CalculadoraPage({ params, request }: { params: { calculadora: string }, request: NextRequest }) {
   const conexion = await conectarBd();
   async function obtenerCalculadora() {
-    interface RowsCalculadora extends RowDataPacket, ICalculadora { }
     try {
       const [rows] = await conexion.query<RowsCalculadora[]>('SELECT * FROM calculadora WHERE enlace = ?', [params.calculadora]);
 
@@ -27,7 +33,6 @@ export default async function CalculadoraPage({ params, request }: { params: { c
   const calculadora: ICalculadora = await obtenerCalculadora();
 
   async function obtenerParametros() {
-    interface Parametros extends RowDataPacket, Parametro { }
     try {
       const [parametrosRows] = await conexion.query<Parametros[]>(
         'SELECT * FROM `calculadora_parametro` as `cp` RIGHT JOIN `parametro` as `p` ON cp.id_calculadora = p.id AND id_calculadora = ?',
@@ -39,14 +44,13 @@ export default async function CalculadoraPage({ params, request }: { params: { c
         redirect('/404');
       }
 
-      interface Unidades extends RowDataPacket, Unidad { }
       const parametrosConUnidades = parametrosRows.map(async (parametro) => {
         try {
           const [unidadesRows] = await conexion.query<Unidades[]>(
             'SELECT * FROM `parametro_unidad` as `pu` RIGHT JOIN `unidad` as `u` ON pu.id_unidad = u.id AND `id_parametro` = ? WHERE pu.id IS NOT NULL;',
             [parametro.id],
           );
-          return { ...parametro, unidades: unidadesRows }
+          return { ...parametro, unidades: unidadesRows, unidadActual: unidadesRows[0] };
         } catch (error) {
           console.error(error);
           return undefined;
@@ -54,14 +58,14 @@ export default async function CalculadoraPage({ params, request }: { params: { c
       });
 
       const resolvedParametros = await Promise.all(parametrosConUnidades);
-      return resolvedParametros.filter((parametro) => parametro !== undefined) as TypeParametroSchema[];
+      return resolvedParametros.filter((parametro) => parametro !== undefined) as IParametro[];
     } catch (error) {
       console.error(error);
       redirect('/404');
     }
   }
 
-  const parametros: TypeParametroSchema[] = await obtenerParametros();
+  const parametros: IParametro[] = await obtenerParametros();
 
   return (
     <div className="w-full h-full bg-white flex flex-col items-center">

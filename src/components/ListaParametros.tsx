@@ -1,22 +1,21 @@
 'use client'
 
-import { z } from "@/lib/es-zod";
-import { ParametroSchema } from "@/validationSchemas/ParametroSchema";
+import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
 import { IconTrash } from "@tabler/icons-react";
-import { memo, useEffect, useState } from "react";
-import { obtenerUnidadesPorParametroAction } from "../utils/actions";
-import { UnidadPorParametro } from "../utils/types";
+import { memo } from "react";
 import BotonActualizarParametro from "./BotonActualizarParametro";
 import { Boton } from "./Botones";
 import CampoParametro from "./CampoParametro";
 import { Each } from "./EachOf";
 
 interface ListaParametrosProps {
-  parametros: z.infer<typeof ParametroSchema>[];
+  parametros: TypeParametroSchema[];
+  setParametros?: (parametros: TypeParametroSchema[]) => void;
   sesion: string;
+  onChange?: (parametro: string, valor: number) => void;
 }
 
-function ListaParametros({ parametros, sesion }: ListaParametrosProps) {
+function ListaParametros({ parametros, sesion, onChange }: ListaParametrosProps) {
 
   const BotonEliminar = ({ id }: { id: number }) => {
     const EliminarParametro = () => {
@@ -39,7 +38,7 @@ function ListaParametros({ parametros, sesion }: ListaParametrosProps) {
         of={parametros}
         render={(parametro) => {
           return (<div className="flex flex-row gap-2">
-            <CampoParametro key={parametro.id} parametro={parametro} />
+            <CampoParametro key={parametro.id} parametro={parametro} onChange={onChange} />
             {sesion === 'admin' && (
               <div className="flex flex-row gap-1">
                 <BotonEliminar id={parametro.id} />
