@@ -4,6 +4,7 @@ import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
 import { evaluate } from "mathjs";
 import { useCallback, useEffect, useState } from "react";
 import ListaParametros from "./ListaParametros";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "./ui/card";
 
 interface IParametro extends TypeParametroSchema {
   unidadActual?: Unidad;
@@ -39,13 +40,21 @@ const Calculadora = ({ formula, parametros }: CalculadoraProps) => {
   }, [valores]);
 
   return (<>
-    <ListaParametros parametros={parametros} sesion="cliente" onChange={handleInputChange} />
-    {/* <Button type="button" variant="default" onClick={calcularResultado}>Calcular</Button> */}
+    <Card className="w-[400px]">
+      <CardHeader>
+        <CardDescription>Ingrese los datos</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <ListaParametros parametros={parametros} sesion="cliente" onChange={handleInputChange} />
+      </CardContent>
+      <CardFooter>
+        <div className="flex flex-row gap-4 w-full bg-slate-100 rounded p-8 py-4 ">
+          <p className="text-lg">Resultado:</p>
+          <p className="text-lg font-bold">{!Number.isNaN(resultado) ? resultado : ''}</p>
+        </div>
+      </CardFooter>
+    </Card>
 
-    <div className="flex flex-row gap-4 w-full bg-slate-50 rounded p-8 py-4 ">
-      <p className="text-lg">Resultado:</p>
-      <p className="text-lg font-bold">{!Number.isNaN(resultado) ? resultado : ''}</p>
-    </div>
   </>)
 }
 

@@ -1,8 +1,12 @@
 
 import Calculadora from "@/components/Calculadora";
+import { Each } from "@/components/EachOf";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { conectarBd } from "@/db/conectarDb";
 import { Calculadora as ICalculadora, Parametro, Unidad } from "@/utils/types";
 import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
+import { FileText } from "lucide-react";
 import { RowDataPacket } from "mysql2";
 import { redirect } from "next/navigation";
 import { NextRequest } from "next/server";
@@ -13,6 +17,12 @@ interface Unidades extends RowDataPacket, Unidad { }
 interface IParametro extends TypeParametroSchema {
   unidadActual?: Unidad;
 }
+interface Evidencia {
+  id: number;
+  id_calculadora: number;
+  cita: string;
+}
+interface Evidencias extends RowDataPacket, Evidencia { }
 
 export default async function CalculadoraPage({ params, request }: { params: { calculadora: string }, request: NextRequest }) {
   const conexion = await conectarBd();
@@ -67,34 +77,84 @@ export default async function CalculadoraPage({ params, request }: { params: { c
 
   const parametros: IParametro[] = await obtenerParametros();
 
+  async function obtenerEvidencias() {
+    try {
+      const [rows] = await conexion.query<Evidencias[]>('SELECT * FROM `evidencia` WHERE id_calculadora = ?', [calculadora.id]);
+
+      return rows;
+    } catch (error) {
+      console.error(error);
+      redirect('/404');
+    }
+  }
+  const evidencias: Evidencia[] = await obtenerEvidencias();
+
+
   return (
     <div className="w-full h-full bg-white flex flex-col items-center">
       <main className="flex md:max-w-screen-md lg:max-w-screen-lg flex-col items-center rounded-lg p-12 py-12 bg-white gap-8">
-        <div className="flex flex-col w-full divide-y">
-          <div className="flex flex-col gap-12">
-            <h1 className="text-xl font-bold self-center text-center">{calculadora.nombre}</h1>
-            <div className="w-full flex flex-col gap-4">
-              <form id="calculadora" className="flex flex-col gap-8">
-                <Calculadora formula={calculadora.formula} parametros={parametros} />
-              </form>
+        <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
+          {calculadora.nombre}
+        </h2>
+        <div className="flex flex-col gap-8 sm:flex sm:flex-row gap-y-8 divide-y gap-x-8">
+          <div className="flex flex-col">
+            <div className="flex flex-col gap-4">
+              <Calculadora formula={calculadora.formula} parametros={parametros} />
             </div>
           </div>
 
-          <div className="flex flex-col gap-8">
-            <div className="flex flex-col">
-              <h2 className="text-lg font-semibold ">Formula</h2>
-              <p className="text-sm">{calculadora.formula}</p>
-            </div>
-            <div>
-              <h2 className="text-lg font-semibold ">Acerca de {calculadora.nombre}</h2>
-              <p className="">{calculadora.descripcion}</p>
-            </div>
-
-            <div className="flex flex-col">
-              <p className="text-lg font-semibold ">Recomendaciones</p>
-              <p className=" ">{calculadora.resultados_recomendaciones}</p>
-            </div>
-          </div>
+          <Tabs defaultValue="Formula" className="w-[400px] lg:w-[650px]">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="Formula">Formula</TabsTrigger>
+              <TabsTrigger value="Recomendaciones">Recomendaciones</TabsTrigger>
+              <TabsTrigger value="Evidencias">Evidencias</TabsTrigger>
+            </TabsList>
+            <TabsContent value="Formula">
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle>Formula</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm">{calculadora.formula}</p>
+                </CardContent>
+                <CardHeader>
+                  <CardTitle>Acerca de {calculadora.nombre}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="leading-7 [&:not(:first-child)]:mt-6">{calculadora.descripcion}</p>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="Recomendaciones">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Recomendaciones</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="leading-7 [&:not(:first-child)]:mt-6">{calculadora.resultados_recomendaciones}</p>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="Evidencias">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Evidencias</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Each of={evidencias} render={
+                    (evidencia, index) => (
+                      <Card key={index} className="w-full py-4 ps-4 pe-0">
+                        <CardContent className="p-0 flex flex-row gap-2">
+                          <FileText className="min-w-6 min-h-6" />
+                          <p className="text-sm text-muted-foreground">{evidencia.cita}</p>
+                        </CardContent>
+                      </Card>
+                    )
+                  } />
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
         </div>
       </main>
     </div>
