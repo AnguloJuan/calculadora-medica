@@ -16,11 +16,10 @@ import { useToast } from "@/zustand/Toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm, useFormContext } from "react-hook-form";
-import FormularioParametro from "./formularios/FormularioParametro";
+import FormularioParametro from "../formularios/FormularioParametro";
+import { crearParametroAction } from "@/utils/actions";
 
-type ParametroFields = TypeParametroSchema
-
-const CrearParametro = ({ element }: { element?: Element | DocumentFragment }) => {
+const CrearParametro = () => {
   const { addToast } = useToast();
   const [open, setOpen] = useState(false);
 
@@ -29,7 +28,7 @@ const CrearParametro = ({ element }: { element?: Element | DocumentFragment }) =
   const handleValidaton = () => {
     return zodResolver(ParametroSchema);
   };
-  const form = useForm<ParametroFields>({
+  const form = useForm<TypeParametroSchema>({
     resolver: handleValidaton(),
     mode: 'onBlur',
     defaultValues: {
@@ -43,12 +42,33 @@ const CrearParametro = ({ element }: { element?: Element | DocumentFragment }) =
     },
   })
 
-  const onSubmit = async (data: ParametroFields) => {
+  const onSubmit = async (data: TypeParametroSchema) => {
     const output = await form.trigger();
     if (!output) return;
 
-    addToast('Parametro creado', 'success');
-    setOpen(false);
+    const parametro = form.getValues();
+    async function crearParametro() {
+      const formData = new FormData();
+      formData.append('id', parametro.id.toString());
+      formData.append('nombre', parametro.nombre);
+      formData.append('tipo_campo', parametro.tipo_campo);
+      formData.append('abreviatura', parametro.abreviatura || '');
+      if (parametro.tipo_campo === 'numerico') {
+        formData.append('valorMinimo', parametro.valorMinimo?.toString() || '');
+        formData.append('valorMaximo', parametro.valorMaximo?.toString() || '');
+        formData.append('unidades', JSON.stringify(parametro.unidades));
+      }
+      if (parametro.tipo_campo === 'seleccion' || parametro.tipo_campo === 'radio') formData.append('opciones', parametro.opciones || '');
+
+      const response = await crearParametroAction(formData);
+      if (response.error) {
+        addToast('Error al crear el parametro', 'error');
+        return;
+      }
+      addToast('Parametro creado', 'success');
+      setOpen(false);
+    }
+    crearParametro();
   }
 
   return (<>
@@ -56,7 +76,7 @@ const CrearParametro = ({ element }: { element?: Element | DocumentFragment }) =
       <DialogTrigger asChild>
         <Button variant="default">Crear parametro</Button>
       </DialogTrigger>
-      <DialogPortal container={element}>
+      <DialogPortal>
         <DialogContent className="sm:max-w-lg lg:max-w-lg">
           <DialogHeader>
             <DialogTitle>Crear parametro</DialogTitle>
@@ -72,9 +92,9 @@ const CrearParametro = ({ element }: { element?: Element | DocumentFragment }) =
           </section>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="secondary" onClick={() => form.reset()}>Cancel</Button>
+              <Button variant="secondary" onClick={() => form.reset()}>Cancelar</Button>
             </DialogClose>
-            <Button type="button" onClick={() => onSubmit(form.getValues())}>Save changes</Button>
+            <Button type="button" onClick={() => onSubmit(form.getValues())}>Crear</Button>
           </DialogFooter>
         </DialogContent>
       </DialogPortal>
