@@ -11,14 +11,14 @@ import { z } from "@/lib/es-zod";
 import { crearCalculadoraAction } from "@/utils/actions";
 import { CATEGORIAS } from "@/utils/types";
 import CalculadoraSchema from "@/validationSchemas/CalculadoraSchema";
-import { ParametroSchema } from "@/validationSchemas/ParametroSchema";
+import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
 import { useToast } from "@/zustand/Toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Save } from "lucide-react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 
-type parametrosConUnidades = z.infer<typeof ParametroSchema>[]
+type parametrosConUnidades = TypeParametroSchema[]
 const FormularioNuevaCalculadora = ({ parametros }: { parametros: parametrosConUnidades | undefined }) => {
   const { addToast } = useToast();
   const form = useForm<z.infer<typeof CalculadoraSchema>>({

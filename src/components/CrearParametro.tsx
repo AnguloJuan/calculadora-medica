@@ -11,15 +11,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { z } from "@/lib/es-zod";
-import { ParametroSchema } from "@/validationSchemas/ParametroSchema";
+import { ParametroSchema, TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
 import { useToast } from "@/zustand/Toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm, useFormContext } from "react-hook-form";
 import FormularioParametro from "./formularios/FormularioParametro";
 
-type ParametroFields = z.infer<typeof ParametroSchema>
+type ParametroFields = TypeParametroSchema
 
 const CrearParametro = ({ element }: { element?: Element | DocumentFragment }) => {
   const { addToast } = useToast();

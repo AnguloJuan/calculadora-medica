@@ -32,5 +32,8 @@ const ParametroSeleccionSchema = z.object({
   opciones: z.string().min(1)
 })
 
+type TypeParametroSchema = z.infer<typeof ParametroSchema>;
+
 export { ParametroNumericoSchema, ParametroSchema, ParametroSeleccionSchema };
+export type { TypeParametroSchema };
 

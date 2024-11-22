@@ -2,11 +2,10 @@
 
 import { conectarBd } from "@/db/conectarDb";
 import { Parametro, Unidad } from "@/utils/types";
+import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
 import { RowDataPacket } from "mysql2";
 import { NextRequest } from "next/server";
 import FormularioNuevaCalculadora from "./FormularioNuevaCalculadora";
-import { z } from "@/lib/es-zod";
-import { ParametroSchema } from "@/validationSchemas/ParametroSchema";
 
 export default async function NuevaCalculadora({ request }: { request: NextRequest }) {
   const conexion = await conectarBd()
@@ -41,9 +40,9 @@ export default async function NuevaCalculadora({ request }: { request: NextReque
     });
 
     const resolvedParametros = await Promise.all(parametrosConUnidades);
-    return resolvedParametros.filter((parametro) => parametro !== undefined) as z.infer<typeof ParametroSchema>[];
+    return resolvedParametros.filter((parametro) => parametro !== undefined) as TypeParametroSchema[];
   }
-  const parametros: z.infer<typeof ParametroSchema>[] = await obtenerUnidades(parametrosObtenidos!);
+  const parametros: TypeParametroSchema[] = await obtenerUnidades(parametrosObtenidos!);
 
   return (
     <div className="w-full items-center flex justify-center my-8">

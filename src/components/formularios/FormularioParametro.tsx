@@ -1,6 +1,5 @@
-import { z } from "@/lib/es-zod"
 import { Unidad } from "@/utils/types"
-import { ParametroSchema } from "@/validationSchemas/ParametroSchema"
+import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema"
 import { useEffect, useState } from "react"
 import { useController, UseFormReturn } from "react-hook-form"
 import Select, { MultiValue } from "react-select"
@@ -8,7 +7,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import FormInput from "../ui/form-input"
 import { Select as MSelect, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 
-type ParametroFields = z.infer<typeof ParametroSchema>
+type ParametroFields = TypeParametroSchema
 type UnidadOption = { value: Unidad, label: string }
 
 const FormularioParametro = ({ form, onSubmit }: {

@@ -1,9 +1,8 @@
 
 import Calculadora from "@/components/Calculadora";
 import { conectarBd } from "@/db/conectarDb";
-import { z } from "@/lib/es-zod";
 import { Calculadora as ICalculadora, Parametro, Unidad } from "@/utils/types";
-import { ParametroSchema } from "@/validationSchemas/ParametroSchema";
+import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
 import { RowDataPacket } from "mysql2";
 import { redirect } from "next/navigation";
 import { NextRequest } from "next/server";
@@ -55,14 +54,14 @@ export default async function CalculadoraPage({ params, request }: { params: { c
       });
 
       const resolvedParametros = await Promise.all(parametrosConUnidades);
-      return resolvedParametros.filter((parametro) => parametro !== undefined) as z.infer<typeof ParametroSchema>[];
+      return resolvedParametros.filter((parametro) => parametro !== undefined) as TypeParametroSchema[];
     } catch (error) {
       console.error(error);
       redirect('/404');
     }
   }
 
-  const parametros: z.infer<typeof ParametroSchema>[] = await obtenerParametros();
+  const parametros: TypeParametroSchema[] = await obtenerParametros();
 
   return (
     <div className="w-full h-full bg-white flex flex-col items-center">
