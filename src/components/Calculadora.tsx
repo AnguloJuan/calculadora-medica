@@ -6,7 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 import ListaParametros from "./ListaParametros";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "./ui/card";
 
-interface IParametro extends TypeParametroSchema {
+type IParametro = TypeParametroSchema & {
   unidadActual?: Unidad;
 }
 interface CalculadoraProps {
@@ -45,7 +45,7 @@ const Calculadora = ({ formula, parametros }: CalculadoraProps) => {
         <CardDescription>Ingrese los datos</CardDescription>
       </CardHeader>
       <CardContent>
-        <ListaParametros parametros={parametros} sesion="cliente" onChange={handleInputChange} />
+        <ListaParametros parametros={parametros} onChange={handleInputChange} />
       </CardContent>
       <CardFooter>
         <div className="flex flex-row gap-4 w-full bg-slate-100 rounded p-8 py-4 ">

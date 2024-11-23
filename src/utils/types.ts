@@ -1,4 +1,3 @@
-import { z } from "../lib/es-zod";
 
 // var kebabCase = require('lodash/kebabCase');
 
@@ -54,14 +53,15 @@ interface Parametro {
 interface Evidencia {
   id: number,
   cita: string,
+  enlace: string,
   id_calculadora: number
 }
 
 interface Unidad {
   id: number,
   unidad: string,
-  conversion?: number,
-  id_unidad_conversion?: number
+  conversion?: number | null,
+  id_unidad_conversion?: number | null
 }
 
 interface UnidadPorParametro {

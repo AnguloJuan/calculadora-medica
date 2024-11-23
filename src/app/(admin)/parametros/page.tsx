@@ -1,4 +1,4 @@
-import CrearParametro from "@/components/CrearParametro";
+import CrearParametro from "@/components/parametros/CrearParametro";
 
 export default function ParametrosPage() {
   return (<>

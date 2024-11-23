@@ -37,7 +37,6 @@ body {
   }
 }
 
-
 body {
   /* background: 
     radial-gradient(
@@ -68,7 +67,6 @@ text {
 input,
 textarea,
 select {
-
   @apply mt-1 block w-full px-3 py-2 text-base leading-normal bg-white border-gray-300 appearance-none rounded-lg focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50;
   @apply bg-gray-100 text-gray-900;
 
@@ -111,6 +109,8 @@ select {
     --accent-foreground: 240 5.9% 10%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 48 96% 89%;
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
     --ring: 240 10% 3.9%;
@@ -147,6 +147,8 @@ select {
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
+    --warning: 48 96% 89%;
+    --warning-foreground: 38 92% 50%;
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;

@@ -1,5 +1,6 @@
 import { CATEGORIAS } from "@/utils/types";
 import { z } from "../lib/es-zod";
+import EvidenciaSchema from "./EvidenciaSchema";
 import { ParametroSchema } from "./ParametroSchema";
 
 const CalculadoraSchema = z.object({
@@ -10,9 +11,9 @@ const CalculadoraSchema = z.object({
   resultados_recomendaciones: z.string().min(50).optional(),
   categoria: z.enum(CATEGORIAS.map((categoria) => categoria.kebabCase) as [string, ...string[]]),
   formula: z.string().min(3),
-  evidencias: z.array(z.string()),
   parametros: z.array(ParametroSchema).nonempty('Debe agregar al menos un parámetro'),
-  enlace: z.string()
+  enlace: z.string().optional(),
+  evidencias: z.array(EvidenciaSchema).nonempty('Debe agregar al menos una evidencia'),
 });
 
 export default CalculadoraSchema;

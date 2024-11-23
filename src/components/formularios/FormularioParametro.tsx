@@ -45,7 +45,14 @@ const FormularioParametro = ({ form, onSubmit }: {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Tipo de campo</FormLabel>
-              <MSelect onValueChange={field.onChange} defaultValue={field.value}>
+              <MSelect onValueChange={(value) => {
+                value === "numerico" && form.resetField("opciones");
+                (value === "seleccion" || value === "radio")
+                  && form.resetField("valorMinimo")
+                  && form.resetField("valorMaximo")
+                  && form.resetField("unidades")
+                field.onChange(value)
+              }} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Seleccióna el tipo de campo" />

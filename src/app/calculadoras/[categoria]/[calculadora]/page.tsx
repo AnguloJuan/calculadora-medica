@@ -14,7 +14,7 @@ import { NextRequest } from "next/server";
 interface RowsCalculadora extends RowDataPacket, ICalculadora { }
 interface Parametros extends RowDataPacket, Parametro { }
 interface Unidades extends RowDataPacket, Unidad { }
-interface IParametro extends TypeParametroSchema {
+type IParametro = TypeParametroSchema & {
   unidadActual?: Unidad;
 }
 interface Evidencia {
@@ -45,7 +45,7 @@ export default async function CalculadoraPage({ params, request }: { params: { c
   async function obtenerParametros() {
     try {
       const [parametrosRows] = await conexion.query<Parametros[]>(
-        'SELECT * FROM `calculadora_parametro` as `cp` RIGHT JOIN `parametro` as `p` ON cp.id_calculadora = p.id AND id_calculadora = ?',
+        'SELECT * FROM `calculadora_parametro` as `cp` RIGHT JOIN `parametro` as `p` ON cp.id_parametro = p.id WHERE id_calculadora = ?',
         [calculadora.id]
       );
 

@@ -1,26 +1,33 @@
 "use client"
 
-import CrearParametro from "@/components/CrearParametro";
+import CampoParametro from "@/components/CampoParametro";
 import { Each } from "@/components/EachOf";
-import AgregarEvidencias from "@/components/nueva-calculadora/AgregarEvidencias";
+import ActualizarParametro from "@/components/parametros/ActualizarParametro";
+import CrearParametro from "@/components/parametros/CrearParametro";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import FormInput from "@/components/ui/form-input";
+import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { z } from "@/lib/es-zod";
 import { crearCalculadoraAction } from "@/utils/actions";
 import { CATEGORIAS } from "@/utils/types";
 import CalculadoraSchema from "@/validationSchemas/CalculadoraSchema";
+import EvidenciaSchema from "@/validationSchemas/EvidenciaSchema";
 import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
 import { useToast } from "@/zustand/Toast";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Save } from "lucide-react";
+import { FileText, Save, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { useForm } from "react-hook-form";
+import { useState } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
 
 type parametrosConUnidades = TypeParametroSchema[]
-const FormularioNuevaCalculadora = ({ parametros }: { parametros: parametrosConUnidades | undefined }) => {
+const FormularioNuevaCalculadora = ({ parametros: params }: { parametros: parametrosConUnidades | undefined }) => {
   const { addToast } = useToast();
+  const [parametros, setParametros] = useState<TypeParametroSchema[]>(params || []);
   const form = useForm<z.infer<typeof CalculadoraSchema>>({
     resolver: zodResolver(CalculadoraSchema),
     defaultValues: {
@@ -36,6 +43,15 @@ const FormularioNuevaCalculadora = ({ parametros }: { parametros: parametrosConU
       parametros: [],
     },
   })
+
+  const {
+    formState: { errors },
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    watch,
+  } = form;
 
   function onSubmit(values: z.infer<typeof CalculadoraSchema>) {
     const formulario = new FormData(document.getElementById("form_calculadora") as HTMLFormElement);
@@ -73,16 +89,30 @@ const FormularioNuevaCalculadora = ({ parametros }: { parametros: parametrosConU
     guardarCalculadora();
   }
 
+  const { fields: parametrosFields, append: appendParametros, remove: removeParametros } = useFieldArray({
+    name: "parametros",
+    control: control
+  });
+  const { fields: evidencias, append: appendEvidencia, remove: removeEvidencia } = useFieldArray({
+    name: "evidencias",
+    control: control
+  });
+  type Evidencia = z.infer<typeof EvidenciaSchema>;
+  const [evidencia, setEvidencia] = useState<Evidencia>({
+    cita: "",
+    enlace: ""
+  });
+
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(onSubmit)}
         className="flex min-h-screen md:max-w-screen-md lg:max-w-screen-lg w-full flex-col items-center justify-between rounded-lg p-24 py-12 bg-white gap-16"
       >
-        <div className="w-full flex flex-col gap-6">
-          <h2 className="w-full text-xl font-semibold text-center leading-none">Información general</h2>
+        <div className="w-full flex flex-col gap-4">
+          <h2 className="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0">Información general</h2>
           <FormInput
-            control={form.control}
+            control={control}
             name="nombre"
             label="Título"
             placeholder="Ingrese el título de la calculadora"
@@ -114,26 +144,28 @@ const FormularioNuevaCalculadora = ({ parametros }: { parametros: parametrosConU
             )}
           />
 
+
           <FormField
-            control={form.control}
+            control={control}
             name='parametros'
             render={({ field }) => (<>
               <FormItem>
-                <FormLabel>Parametros</FormLabel>
+                <h2 className="scroll-m-20 text-lg font-semibold tracking-tight">Parametros</h2>
                 <div className="flex flex-row gap-2">
                   <Select
                     onValueChange={
                       (value: string) => {
                         const parametro = parametros?.find((parametro) => parametro.id === parseInt(value));
-                        if (parametro) {
-                          form.setValue('parametros', [...field.value, { ...parametro }]);
+                        const parametroExistente = field.value.find((param) => param.id === parametro?.id);
+                        if (parametro && !parametroExistente) {
+                          setValue('parametros', [...field.value, { ...parametro }]);
                         }
                       }
                     }
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Selecciona el area" />
+                        <SelectValue placeholder="Selecciona un parametro" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -142,10 +174,10 @@ const FormularioNuevaCalculadora = ({ parametros }: { parametros: parametrosConU
                       )} />
                     </SelectContent>
                   </Select>
-                  <CrearParametro />
+                  <CrearParametro setParametros={setParametros} />
                 </div>
                 <FormDescription>
-                  El area a la que pertenece la calculadora
+                  Agrega parametros a la calculadora
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -153,15 +185,36 @@ const FormularioNuevaCalculadora = ({ parametros }: { parametros: parametrosConU
             )}
           />
 
+          {parametrosFields.map((field, index) => {
+            return (
+              <div key={field.id} className="flex flex-row items-center gap-4">
+                <CampoParametro key={field.id} parametro={field} />
+                <ActualizarParametro parametro={field} setParametros={setParametros} />
+                <Button type="button" variant={'destructive'} onClick={() => removeParametros(index)}>
+                  <Trash2 />
+                </Button>
+              </div>
+            );
+          })}
+
           <FormInput
-            control={form.control}
+            control={control}
+            name="formula"
+            label="Fórmula"
+            placeholder="Ingrese la fórmula de la calculadora"
+            input="textarea"
+          />
+
+          <h2 className="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0">Detalles</h2>
+          <FormInput
+            control={control}
             name="descripcion"
             label="Descripción"
             placeholder="Ingrese una descripción de la calculadora"
             input="textarea"
           />
           <FormInput
-            control={form.control}
+            control={control}
             name="descripcion_corta"
             label="Descripción corta"
             placeholder="Ingrese una descripción corta de la calculadora"
@@ -169,33 +222,68 @@ const FormularioNuevaCalculadora = ({ parametros }: { parametros: parametrosConU
             description="Esta descripción se mostrará en la lista de calculadoras"
           />
           <FormInput
-            control={form.control}
+            control={control}
             name="resultados_recomendaciones"
             label="Resultados y recomendaciones"
             placeholder="Ingrese resultados y recomendaciones de la calculadora"
             input="textarea"
           />
-          <FormInput name="evidencias"
-            control={form.control}
-            label="Evidencias"
-            textInputProps={{ hidden: true }}
-          />
 
-          <AgregarEvidencias />
+          <FormItem>
+            <h2 className="scroll-m-20 text-lg font-semibold tracking-tight">Evidencias</h2>
+            <FormLabel htmlFor="cita">Cita</FormLabel>
+            <Textarea
+              name="cita"
+              value={evidencia.cita}
+              onChange={(e) => setEvidencia({ ...evidencia, cita: e.target.value })}
+              placeholder="Cita de la evidencia en formato APA"
+            />
+          </FormItem>
+          <FormItem>
+            <FormLabel htmlFor="enlace">Enlace</FormLabel>
+            <Input
+              type="url"
+              name="enlace"
+              value={evidencia.enlace}
+              onChange={(e) => setEvidencia({ ...evidencia, enlace: e.target.value })}
+              placeholder="Enlace de la calculadora"
+            />
+          </FormItem>
+          <Button
+            type="button"
+            onClick={() => {
+              if (evidencia.cita === "" || evidencia.enlace === "") {
+                return;
+              }
+              appendEvidencia(evidencia);
+              setEvidencia({
+                cita: "",
+                enlace: ""
+              });
+            }}
+          >
+            Agregar evidencia
+          </Button>
+          {evidencias.map((field, index) => {
+            return (
+              <div key={field.id} className="flex flex-row items-center gap-4">
+                <Card key={field.id}>
+                  <Link href={field.enlace} passHref>
+                    <CardContent className="py-4 flex flex-row gap-4">
+                      <div className="self-center">
+                        <FileText />
+                      </div>
+                      <p className="text-blue-500 cursor-pointer hover:text-blue-700 transition-colors">{field.cita}</p>
+                    </CardContent>
+                  </Link>
+                </Card>
+                <Button type="button" variant={'destructive'} onClick={() => removeEvidencia(index)}>
+                  <Trash2 />
+                </Button>
+              </div>
+            );
+          })}
 
-        </div>
-
-        <div className="w-full flex flex-col gap-6">
-          {/* {Array.isArray(parametros) ? <AgregarParametros listaParametros={parametros ? parametros : [] as Parametro[]} />
-            : <p>Cargando...</p>} */}
-
-          <FormInput
-            control={form.control}
-            name="formula"
-            label="Fórmula"
-            placeholder="Ingrese la fórmula de la calculadora"
-            input="textarea"
-          />
         </div>
 
         <Button type="submit">

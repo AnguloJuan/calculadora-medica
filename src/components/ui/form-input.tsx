@@ -30,7 +30,7 @@ const FormInput = <T extends FieldValues>({ control, name, label, description, i
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{label}</FormLabel>
+          <FormLabel htmlFor={name}>{label}</FormLabel>
           <FormControl>
             {input === 'input' ? (
               <Input {...field} placeholder={placeholder} {...textInputProps} />
