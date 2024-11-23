@@ -11,25 +11,22 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
+import { crearParametroAction } from "@/utils/actions";
 import { ParametroSchema, TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
-import { useToast } from "@/zustand/Toast";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useForm, useFormContext } from "react-hook-form";
 import FormularioParametro from "../formularios/FormularioParametro";
-import { crearParametroAction } from "@/utils/actions";
 
-const CrearParametro = () => {
-  const { addToast } = useToast();
+const CrearParametro = ({ setParametros }: { setParametros?: Dispatch<SetStateAction<TypeParametroSchema[]>> }) => {
+  const { toast } = useToast();
   const [open, setOpen] = useState(false);
 
   const methods = useFormContext();
 
-  const handleValidaton = () => {
-    return zodResolver(ParametroSchema);
-  };
   const form = useForm<TypeParametroSchema>({
-    resolver: handleValidaton(),
+    resolver: zodResolver(ParametroSchema),
     mode: 'onBlur',
     defaultValues: {
       id: 0,
@@ -61,11 +58,14 @@ const CrearParametro = () => {
       if (parametro.tipo_campo === 'seleccion' || parametro.tipo_campo === 'radio') formData.append('opciones', parametro.opciones || '');
 
       const response = await crearParametroAction(formData);
-      if (response.error) {
-        addToast('Error al crear el parametro', 'error');
+      if (response.error || !response.id) {
+        toast({ title: 'Error al crear el parametro', variant: 'destructive' });
         return;
       }
-      addToast('Parametro creado', 'success');
+      const nuevoParametro: TypeParametroSchema = { ...parametro, id: response.id };
+      methods && methods.setValue('parametros', [...methods.getValues('parametros'), nuevoParametro]);
+      setParametros && setParametros((parametros) => [...parametros, nuevoParametro]);
+      toast({ title: 'Parametro creado' });
       setOpen(false);
     }
     crearParametro();

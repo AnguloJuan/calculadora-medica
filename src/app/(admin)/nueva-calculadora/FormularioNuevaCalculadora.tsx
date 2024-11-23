@@ -1,9 +1,8 @@
 "use client"
 
 import CampoParametro from "@/components/CampoParametro";
-import CrearParametro from "@/components/parametros/CrearParametro";
 import { Each } from "@/components/EachOf";
-import ListaParametros from "@/components/ListaParametros";
+import CrearParametro from "@/components/parametros/CrearParametro";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -25,8 +24,9 @@ import { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 
 type parametrosConUnidades = TypeParametroSchema[]
-const FormularioNuevaCalculadora = ({ parametros }: { parametros: parametrosConUnidades | undefined }) => {
+const FormularioNuevaCalculadora = ({ parametros: params }: { parametros: parametrosConUnidades | undefined }) => {
   const { addToast } = useToast();
+  const [parametros, setParametros] = useState<TypeParametroSchema[]>(params || []);
   const form = useForm<z.infer<typeof CalculadoraSchema>>({
     resolver: zodResolver(CalculadoraSchema),
     defaultValues: {
@@ -173,7 +173,7 @@ const FormularioNuevaCalculadora = ({ parametros }: { parametros: parametrosConU
                       )} />
                     </SelectContent>
                   </Select>
-                  <CrearParametro />
+                  <CrearParametro setParametros={setParametros} />
                 </div>
                 <FormDescription>
                   Agrega parametros a la calculadora
@@ -188,7 +188,7 @@ const FormularioNuevaCalculadora = ({ parametros }: { parametros: parametrosConU
             return (
               <div key={field.id} className="flex flex-row items-center gap-4">
                 <CampoParametro key={field.id} parametro={field} />
-                <Button type="button" variant={'warning'} onClick={() => {}}>
+                <Button type="button" variant={'warning'} onClick={() => { }}>
                   <Pencil />
                 </Button>
                 <Button type="button" variant={'destructive'} onClick={() => removeParametros(index)}>
