@@ -2,6 +2,7 @@
 
 import CampoParametro from "@/components/CampoParametro";
 import { Each } from "@/components/EachOf";
+import ActualizarParametro from "@/components/parametros/ActualizarParametro";
 import CrearParametro from "@/components/parametros/CrearParametro";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -18,7 +19,7 @@ import EvidenciaSchema from "@/validationSchemas/EvidenciaSchema";
 import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
 import { useToast } from "@/zustand/Toast";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FileText, Pencil, Save, Trash2 } from "lucide-react";
+import { FileText, Save, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -188,9 +189,7 @@ const FormularioNuevaCalculadora = ({ parametros: params }: { parametros: parame
             return (
               <div key={field.id} className="flex flex-row items-center gap-4">
                 <CampoParametro key={field.id} parametro={field} />
-                <Button type="button" variant={'warning'} onClick={() => { }}>
-                  <Pencil />
-                </Button>
+                <ActualizarParametro parametro={field} setParametros={setParametros} />
                 <Button type="button" variant={'destructive'} onClick={() => removeParametros(index)}>
                   <Trash2 />
                 </Button>

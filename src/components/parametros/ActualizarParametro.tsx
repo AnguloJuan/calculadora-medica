@@ -11,34 +11,32 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
+import { actualizarParametroAction } from "@/utils/actions";
 import { ParametroSchema, TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
-import { useToast } from "@/zustand/Toast";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { Pencil } from "lucide-react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useForm, useFormContext } from "react-hook-form";
 import FormularioParametro from "../formularios/FormularioParametro";
-import { actualizarParametroAction, crearParametroAction } from "@/utils/actions";
 
-const CrearParametro = () => {
-  const { addToast } = useToast();
+const ActualizarParametro = ({ parametro, setParametros }: { parametro: TypeParametroSchema, setParametros?: Dispatch<SetStateAction<TypeParametroSchema[]>> }) => {
+  const { toast } = useToast();
   const [open, setOpen] = useState(false);
 
   const methods = useFormContext();
 
-  const handleValidaton = () => {
-    return zodResolver(ParametroSchema);
-  };
   const form = useForm<TypeParametroSchema>({
-    resolver: handleValidaton(),
+    resolver: zodResolver(ParametroSchema),
     mode: 'onBlur',
     defaultValues: {
-      id: 0,
-      nombre: '',
-      tipo_campo: '' as any,
-      opciones: '',
-      unidades: [],
-      valorMinimo: '' as any,
-      valorMaximo: '' as any,
+      id: parametro.id,
+      nombre: parametro.nombre,
+      tipo_campo: parametro.tipo_campo,
+      opciones: (parametro.tipo_campo === 'radio' || parametro.tipo_campo === 'seleccion') ? parametro.opciones : '',
+      unidades: parametro.tipo_campo === 'numerico' ? parametro.unidades : [],
+      valorMinimo: parametro.tipo_campo === 'numerico' ? parametro.valorMinimo : '' as any,
+      valorMaximo: parametro.tipo_campo === 'numerico' ? parametro.valorMaximo : '' as any,
     },
   })
 
@@ -62,10 +60,14 @@ const CrearParametro = () => {
 
       const response = await actualizarParametroAction(formData);
       if (response.error) {
-        addToast('Error al crear el parametro', 'error');
+        toast({ title: 'Error al actualizar el parametro', variant: 'destructive' });
         return;
       }
-      addToast('Parametro creado', 'success');
+      if (setParametros) {
+        setParametros((prev) => prev.map((p) => p.id === parametro.id ? parametro : p));
+      }
+      methods && methods.setValue('parametros', methods.getValues('parametros').map((p: TypeParametroSchema) => p.id === parametro.id ? parametro : p));
+      toast({ title: 'Parametro actualizado' });
       setOpen(false);
     }
     actualizarParametro();
@@ -74,15 +76,16 @@ const CrearParametro = () => {
   return (<>
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="default">Actualizar parametro</Button>
+        <Button type="button" variant={'warning'} onClick={() => { }}>
+          <Pencil />
+        </Button>
       </DialogTrigger>
       <DialogPortal>
         <DialogContent className="sm:max-w-lg lg:max-w-lg">
           <DialogHeader>
             <DialogTitle>Actualizar parametro</DialogTitle>
             <DialogDescription>
-                Los cambios se guardaran en el parametro.
-                Estos cambios afectaran a TODAS las calculadoras que tengan este parametro.
+              Los cambios afectaran a TODAS las calculadoras que usen este parametro.
             </DialogDescription>
           </DialogHeader>
           <section className="grid gap-4 py-4 max-w-full">
@@ -99,4 +102,4 @@ const CrearParametro = () => {
     </Dialog>
   </>)
 }
-export default CrearParametro;
+export default ActualizarParametro;
