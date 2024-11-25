@@ -10,7 +10,7 @@ import { crearUnidadAction, obtenerUnidadesAction } from "../utils/actions";
 import { Unidad } from "../utils/types";
 import { Boton } from "./Botones";
 import { Each } from "./EachOf";
-import { useToast } from "../zustand/Toast";
+import { useToast } from "./Toast";
 
 interface FormularioUnidadProps {
   setFieldValue?: (field: string, value: any, shouldValidate?: boolean | undefined) => void;

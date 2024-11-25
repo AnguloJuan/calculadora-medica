@@ -11,7 +11,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useToast } from "@/hooks/use-toast";
 import { crearParametroAction } from "@/utils/actions";
 import { ParametroSchema, TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,9 +18,10 @@ import { Plus } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useForm, useFormContext } from "react-hook-form";
 import FormularioParametro from "../formularios/FormularioParametro";
+import { useToast } from "../Toast";
 
 const CrearParametro = ({ setParametros }: { setParametros?: Dispatch<SetStateAction<TypeParametroSchema[]>> }) => {
-  const { toast } = useToast();
+  const { addToast } = useToast();
   const [open, setOpen] = useState(false);
 
   const methods = useFormContext();
@@ -60,13 +60,13 @@ const CrearParametro = ({ setParametros }: { setParametros?: Dispatch<SetStateAc
 
       const response = await crearParametroAction(formData);
       if (response.error || !response.id) {
-        toast({ title: 'Error al crear el parametro', variant: 'destructive' });
+        addToast('Error al crear el parametro', 'error');
         return;
       }
       const nuevoParametro: TypeParametroSchema = { ...parametro, id: response.id };
       methods && methods.setValue('parametros', [...methods.getValues('parametros'), nuevoParametro]);
       setParametros && setParametros((parametros) => [...parametros, nuevoParametro]);
-      toast({ title: 'Parametro creado' });
+      addToast('Parametro creado', 'success');
       setOpen(false);
     }
     crearParametro();
@@ -75,7 +75,7 @@ const CrearParametro = ({ setParametros }: { setParametros?: Dispatch<SetStateAc
   return (<>
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="default">
+        <Button variant="default" type="button">
           <Plus />
           Crear parametro
         </Button>

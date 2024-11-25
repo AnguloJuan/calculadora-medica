@@ -6,7 +6,7 @@ import { IconDeviceFloppy } from "@tabler/icons-react";
 import Link from "next/link";
 import CalculadoraSchema from "../../validationSchemas/CalculadoraSchema";
 import { Boton } from "../Botones";
-import { useToast } from "../../zustand/Toast";
+import { useToast } from "../Toast";
 
 export default function BotonGuardarCalculadora() {
     const { addToast } = useToast();

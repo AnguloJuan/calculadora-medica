@@ -4,6 +4,7 @@ import CampoParametro from "@/components/CampoParametro";
 import { Each } from "@/components/EachOf";
 import ActualizarParametro from "@/components/parametros/ActualizarParametro";
 import CrearParametro from "@/components/parametros/CrearParametro";
+import { useToast } from "@/components/Toast";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -17,7 +18,6 @@ import { CATEGORIAS } from "@/utils/types";
 import CalculadoraSchema from "@/validationSchemas/CalculadoraSchema";
 import EvidenciaSchema from "@/validationSchemas/EvidenciaSchema";
 import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
-import { useToast } from "@/zustand/Toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FileText, Save, Trash2 } from "lucide-react";
 import Link from "next/link";
@@ -107,7 +107,7 @@ const FormularioNuevaCalculadora = ({ parametros: params }: { parametros: parame
     <Form {...form}>
       <form
         onSubmit={handleSubmit(onSubmit)}
-          className="flex min-h-screen md:max-w-screen-md lg:max-w-screen-lg w-full flex-col items-center justify-between rounded-lg p-24 py-12 gap-16"
+        className="flex min-h-screen md:max-w-screen-md lg:max-w-screen-lg w-full flex-col items-center justify-between rounded-lg p-24 py-12 gap-16"
       >
         <div className="w-full flex flex-col gap-4">
           <h2 className="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0">Información general</h2>

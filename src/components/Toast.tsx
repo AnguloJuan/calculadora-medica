@@ -37,19 +37,19 @@ export default function Toast() {
     },
     warning: {
       bg: 'bg-yellow-100',
-      iconStyle: 'bg-yellow-300 text-yellow-700',
+      iconStyle: 'bg-warning text-yellow-700',
       lineColor: 'bg-yellow-500',
       icon: <IconAlertTriangle />,
     },
     error: {
-      bg: 'bg-red-100',
-      iconStyle: 'bg-red-300 text-red-700',
+      bg: 'bg-container',
+      iconStyle: 'bg-destructive text-destructive-foreground',
       lineColor: 'bg-red-500',
       icon: <IconHexagonLetterX />,
     },
     default: {
-      bg: 'bg-zinc-100',
-      iconStyle: 'bg-zinc-300 text-zinc-700',
+      bg: 'bg-container',
+      iconStyle: 'bg-muted text-muted-foreground',
       lineColor: 'bg-zinc-500',
       icon: <IconBell />,
     },
@@ -65,14 +65,14 @@ export default function Toast() {
   }, [toasts, removeToast]);
 
   return (
-    <div className="fixed bottom-3 right-2 flex flex-col-reverse gap-2 w-full max-w-sm z-[99999]">
+    <div className="fixed bottom-3 right-2 flex flex-col-reverse gap-2 w-full max-w-sm z-50">
       {
         <Each
           of={toasts}
           render={(toast) => (
             <div
               key={toast.id}
-              className={`relative p-3 text-gray-500 ${styleType[toast.type].bg
+              className={`relative p-3 text-muted-foreground ${styleType[toast.type].bg
                 } rounded-lg shadow overflow-hidden`}
             >
               <div className="flex items-center gap-2">
@@ -85,7 +85,7 @@ export default function Toast() {
                 <p className="text-sm font-normal">{toast.message}</p>
                 <button
                   onClick={() => removeToast(toast.id)}
-                  className="ms-auto -mx-1.5 -my-1.5 text-black hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8"
+                  className="ms-auto -mx-1.5 -my-1.5 hover:text-opacity-90 rounded-lg focus:ring-2 focus:ring-accent p-1.5 hover:bg-accent inline-flex items-center justify-center h-8 w-8"
                 >
                   <IconX />
                 </button>
