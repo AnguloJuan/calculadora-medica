@@ -48,7 +48,7 @@ const Calculadora = ({ formula, parametros }: CalculadoraProps) => {
         <ListaParametros parametros={parametros} onChange={handleInputChange} />
       </CardContent>
       <CardFooter>
-        <div className="flex flex-row gap-4 w-full bg-slate-100 rounded p-8 py-4 ">
+        <div className="flex flex-row gap-4 w-full bg-muted rounded p-8 py-4 ">
           <p className="text-lg">Resultado:</p>
           <p className="text-lg font-bold">{!Number.isNaN(resultado) ? resultado : ''}</p>
         </div>

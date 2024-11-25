@@ -27,7 +27,7 @@ export default function LogIn() {
   const [errorMessage, dispatch] = useFormState(authenticateAction, undefined)
   return (<>
     <div className="h-full min-h-full items-center w-full md:flex md:justify-center">
-      <div className="flex flex-1 flex-col justify-center px-6 py-12 lg:px-8 bg-white rounded w-full h-full md:h-auto md:max-w-screen-md ">
+      <div className="flex flex-1 flex-col justify-center px-6 py-12 lg:px-8 bg-backgroud rounded w-full h-full md:h-auto md:max-w-screen-md ">
         <div className="">
           <Image
             alt="Toronja Lab logo"

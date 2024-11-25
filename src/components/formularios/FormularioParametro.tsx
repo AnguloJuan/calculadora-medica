@@ -86,7 +86,18 @@ const FormularioParametro = ({ form, onSubmit }: {
                         onChange={(value: MultiValue<UnidadOption>) => {
                           field.onChange(value.map((unidad) => unidad.value))
                         }}
-                        className="w-full"
+                        className="w-full border border-border rounded-lg bg-input text-foreground focus:ring focus:ring-ring focus:ring-opacity-50"
+                        styles={{
+                          control: (styles) => ({ ...styles, backgroundColor: 'Background' }),
+                          option: (styles, { isSelected }) => ({ ...styles, backgroundColor: isSelected ? 'ActiveCaption' : 'InactiveCaption', color: isSelected ? 'ActiveCaption' : 'foreground', ":hover": { backgroundColor: 'ButtonHighlight', color: 'ActiveCaptionText' } }),
+                          multiValue: (styles) => ({ ...styles, backgroundColor: 'accent', color: 'accent-foreground' }),
+                          multiValueLabel: (styles) => ({ ...styles, color: 'foreground', }),
+                          multiValueRemove: (styles) => ({ ...styles, color: 'accent-foreground', ':hover': { backgroundColor: 'destructive', color: 'destructive-foreground' } }),
+                          input: (styles) => ({ ...styles, color: 'foreground' }),
+                          // singleValue: (styles) => ({ ...styles, color: 'foreground' }),
+                          // container: (styles) => ({ ...styles, width: '100%', color: 'foreground', backgroundColor: 'input' }),
+                          menu: (styles) => ({ ...styles, backgroundColor: 'Background', color: 'foreground' }),
+                        }}
                       />
                     </FormControl>
                   </div>

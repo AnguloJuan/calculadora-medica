@@ -91,8 +91,8 @@ export default async function CalculadoraPage({ params, request }: { params: { c
 
 
   return (
-    <div className="w-full h-full bg-white flex flex-col items-center">
-      <main className="flex md:max-w-screen-md lg:max-w-screen-lg flex-col items-center rounded-lg p-12 py-12 bg-white gap-8">
+    <div className="w-full bg-backgroud flex flex-col items-center">
+      <main className="flex md:max-w-screen-md lg:max-w-screen-lg flex-col items-center rounded-lg p-12 py-12 bg-backgroud gap-8">
         <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
           {calculadora.nombre}
         </h2>

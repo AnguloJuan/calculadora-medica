@@ -3,6 +3,7 @@ import { IconMenu2, IconX } from "@tabler/icons-react";
 import Image from "next/image";
 import CerrarSesion from "./CerrarSesion";
 import NavOpcion from "./NavOpcion";
+import { ModeToggle } from "./mode-toggle";
 
 // const user = {
 //   name: 'Admin',
@@ -19,8 +20,8 @@ export default async function Header({ rol }: { rol?: string }) {
   return (
     <div className="w-full">
       <Disclosure as="nav" className="top-0 z-40 backdrop-blur flex-none transition-colors duration-500
-             dark:border-slate-50/[0.06] bg-white supports-backdrop-blur:bg-white/95 dark:bg-slate-900/75
-            border-b border-slate-900/10 lg:px-8">
+              bg-backgroud supports-backdrop-blur:bg-backgroud/95
+            border-b lg:px-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center">
@@ -41,6 +42,7 @@ export default async function Header({ rol }: { rol?: string }) {
             </div>
             <div className="hidden md:block">
               <div className="ml-4 flex items-center md:ml-6">
+                <ModeToggle />
                 {/* <button
                                     type="button"
                                     className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
@@ -53,9 +55,8 @@ export default async function Header({ rol }: { rol?: string }) {
             </div>
             <div className="-mr-2 flex md:hidden">
               {/* Mobile menu button */}
-              <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md bg-gray-200 dark:bg-gray-800 p-2 
-                            text-slate-600 dark:text-slate-400 hover:bg-gray-700
-                            hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+              <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md 
+                             focus:outline-none focus:ring-2  focus:ring-offset-2 ">
                 <span className="absolute -inset-0.5" />
                 <span className="sr-only">Abrir menu</span>
                 <IconMenu2 aria-hidden="true" className="block h-6 w-6 group-data-[open]:hidden" />
@@ -68,6 +69,7 @@ export default async function Header({ rol }: { rol?: string }) {
         <DisclosurePanel className="md:hidden">
           <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
             <NavOpcion mobile />
+            <ModeToggle />
           </div>
         </DisclosurePanel>
       </Disclosure>

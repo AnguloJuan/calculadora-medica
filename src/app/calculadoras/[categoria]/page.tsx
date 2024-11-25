@@ -23,7 +23,7 @@ export default async function CategoriaPage({ params }: { params: { categoria: s
   const nombreCategoria = CATEGORIAS.find((categoria) => categoria.kebabCase === params.categoria)?.nombre;
 
   return (<>
-    <div className="w-full rounded-none bg-white flex flex-col items-center min-h-full pt-4 gap-4">
+    <div className="w-full rounded-none bg-backgroud flex flex-col items-center min-h-full pt-4 gap-4">
       <h1 className="text-xl font-bold">{nombreCategoria}</h1>
       <div className="w-full flex flex-col items-center gap-4 px-8 md:px-12 lg:px-20">
         <Each of={calculadoras} render={(calculadora) => {

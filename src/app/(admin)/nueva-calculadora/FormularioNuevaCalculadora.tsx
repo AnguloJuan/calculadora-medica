@@ -107,7 +107,7 @@ const FormularioNuevaCalculadora = ({ parametros: params }: { parametros: parame
     <Form {...form}>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex min-h-screen md:max-w-screen-md lg:max-w-screen-lg w-full flex-col items-center justify-between rounded-lg p-24 py-12 bg-white gap-16"
+          className="flex min-h-screen md:max-w-screen-md lg:max-w-screen-lg w-full flex-col items-center justify-between rounded-lg p-24 py-12 gap-16"
       >
         <div className="w-full flex flex-col gap-4">
           <h2 className="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0">Información general</h2>

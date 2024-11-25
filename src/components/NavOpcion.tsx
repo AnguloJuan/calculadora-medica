@@ -26,7 +26,7 @@ export default function NavOpcion({ mobile }: { mobile?: boolean }) {
       href={item.href}
       aria-current={item.current ? 'page' : undefined}
       className={classNames(
-        item.current ? 'bg-gray-900 text-white' : 'text-slate-700 dark:text-slate-300 hover:bg-gray-700 hover:text-white',
+        item.current ? 'bg-primary text-primary-foreground' : 'text-sidebar-foreground hover:text-accent-foreground hover:bg-accent',
         'block rounded-md px-3 py-2 text-base font-medium',
       )}
     >
@@ -38,7 +38,7 @@ export default function NavOpcion({ mobile }: { mobile?: boolean }) {
       href={item.href}
       aria-current={item.current ? 'page' : undefined}
       className={classNames(
-        item.current ? 'bg-gray-900 text-white' : 'text-slate-700 dark:text-slate-300 hover:bg-gray-700 hover:text-white',
+        item.current ? 'bg-primary text-primary-foreground' : 'text-sidebar-foreground hover:text-accent-foreground hover:bg-accent',
         'rounded-md px-3 py-2 text-sm font-medium',
       )}
     >
