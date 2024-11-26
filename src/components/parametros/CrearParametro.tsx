@@ -14,7 +14,7 @@ import {
 import { crearParametroAction } from "@/utils/actions";
 import { ParametroSchema, TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus } from "lucide-react";
+import { Plus, Save } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useForm, useFormContext } from "react-hook-form";
 import FormularioParametro from "../formularios/FormularioParametro";
@@ -86,8 +86,8 @@ const CrearParametro = ({ setParametros }: { setParametros?: Dispatch<SetStateAc
             <DialogTitle>Crear parametro</DialogTitle>
             <DialogDescription>
               {!methods ?
-                "Al crear un parametro, este se agregará a la lista de parametros disponibles para las calculadoras."
-                : "Este parametro se agregará a la lista de parametros de la calculadora."
+                "Al crear un parámetro, este se agregará a la lista de parámetros disponibles para las calculadoras."
+                : "Este parámetro se agregará a la lista de parámetros de la calculadora."
               }
             </DialogDescription>
           </DialogHeader>
@@ -98,7 +98,10 @@ const CrearParametro = ({ setParametros }: { setParametros?: Dispatch<SetStateAc
             <DialogClose asChild>
               <Button variant="secondary" onClick={() => form.reset()}>Cancelar</Button>
             </DialogClose>
-            <Button type="button" variant={'success'} onClick={() => onSubmit(form.getValues())}>Crear</Button>
+            <Button type="button" variant={'success'} onClick={() => onSubmit(form.getValues())}>
+              <Plus />
+              Crear
+            </Button>
           </DialogFooter>
         </DialogContent>
       </DialogPortal>

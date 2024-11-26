@@ -157,9 +157,9 @@ select {
     --destructive: 0 62.8% 30.6%;
     --destructive-container: 0 23.5% 11.8%;
     --destructive-foreground: 0 0% 98%;
-    --warning: 48 96% 89%;
-    --warning-container: 48 36% 9%;
-    --warning-foreground: 38 92% 50%;
+    --warning: 43 82% 38%;
+    --warning-container: 43 82% 8%;
+    --warning-foreground: 0 0% 98%;
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;

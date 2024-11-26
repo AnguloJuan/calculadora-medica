@@ -60,7 +60,7 @@ interface Evidencia {
 interface Unidad {
   id: number,
   unidad: string,
-  conversion?: number | null,
+  conversion?: string | null,
   id_unidad_conversion?: number | null
 }
 

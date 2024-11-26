@@ -246,7 +246,17 @@ export async function crearUnidadAction(formulario: FormData) {
   };
 
   const conversion = unidad.conversion !== '' ? unidad.conversion : null
-  const id_unidad_conversion = unidad.id_unidad_conversion !== '0' ? unidad.id_unidad_conversion : null
+  const id_unidad_conversion = (unidad.id_unidad_conversion !== '' && unidad.id_unidad_conversion !== '0') ? unidad.id_unidad_conversion : null
+
+  // check if the unit already exists
+  const [unidades] = await conexion.query<Unidades[]>(
+    'SELECT * FROM `unidad` WHERE `unidad` = ?',
+    [unidad.unidad]
+  );
+
+  if (unidades.length > 0) {
+    return { error: 'La unidad ya existe', status: 400 };
+  }
 
   try {
     const insert = await conexion.query<ResultSetHeader>(
@@ -255,13 +265,13 @@ export async function crearUnidadAction(formulario: FormData) {
     );
 
     if (insert[0].affectedRows !== 1) {
-      return { error: 'Fallo inesperado guardando la unidad', status: 500 };
+      return { error: 'Error al crear la unidad', status: 500 };
     }
 
     return { id: insert[0].insertId, status: 200 };
   } catch (err) {
     console.error(err);
-    return { error: 'Fallo al intentar guardar la unidad', status: 500 };
+    return { error: 'Error al crear la unidad', status: 500 };
   }
 }
 export async function obtenerUnidadesPorParametroAction(formulario: FormData) {

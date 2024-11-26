@@ -22,7 +22,7 @@ interface CampoParametroProps {
 }
 
 const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, setParametros, parametros, onChange }) => {
-  const opciones = (parametro.tipo_campo === 'seleccion' || parametro.tipo_campo === 'radio') ? parametro.opciones?.split(',') : undefined;
+  const opciones = (parametro.tipo_campo === 'seleccion' || parametro.tipo_campo === 'radio') ? parametro.opciones !== '' ? parametro.opciones.split(',') : undefined : undefined;
   const [valor, setValor] = useState<string | number>(
     parametro.tipo_campo === 'numerico' ? 0 : ''
   );
@@ -37,12 +37,11 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, set
   }
 
   return (
-    <div className={`w-full gap-y-2 flex flex-col sm:grid sm:grid-cols-3
-        ${parametro.tipo_campo === 'radio' ? (opciones && opciones.length > 3 ? 'items-start' : 'items-center') : 'items-center'}`}>
+    <div className={`w-full gap-y-2 flex flex-col items-start'}`}>
 
-      <Label htmlFor={parametro.nombre} className="sm:col-span-3">{parametro.nombre}</Label>
+      <Label htmlFor={parametro.nombre} className="">{parametro.nombre}</Label>
       {parametro.tipo_campo === 'numerico' && (
-        <div className="flex flex-row sm:col-span-3">
+        <div className="flex flex-row w-full">
           <Input
             type="number"
             id={`campo_${parametro.nombre}`}
@@ -51,7 +50,7 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, set
             max={parametro.valorMaximo}
             value={valor}
             onChange={(e) => { setValor(e.target.value); onChange && onChange(parametro.nombre, e.target.valueAsNumber) }}
-            className="sm:col-span-3 mt-0 rounded-e-none"
+            className="mt-0 rounded-e-none"
           />
           <div className="h-9 col-span-1 text-center self-cente content-center px-4 bg-muted border border-input rounded-e-lg">
             {parametro.unidades && (
@@ -64,7 +63,7 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, set
                   value={String(valor)}
 
                   onValueChange={(e) => {
-                    const unidad = parametro.unidades!.find((unidad) => unidad.id === Number(e)) ;
+                    const unidad = parametro.unidades!.find((unidad) => unidad.id === Number(e));
                     if (unidad) {
                       actualizarUnidadActual(unidad);
                     }
@@ -86,34 +85,36 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, set
         </div>
       )}
 
-      {parametro.tipo_campo === 'seleccion' && (
+      {parametro.tipo_campo === 'seleccion' && opciones && (
         <Select
           name={`campo_${parametro.nombre}`}
           onValueChange={(e) => setValor(e)}
           defaultValue=""
           value={String(valor)}
         >
-          <SelectTrigger>
+          <SelectTrigger className="w-full">
             <SelectValue placeholder="Selecciona una opción" />
           </SelectTrigger>
           <SelectContent>
-            {opciones?.map((opcion, index) =>
-              <SelectItem key={index} value={opcion}>{opcion}</SelectItem>
-            )}
+            <Each
+              of={opciones}
+              render={(opcion, index) => (<>
+                {opcion !== '' && <SelectItem key={index} value={opcion}>{opcion}</SelectItem>}
+              </>)} />
           </SelectContent>
         </Select>
       )}
 
       {parametro.tipo_campo === 'radio' && opciones && (
-        <div className="mx-auto w-full col-span-3">
+        <div className="mx-auto w-full">
           <RadioGroup
             id={`campo_${parametro.nombre}`}
             name={`campo_${parametro.nombre}`}
             value={valor}
             onChange={setValor}
             aria-label={parametro.nombre}
-            className={`${opciones.length > 3 ? 'space-y-2' : 'space-x-1'} 
-                    ${opciones.length === 3 ? 'sm:grid sm:grid-cols-3' : opciones.length === 2 && 'grid grid-cols-2'}`}
+            className={`flex flex-col gap-2 w-full justify-between`}
+          // ${opciones.length > 3 ? 'flex-col' : 'flex-col'} 
           >
             <Each
               of={opciones}
@@ -122,7 +123,7 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, set
                   key={index}
                   value={opcion}
                   onClick={() => setValor(valor === opcion ? '' : opcion)}
-                  className="group relative flex w-full cursor-pointer rounded-lg col-span-1 bg-backgroud border-gray-300 outline-gray-300 py-4 px-5 outline-none outline-offset-0 transition focus:outline-blue-500 data-[focus]:border-blue-500 data-[checked]:border-blue-500 data-[checked]:outline-blue-500"
+                  className="group relative flex w-full cursor-pointer rounded-lg col-span-1 bg-backgroud border-gray-300 outline-gray-300 py-2 px-5 outline-none outline-offset-0 transition focus:outline-blue-500 data-[focus]:border-blue-500 data-[checked]:border-blue-500 data-[checked]:outline-blue-500"
                 >
                   <div className="flex w-full items-center justify-between">
                     <div className="text-sm/6">

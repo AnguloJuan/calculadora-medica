@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS calculadora_parametro (
 CREATE TABLE IF NOT EXISTS unidad (
   id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
   unidad VARCHAR(10) NOT NULL,
-  conversion FLOAT,
+  conversion VARCHAR(50),
   id_unidad_conversion INT,
   CONSTRAINT FK_id_unidades_conversion_unidad FOREIGN KEY (id_unidad_conversion) REFERENCES unidad(id)
 );

@@ -6,6 +6,8 @@ import Select, { MultiValue } from "react-select"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import FormInput from "../ui/form-input"
 import { Select as MSelect, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
+import CampoParametro from "../CampoParametro"
+import CrearUnidad from "../unidades/CrearUnidad"
 
 type ParametroFields = TypeParametroSchema
 type UnidadOption = { value: Unidad, label: string }
@@ -18,6 +20,7 @@ const FormularioParametro = ({ form, onSubmit }: {
   const { field: valorMinimo } = useController({ name: 'valorMinimo', control: form.control })
   const { field: valorMaximo } = useController({ name: 'valorMaximo', control: form.control })
   const [Unidades, setUnidades] = useState<{ value: Unidad, label: string }[]>([])
+  const fields = form.watch()
 
 
   useEffect(() => {
@@ -47,10 +50,11 @@ const FormularioParametro = ({ form, onSubmit }: {
               <FormLabel>Tipo de campo</FormLabel>
               <MSelect onValueChange={(value) => {
                 value === "numerico" && form.resetField("opciones");
-                (value === "seleccion" || value === "radio")
-                  && form.resetField("valorMinimo")
-                  && form.resetField("valorMaximo")
-                  && form.resetField("unidades")
+                if (value === "seleccion" || value === "radio") {
+                  form.resetField("valorMinimo")
+                  form.resetField("valorMaximo")
+                  form.resetField("unidades")
+                }
                 field.onChange(value)
               }} defaultValue={field.value}>
                 <FormControl>
@@ -106,6 +110,7 @@ const FormularioParametro = ({ form, onSubmit }: {
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
+                <CrearUnidad />
               </>
               )}
             />
@@ -144,6 +149,11 @@ const FormularioParametro = ({ form, onSubmit }: {
             placeholder="Opciones separadas por coma"
           />
         </>)}
+        <div className="mt-8 p-2 rounded border shadow bg-container">
+          <CampoParametro parametro={{
+            ...fields
+          }} />
+        </div>
       </form>
     </Form>
   </>)
