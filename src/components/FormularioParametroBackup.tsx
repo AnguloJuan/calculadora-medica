@@ -144,7 +144,7 @@ const FormularioParametroBackup: FunctionComponent<FormularioParametroProps> = (
       onSubmit={handleSubmit}
     >
       {({ values, setFieldValue, handleBlur, isSubmitting, dirty, isValid, errors, touched }) => (
-        <Form className="flex md:max-w-screen-md lg:max-w-screen-lg flex-col items-center rounded-lg p-12 py-12 bg-backgroud gap-8">
+        <Form className="flex md:max-w-screen-md lg:max-w-screen-lg flex-col items-center rounded-lg p-12 py-12 bg-background gap-8">
           <div className="w-full flex flex-row gap-4">
             <div className="w-full flex flex-col gap-2">
               <label htmlFor="nombre">Nombre del parámetro</label>

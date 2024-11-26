@@ -91,8 +91,8 @@ export default async function CalculadoraPage({ params, request }: { params: { c
 
 
   return (
-    <div className="w-full bg-backgroud flex flex-col items-center">
-      <main className="flex md:max-w-screen-md lg:max-w-screen-lg flex-col items-center rounded-lg p-12 py-12 bg-backgroud gap-8">
+    <div className="w-full bg-background flex flex-col items-center">
+      <main className="flex md:max-w-screen-md lg:max-w-screen-lg flex-col items-center rounded-lg p-12 py-12 bg-background gap-8">
         <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
           {calculadora.nombre}
         </h2>
@@ -109,9 +109,10 @@ export default async function CalculadoraPage({ params, request }: { params: { c
               <TabsTrigger value="Recomendaciones">Recomendaciones</TabsTrigger>
               <TabsTrigger value="Evidencias">Evidencias</TabsTrigger>
             </TabsList>
+
             <TabsContent value="Formula">
               <Card className="bg-container">
-                <CardHeader className="pb-2">
+                <CardHeader>
                   <CardTitle>Formula</CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -125,6 +126,7 @@ export default async function CalculadoraPage({ params, request }: { params: { c
                 </CardContent>
               </Card>
             </TabsContent>
+
             <TabsContent value="Recomendaciones">
               <Card className="bg-container">
                 <CardHeader>
@@ -135,6 +137,7 @@ export default async function CalculadoraPage({ params, request }: { params: { c
                 </CardContent>
               </Card>
             </TabsContent>
+
             <TabsContent value="Evidencias">
               <Card className="bg-container">
                 <CardHeader>

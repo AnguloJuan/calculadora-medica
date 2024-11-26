@@ -4,6 +4,8 @@ import { authenticateAction } from "@/utils/actions";
 import Image from "next/image";
 import { useFormState, useFormStatus } from "react-dom";
 import { Boton } from "../../components/Botones";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 function LoginButton() {
   const { pending } = useFormStatus()
@@ -27,7 +29,7 @@ export default function LogIn() {
   const [errorMessage, dispatch] = useFormState(authenticateAction, undefined)
   return (<>
     <div className="h-full min-h-full items-center w-full md:flex md:justify-center">
-      <div className="flex flex-1 flex-col justify-center px-6 py-12 lg:px-8 bg-backgroud rounded w-full h-full md:h-auto md:max-w-screen-md ">
+      <div className="flex flex-1 flex-col justify-center px-6 py-12 lg:px-8 bg-background rounded w-full h-full md:h-auto md:max-w-screen-md ">
         <div className="">
           <Image
             alt="Toronja Lab logo"
@@ -37,7 +39,7 @@ export default function LogIn() {
             height={80}
             style={{ objectFit: 'contain' }}
           />
-          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+          <h2 className="mt-10 text-center leading-9  text-3xl font-semibold tracking-tight first:mt-0">
             Iniciar sesión
           </h2>
         </div>
@@ -45,35 +47,35 @@ export default function LogIn() {
         <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-sm">
           <form action={dispatch} className="space-y-6">
             <div>
-              <label htmlFor="usuario" className="block text-sm font-medium leading-6 text-gray-900">
+              <label htmlFor="usuario" className="block text-sm font-medium leading-6">
                 Usuario
               </label>
               <div className="mt-2">
-                <input
+                <Input
                   id="usuario"
                   name="usuario"
                   type="text"
                   required
                   autoComplete="username"
-                  className="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
 
             <div>
               <div className="flex items-center justify-between">
-                <label htmlFor="contrasena" className="block text-sm font-medium leading-6 text-gray-900">
+                <Label htmlFor="contrasena" className="block text-sm font-medium leading-6">
                   Contraseña
-                </label>
+                </Label>
               </div>
               <div className="mt-2">
-                <input
+                <Input
                   id="contrasena"
                   name="contrasena"
                   type="password"
                   required
                   autoComplete="current-password"
-                  className="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>

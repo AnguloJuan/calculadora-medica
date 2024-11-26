@@ -123,7 +123,7 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, set
                   key={index}
                   value={opcion}
                   onClick={() => setValor(valor === opcion ? '' : opcion)}
-                  className="group relative flex w-full cursor-pointer rounded-lg col-span-1 bg-backgroud border-gray-300 outline-gray-300 py-2 px-5 outline-none outline-offset-0 transition focus:outline-blue-500 data-[focus]:border-blue-500 data-[checked]:border-blue-500 data-[checked]:outline-blue-500"
+                  className="group relative flex w-full cursor-pointer rounded-lg col-span-1 bg-background border-gray-300 outline-gray-300 py-2 px-5 outline-none outline-offset-0 transition focus:outline-blue-500 data-[focus]:border-blue-500 data-[checked]:border-blue-500 data-[checked]:outline-blue-500"
                 >
                   <div className="flex w-full items-center justify-between">
                     <div className="text-sm/6">
