@@ -12,9 +12,8 @@ import CrearUnidad from "../unidades/CrearUnidad"
 type ParametroFields = TypeParametroSchema
 type UnidadOption = { value: Unidad, label: string }
 
-const FormularioParametro = ({ form, onSubmit }: {
+const FormularioParametro = ({ form }: {
   form: UseFormReturn<ParametroFields>,
-  onSubmit: (data: ParametroFields) => void
 }) => {
   const { field: tipoCampo } = useController({ name: 'tipo_campo', control: form.control })
   const { field: valorMinimo } = useController({ name: 'valorMinimo', control: form.control })
@@ -35,7 +34,7 @@ const FormularioParametro = ({ form, onSubmit }: {
 
   return (<>
     <Form {...form}>
-      <form>
+      <form className="space-y-2">
         <FormInput
           control={form.control}
           name="nombre"
@@ -73,48 +72,46 @@ const FormularioParametro = ({ form, onSubmit }: {
           )}
         />
         {tipoCampo.value === 'numerico' && (<>
-          <div className="flex flex-row gap-2">
-            <FormField
-              control={form.control}
-              name='unidades'
-              render={({ field }) => (<>
-                <FormItem>
-                  <FormLabel>Parametros</FormLabel>
-                  <div className="flex flex-row gap-2 w-full">
-                    <FormControl>
-                      <Select
-                        value={field.value?.map((unidad: Unidad) => ({ value: unidad, label: unidad.unidad }))}
-                        options={Unidades}
-                        noOptionsMessage={() => 'No hay unidades disponibles'}
-                        isMulti
-                        onChange={(value: MultiValue<UnidadOption>) => {
-                          field.onChange(value.map((unidad) => unidad.value))
-                        }}
-                        className="w-full border border-border rounded-lg bg-input text-foreground focus:ring focus:ring-ring focus:ring-opacity-50"
-                        styles={{
-                          control: (styles) => ({ ...styles, backgroundColor: 'Background' }),
-                          option: (styles, { isSelected }) => ({ ...styles, backgroundColor: isSelected ? 'ActiveCaption' : 'InactiveCaption', color: isSelected ? 'ActiveCaption' : 'foreground', ":hover": { backgroundColor: 'ButtonHighlight', color: 'ActiveCaptionText' } }),
-                          multiValue: (styles) => ({ ...styles, backgroundColor: 'accent', color: 'accent-foreground' }),
-                          multiValueLabel: (styles) => ({ ...styles, color: 'foreground', }),
-                          multiValueRemove: (styles) => ({ ...styles, color: 'accent-foreground', ':hover': { backgroundColor: 'destructive', color: 'destructive-foreground' } }),
-                          input: (styles) => ({ ...styles, color: 'foreground' }),
-                          // singleValue: (styles) => ({ ...styles, color: 'foreground' }),
-                          // container: (styles) => ({ ...styles, width: '100%', color: 'foreground', backgroundColor: 'input' }),
-                          menu: (styles) => ({ ...styles, backgroundColor: 'Background', color: 'foreground' }),
-                        }}
-                      />
-                    </FormControl>
-                  </div>
-                  <FormDescription>
-                    El area a la que pertenece la calculadora
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-                <CrearUnidad />
-              </>
-              )}
-            />
-          </div>
+          <FormField
+            control={form.control}
+            name='unidades'
+            render={({ field }) => (<>
+              <FormItem>
+                <FormLabel>Parametros</FormLabel>
+                <div className="flex flex-row gap-2 w-full justify-between items-center">
+                  <FormControl>
+                    <Select
+                      value={field.value?.map((unidad: Unidad) => ({ value: unidad, label: unidad.unidad }))}
+                      options={Unidades}
+                      noOptionsMessage={() => 'No hay unidades disponibles'}
+                      isMulti
+                      onChange={(value: MultiValue<UnidadOption>) => {
+                        field.onChange(value.map((unidad) => unidad.value))
+                      }}
+                      className="w-full border border-border rounded-lg bg-input text-foreground focus:ring focus:ring-ring focus:ring-opacity-50 flex-grow"
+                      styles={{
+                        control: (styles) => ({ ...styles, backgroundColor: 'Background' }),
+                        option: (styles, { isSelected }) => ({ ...styles, backgroundColor: isSelected ? 'ActiveCaption' : 'InactiveCaption', color: isSelected ? 'ActiveCaption' : 'foreground', ":hover": { backgroundColor: 'ButtonHighlight', color: 'ActiveCaptionText' } }),
+                        multiValue: (styles) => ({ ...styles, backgroundColor: 'accent', color: 'accent-foreground' }),
+                        multiValueLabel: (styles) => ({ ...styles, color: 'foreground', }),
+                        multiValueRemove: (styles) => ({ ...styles, color: 'accent-foreground', ':hover': { backgroundColor: 'destructive', color: 'destructive-foreground' } }),
+                        input: (styles) => ({ ...styles, color: 'foreground' }),
+                        // singleValue: (styles) => ({ ...styles, color: 'foreground' }),
+                        // container: (styles) => ({ ...styles, width: '100%', color: 'foreground', backgroundColor: 'input' }),
+                        menu: (styles) => ({ ...styles, backgroundColor: 'Background', color: 'foreground' }),
+                      }}
+                    />
+                  </FormControl>
+                  <CrearUnidad />
+                </div>
+                <FormDescription>
+                  El area a la que pertenece la calculadora
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            </>
+            )}
+          />
           <div className="flex flex-row gap-4">
             <FormInput
               control={form.control}
@@ -149,7 +146,7 @@ const FormularioParametro = ({ form, onSubmit }: {
             placeholder="Opciones separadas por coma"
           />
         </>)}
-        <div className="mt-8 p-2 rounded border shadow bg-container">
+        <div className="p-2 rounded border shadow bg-container">
           <CampoParametro parametro={{
             ...fields
           }} />

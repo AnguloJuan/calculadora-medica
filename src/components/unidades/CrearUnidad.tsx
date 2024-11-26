@@ -11,17 +11,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { crearParametroAction, crearUnidadAction } from "@/utils/actions";
-import { ParametroSchema, TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
+import { z } from "@/lib/es-zod";
+import { crearUnidadAction } from "@/utils/actions";
+import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
+import UnidadSchema from "@/validationSchemas/UnidadSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useForm, useFormContext } from "react-hook-form";
-import FormularioParametro from "../formularios/FormularioParametro";
 import { useToast } from "../Toast";
-import UnidadSchema from "@/validationSchemas/UnidadSchema";
-import { z } from "@/lib/es-zod";
-import FormularioUnidad from "../FormularioUnidad";
+import FormularioUnidad from "../formularios/FormularioUnidad";
 
 type TypeUnidadSchema = z.infer<typeof UnidadSchema>;
 
@@ -37,12 +36,12 @@ const CrearUnidad = ({ setParametros }: { setParametros?: Dispatch<SetStateActio
     defaultValues: {
       id: 0,
       unidad: '',
-      conversion: '' as any,
       id_unidad_conversion: '' as any,
+      conversion: '' as any,
     },
   })
 
-  const onSubmit = async (data: TypeParametroSchema) => {
+  const onSubmit = async (data: TypeUnidadSchema) => {
     const output = await form.trigger();
     if (!output) return;
 

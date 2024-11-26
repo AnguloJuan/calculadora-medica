@@ -92,7 +92,7 @@ const CrearParametro = ({ setParametros }: { setParametros?: Dispatch<SetStateAc
             </DialogDescription>
           </DialogHeader>
           <section className="grid gap-4 py-4 max-w-full">
-            <FormularioParametro form={form} onSubmit={onSubmit} />
+            <FormularioParametro form={form} />
           </section>
           <DialogFooter>
             <DialogClose asChild>

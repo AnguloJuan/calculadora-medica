@@ -41,21 +41,21 @@ const FormularioUnidad = ({ form, onSubmit }: {
         />
 
         <div className="flex flex-row gap-2">
-          {/* <FormField
+          <FormField
             control={form.control}
-            name='unidad'
+            name='id_unidad_conversion'
             render={({ field }) => (<>
               <FormItem>
                 <FormLabel>Parametros</FormLabel>
                 <div className="flex flex-row gap-2 w-full">
                   <FormControl>
                     <Select
-                      value={ Unidades.find((unidad) => unidad.value.id === field.value.id) }
+                      value={Unidades.find((unidad) => unidad.value.id === idUnidadConversion.value)}
                       options={Unidades}
                       noOptionsMessage={() => 'No hay unidades disponibles'}
                       onChange={(value) => {
-                        field.onChange(value)
-                      }
+                        idUnidadConversion.onChange(value?.value)
+                      }}
                       className="w-full border border-border rounded-lg bg-input text-foreground focus:ring focus:ring-ring focus:ring-opacity-50"
                       styles={{
                         control: (styles) => ({ ...styles, backgroundColor: 'Background' }),
@@ -78,7 +78,7 @@ const FormularioUnidad = ({ form, onSubmit }: {
               </FormItem>
             </>
             )}
-          /> */}
+          />
         </div>
         <div className="flex flex-row gap-4">
           <FormInput
