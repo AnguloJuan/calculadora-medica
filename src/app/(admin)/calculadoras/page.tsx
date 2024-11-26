@@ -1,4 +1,3 @@
-import { Boton } from "@/components/Botones";
 import { Button } from "@/components/ui/button";
 import { IconPlus } from "@tabler/icons-react";
 import Link from "next/link";

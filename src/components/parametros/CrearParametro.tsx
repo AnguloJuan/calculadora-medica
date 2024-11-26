@@ -75,7 +75,7 @@ const CrearParametro = ({ setParametros }: { setParametros?: Dispatch<SetStateAc
   return (<>
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="default" type="button">
+        <Button variant="success" type="button">
           <Plus />
           Crear parametro
         </Button>
@@ -98,7 +98,7 @@ const CrearParametro = ({ setParametros }: { setParametros?: Dispatch<SetStateAc
             <DialogClose asChild>
               <Button variant="secondary" onClick={() => form.reset()}>Cancelar</Button>
             </DialogClose>
-            <Button type="button" onClick={() => onSubmit(form.getValues())}>Crear</Button>
+            <Button type="button" variant={'success'} onClick={() => onSubmit(form.getValues())}>Crear</Button>
           </DialogFooter>
         </DialogContent>
       </DialogPortal>

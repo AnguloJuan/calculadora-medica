@@ -40,7 +40,7 @@ const Calculadora = ({ formula, parametros }: CalculadoraProps) => {
   }, [valores]);
 
   return (<>
-    <Card className="w-[400px]">
+    <Card className="w-[400px] bg-container">
       <CardHeader>
         <CardDescription>Ingrese los datos</CardDescription>
       </CardHeader>

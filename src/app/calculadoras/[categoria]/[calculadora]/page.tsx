@@ -110,7 +110,7 @@ export default async function CalculadoraPage({ params, request }: { params: { c
               <TabsTrigger value="Evidencias">Evidencias</TabsTrigger>
             </TabsList>
             <TabsContent value="Formula">
-              <Card>
+              <Card className="bg-container">
                 <CardHeader className="pb-2">
                   <CardTitle>Formula</CardTitle>
                 </CardHeader>
@@ -126,7 +126,7 @@ export default async function CalculadoraPage({ params, request }: { params: { c
               </Card>
             </TabsContent>
             <TabsContent value="Recomendaciones">
-              <Card>
+              <Card className="bg-container">
                 <CardHeader>
                   <CardTitle>Recomendaciones</CardTitle>
                 </CardHeader>
@@ -136,7 +136,7 @@ export default async function CalculadoraPage({ params, request }: { params: { c
               </Card>
             </TabsContent>
             <TabsContent value="Evidencias">
-              <Card>
+              <Card className="bg-container">
                 <CardHeader>
                   <CardTitle>Evidencias</CardTitle>
                 </CardHeader>

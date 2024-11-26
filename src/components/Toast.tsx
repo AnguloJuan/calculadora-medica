@@ -30,19 +30,19 @@ export default function Toast() {
 
   const styleType = {
     success: {
-      bg: 'bg-green-100',
-      iconStyle: 'bg-green-300 text-green-700',
+      bg: 'bg-success-container',
+      iconStyle: 'bg-success text-success-foreground',
       lineColor: 'bg-green-500',
       icon: <IconCircleCheck />,
     },
     warning: {
-      bg: 'bg-yellow-100',
-      iconStyle: 'bg-warning text-yellow-700',
+      bg: 'bg-warning-container',
+      iconStyle: 'bg-warning text-warning-foreground',
       lineColor: 'bg-yellow-500',
       icon: <IconAlertTriangle />,
     },
     error: {
-      bg: 'bg-container',
+      bg: 'bg-destructive-container',
       iconStyle: 'bg-destructive text-destructive-foreground',
       lineColor: 'bg-red-500',
       icon: <IconHexagonLetterX />,
@@ -65,7 +65,7 @@ export default function Toast() {
   }, [toasts, removeToast]);
 
   return (
-    <div className="fixed bottom-3 right-2 flex flex-col-reverse gap-2 w-full max-w-sm z-50">
+    <div className="fixed bottom-3 right-2 flex flex-col-reverse gap-4 w-full max-w-sm z-50">
       {
         <Each
           of={toasts}
@@ -73,7 +73,7 @@ export default function Toast() {
             <div
               key={toast.id}
               className={`relative p-3 text-muted-foreground ${styleType[toast.type].bg
-                } rounded-lg shadow overflow-hidden`}
+                } rounded-lg shadow-lg drop-shadow-lg overflow-hidden`}
             >
               <div className="flex items-center gap-2">
                 <div

@@ -19,7 +19,7 @@ import CalculadoraSchema from "@/validationSchemas/CalculadoraSchema";
 import EvidenciaSchema from "@/validationSchemas/EvidenciaSchema";
 import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FileText, Save, Trash2 } from "lucide-react";
+import { FileText, Plus, Save, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -107,7 +107,7 @@ const FormularioNuevaCalculadora = ({ parametros: params }: { parametros: parame
     <Form {...form}>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex min-h-screen md:max-w-screen-md lg:max-w-screen-lg w-full flex-col items-center justify-between rounded-lg p-24 py-12 gap-16"
+        className="flex min-h-screen md:max-w-screen-md lg:max-w-screen-lg w-full flex-col items-center justify-between bg-container border shadow rounded-lg p-24 py-12 gap-16"
       >
         <div className="w-full flex flex-col gap-4">
           <h2 className="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0">Información general</h2>
@@ -187,10 +187,10 @@ const FormularioNuevaCalculadora = ({ parametros: params }: { parametros: parame
 
           {parametrosFields.map((field, index) => {
             return (
-              <div key={field.id} className="flex flex-row items-center gap-4">
+              <div key={field.id} className="flex flex-row items-end gap-4">
                 <CampoParametro key={field.id} parametro={field} />
                 <ActualizarParametro parametro={field} setParametros={setParametros} />
-                <Button type="button" variant={'destructive'} onClick={() => removeParametros(index)}>
+                <Button type="button" variant='destructive' onClick={() => removeParametros(index)}>
                   <Trash2 />
                 </Button>
               </div>
@@ -251,6 +251,7 @@ const FormularioNuevaCalculadora = ({ parametros: params }: { parametros: parame
           </FormItem>
           <Button
             type="button"
+            variant='outline'
             onClick={() => {
               if (evidencia.cita === "" || evidencia.enlace === "") {
                 return;
@@ -261,7 +262,12 @@ const FormularioNuevaCalculadora = ({ parametros: params }: { parametros: parame
                 enlace: ""
               });
             }}
+            className="w-fit"
           >
+            <div className="flex flex-row">
+              <Plus className="pr-0 mr-0" />
+              <FileText className="pl-0 ml-0 leading-none" />
+            </div>
             Agregar evidencia
           </Button>
           {evidencias.map((field, index) => {
@@ -286,7 +292,7 @@ const FormularioNuevaCalculadora = ({ parametros: params }: { parametros: parame
 
         </div>
 
-        <Button type="submit">
+        <Button type="submit" variant={'success'} className="w-full">
           <Save />
           Guardar calculadora
         </Button>

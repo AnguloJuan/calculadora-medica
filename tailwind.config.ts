@@ -38,12 +38,19 @@ const config: Config = {
           DEFAULT: 'hsl(var(--accent))',
           foreground: 'hsl(var(--accent-foreground))'
         },
+        success: {
+          DEFAULT: 'hsl(var(--success))',
+          container: 'hsl(var(--success-container))',
+          foreground: 'hsl(var(--success-foreground))'
+        },
         destructive: {
           DEFAULT: 'hsl(var(--destructive))',
+          container: 'hsl(var(--destructive-container))',
           foreground: 'hsl(var(--destructive-foreground))'
         },
         warning: {
           DEFAULT: 'hsl(var(--warning))',
+          container: 'hsl(var(--warning-container))',
           foreground: 'hsl(var(--warning-foreground))'
         },
         border: 'hsl(var(--border))',
