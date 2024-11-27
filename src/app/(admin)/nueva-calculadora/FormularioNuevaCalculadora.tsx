@@ -21,10 +21,12 @@ import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FileText, Plus, Save, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
+import ReactSelect from "react-select";
 
 type parametrosConUnidades = TypeParametroSchema[]
+
 const FormularioNuevaCalculadora = ({ parametros: params }: { parametros: parametrosConUnidades | undefined }) => {
   const { addToast } = useToast();
   const [parametros, setParametros] = useState<TypeParametroSchema[]>(params || []);
@@ -103,6 +105,11 @@ const FormularioNuevaCalculadora = ({ parametros: params }: { parametros: parame
     enlace: ""
   });
 
+  const parametroOptions = useMemo(() => parametros.map((parametro) => ({
+    value: parametro,
+    label: parametro.nombre
+  })), [parametros]);
+
   return (
     <Form {...form}>
       <form
@@ -152,6 +159,20 @@ const FormularioNuevaCalculadora = ({ parametros: params }: { parametros: parame
               <FormItem>
                 <h2 className="scroll-m-20 text-lg font-semibold tracking-tight">Parametros</h2>
                 <div className="flex flex-row gap-2">
+                  {/* <ReactSelect
+                    value={parametros.find((parametro) => parametro.id === field.value) || null}
+                    options={parametroOptions}
+                    noOptionsMessage={() => 'No hay parametros disponibles'}
+                    onChange={(option) => field.onChange(option ? option.value.id : null)}
+                    className="w-full border border-border rounded-lg bg-input text-foreground focus:ring focus:ring-ring focus:ring-opacity-50"
+                    styles={{
+                      control: (styles) => ({ ...styles, backgroundColor: 'Background' }),
+                      option: (styles, { isSelected }) => ({ ...styles, backgroundColor: isSelected ? 'ButtonHighlight' : 'InactiveCaption', color: isSelected ? 'ActiveCaptionText' : 'CaptionText', ":hover": { backgroundColor: 'ButtonHighlight', color: 'ActiveCaptionText' } }),
+                      input: (styles) => ({ ...styles, color: 'foreground' }),
+                      singleValue: (styles) => ({ ...styles, color: 'foreground' }),
+                      menu: (styles) => ({ ...styles, backgroundColor: 'Background', color: 'foreground' }),
+                    }}
+                  /> */}
                   <Select
                     onValueChange={
                       (value: string) => {

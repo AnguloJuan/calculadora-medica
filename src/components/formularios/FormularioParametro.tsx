@@ -1,12 +1,13 @@
 import { Unidad } from "@/utils/types"
 import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema"
 import { useEffect, useState } from "react"
-import { useController, UseFormReturn } from "react-hook-form"
+import { UseFormReturn } from "react-hook-form"
 import Select, { MultiValue } from "react-select"
+import CampoParametro from "../CampoParametro"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import FormInput from "../ui/form-input"
 import { Select as MSelect, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
-import CampoParametro from "../CampoParametro"
+import { Separator } from "../ui/separator"
 import CrearUnidad from "../unidades/CrearUnidad"
 
 type ParametroFields = TypeParametroSchema
@@ -15,12 +16,8 @@ type UnidadOption = { value: Unidad, label: string }
 const FormularioParametro = ({ form }: {
   form: UseFormReturn<ParametroFields>,
 }) => {
-  const { field: tipoCampo } = useController({ name: 'tipo_campo', control: form.control })
-  const { field: valorMinimo } = useController({ name: 'valorMinimo', control: form.control })
-  const { field: valorMaximo } = useController({ name: 'valorMaximo', control: form.control })
   const [Unidades, setUnidades] = useState<{ value: Unidad, label: string }[]>([])
   const fields = form.watch()
-
 
   useEffect(() => {
     const obtenerUnidades = async () => {
@@ -71,7 +68,7 @@ const FormularioParametro = ({ form }: {
             </FormItem>
           )}
         />
-        {tipoCampo.value === 'numerico' && (<>
+        {fields.tipo_campo === 'numerico' && (<>
           <FormField
             control={form.control}
             name='unidades'
@@ -96,8 +93,6 @@ const FormularioParametro = ({ form }: {
                         multiValueLabel: (styles) => ({ ...styles, color: 'foreground', }),
                         multiValueRemove: (styles) => ({ ...styles, color: 'accent-foreground', ':hover': { backgroundColor: 'destructive', color: 'destructive-foreground' } }),
                         input: (styles) => ({ ...styles, color: 'foreground' }),
-                        // singleValue: (styles) => ({ ...styles, color: 'foreground' }),
-                        // container: (styles) => ({ ...styles, width: '100%', color: 'foreground', backgroundColor: 'input' }),
                         menu: (styles) => ({ ...styles, backgroundColor: 'Background', color: 'foreground' }),
                       }}
                     />
@@ -105,7 +100,7 @@ const FormularioParametro = ({ form }: {
                   <CrearUnidad />
                 </div>
                 <FormDescription>
-                  El area a la que pertenece la calculadora
+                  La/las unidad/unidades en las que se mide el parámetro
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -120,8 +115,8 @@ const FormularioParametro = ({ form }: {
               placeholder="Valor mínimo"
               textInputProps={{
                 type: 'number',
-                value: valorMinimo.value !== null ? String(valorMinimo.value) : '',
-                onChange: (e) => e.target.value !== "" ? valorMinimo.onChange(e.target.valueAsNumber) : valorMinimo.onChange("")
+                value: fields.valorMinimo !== null ? String(fields.valorMinimo) : '',
+                onChange: (e) => e.target.value !== "" ? form.setValue("valorMinimo", e.target.valueAsNumber) : form.setValue("valorMinimo", "" as any)
               }}
             />
             <FormInput
@@ -131,14 +126,14 @@ const FormularioParametro = ({ form }: {
               placeholder="Valor máximo"
               textInputProps={{
                 type: 'number',
-                value: valorMaximo.value !== null ? String(valorMaximo.value) : '',
-                onChange: (e) => e.target.value !== "" ? valorMaximo.onChange(e.target.valueAsNumber) : valorMaximo.onChange("")
+                value: fields.valorMaximo !== null ? String(fields.valorMaximo) : '',
+                onChange: (e) => e.target.value !== "" ? form.setValue("valorMaximo", e.target.valueAsNumber) : form.setValue("valorMaximo", "" as any)
               }}
             />
           </div>
         </>)}
 
-        {(tipoCampo.value === 'seleccion' || tipoCampo.value === 'radio') && (<>
+        {(fields.tipo_campo === 'seleccion' || fields.tipo_campo === 'radio') && (<>
           <FormInput
             control={form.control}
             name="opciones"
@@ -146,12 +141,14 @@ const FormularioParametro = ({ form }: {
             placeholder="Opciones separadas por coma"
           />
         </>)}
-        <div className="p-2 rounded border shadow bg-container">
-          <CampoParametro parametro={{
-            ...fields
-          }} />
-        </div>
       </form>
+      <Separator />
+      <small className="text-muted-foreground">Vista previa:</small>
+      <div className="mt-2">
+        <CampoParametro parametro={{
+          ...fields
+        }} />
+      </div>
     </Form>
   </>)
 }

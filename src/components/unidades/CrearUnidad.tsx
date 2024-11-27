@@ -24,7 +24,7 @@ import FormularioUnidad from "../formularios/FormularioUnidad";
 
 type TypeUnidadSchema = z.infer<typeof UnidadSchema>;
 
-const CrearUnidad = ({ setParametros }: { setParametros?: Dispatch<SetStateAction<TypeParametroSchema[]>> }) => {
+const CrearUnidad = () => {
   const { addToast } = useToast();
   const [open, setOpen] = useState(false);
 
@@ -50,8 +50,8 @@ const CrearUnidad = ({ setParametros }: { setParametros?: Dispatch<SetStateActio
       const formData = new FormData();
       formData.append('id', parametro.id.toString());
       formData.append('unidad', parametro.unidad);
-      formData.append('conversion', parametro.conversion?.toString() || '');
       formData.append('id_unidad_conversion', parametro.id_unidad_conversion?.toString() || '');
+      formData.append('conversion', parametro.conversion?.toString() || '');
 
       const response = await crearUnidadAction(formData);
       if (response.error || !response.id) {
@@ -59,9 +59,12 @@ const CrearUnidad = ({ setParametros }: { setParametros?: Dispatch<SetStateActio
         return;
       }
       const nuevaUnidad: TypeUnidadSchema = { ...parametro, id: response.id };
-      methods && methods.setValue('parametros', [...methods.getValues('parametros'), nuevaUnidad]);
-      // setParametros && setParametros((parametros) => [...parametros, nuevaUnidad]);
-      // addToast('Unidad creada', 'success');
+      if (methods) {
+        methods.setValue('unidadActual', nuevaUnidad);
+        methods.setValue('unidades', [...methods.getValues('unidades'), nuevaUnidad]);
+      }
+
+      addToast('Unidad creada', 'success');
       setOpen(false);
     }
     crearUnidad();
@@ -87,7 +90,7 @@ const CrearUnidad = ({ setParametros }: { setParametros?: Dispatch<SetStateActio
             </DialogDescription>
           </DialogHeader>
           <section className="grid gap-4 py-4 max-w-full">
-            <FormularioUnidad form={form} onSubmit={onSubmit} />
+            <FormularioUnidad form={form} />
           </section>
           <DialogFooter>
             <DialogClose asChild>
