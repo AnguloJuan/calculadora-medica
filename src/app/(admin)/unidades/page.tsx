@@ -1,4 +1,4 @@
-import BotonCrearUnidad from "@/components/BotonCrearUnidad";
+import CrearUnidad from "@/components/unidades/CrearUnidad";
 
 export default function UnidadesPage() {
   return (<>
@@ -11,7 +11,7 @@ export default function UnidadesPage() {
       <div className="bg-background dark:bg-container shadow sm:rounded-lg">
         <div className="px-4 py-5 sm:px-6">
           <h3 className="text-lg font-medium leading-6">Unidades</h3>
-          <BotonCrearUnidad shouldClose={true} />
+          <CrearUnidad />
         </div>
       </div>
     </main>
