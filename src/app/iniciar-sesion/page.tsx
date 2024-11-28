@@ -1,11 +1,11 @@
 'use client'
 
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { authenticateAction } from "@/utils/actions";
 import Image from "next/image";
 import { useFormState, useFormStatus } from "react-dom";
-import { Boton } from "../../components/Botones";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 function LoginButton() {
   const { pending } = useFormStatus()
@@ -18,9 +18,9 @@ function LoginButton() {
 
   return (
     <div className="w-full flex flex-col items-center mt-2">
-      <Boton aria-disabled={pending} type="submit" variante="success" onClick={handleClick}>
+      <Button aria-disabled={pending} className="w-full" type="submit" variant="success" onClick={handleClick}>
         Iniciar sesión
-      </Boton>
+      </Button>
     </div>
   )
 }

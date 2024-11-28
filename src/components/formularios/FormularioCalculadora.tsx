@@ -4,7 +4,6 @@ import CampoParametro from "@/components/CampoParametro";
 import { Each } from "@/components/EachOf";
 import ActualizarParametro from "@/components/parametros/ActualizarParametro";
 import CrearParametro from "@/components/parametros/CrearParametro";
-import { useToast } from "@/components/Toast";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -13,39 +12,32 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { z } from "@/lib/es-zod";
-import { crearCalculadoraAction } from "@/utils/actions";
 import { CATEGORIAS } from "@/utils/types";
 import CalculadoraSchema from "@/validationSchemas/CalculadoraSchema";
 import EvidenciaSchema from "@/validationSchemas/EvidenciaSchema";
 import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { FileText, Plus, Save, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray, UseFormReturn } from "react-hook-form";
 import ReactSelect from "react-select";
+import { DialogClose, DialogFooter } from "../ui/dialog";
 
-type parametrosConUnidades = TypeParametroSchema[]
+type paramOption = {
+  value: TypeParametroSchema,
+  label: string,
+}
+type TypeCalculadoraSchema = z.infer<typeof CalculadoraSchema>;
+type Evidencia = z.infer<typeof EvidenciaSchema>;
 
-const FormularioNuevaCalculadora = ({ parametros: params }: { parametros: parametrosConUnidades | undefined }) => {
-  const { addToast } = useToast();
+interface FormularioCalculadoraProps {
+  form: UseFormReturn<TypeCalculadoraSchema>
+  parametros: TypeParametroSchema[],
+  onSubmit(values: TypeCalculadoraSchema): void
+}
+
+const FormularioCalculadora = ({ form, parametros: params, onSubmit }: FormularioCalculadoraProps) => {
   const [parametros, setParametros] = useState<TypeParametroSchema[]>(params || []);
-  const form = useForm<z.infer<typeof CalculadoraSchema>>({
-    resolver: zodResolver(CalculadoraSchema),
-    defaultValues: {
-      id: 0,
-      nombre: "",
-      descripcion: "",
-      descripcion_corta: "",
-      resultados_recomendaciones: "",
-      categoria: "",
-      enlace: "",
-      formula: "",
-      evidencias: [],
-      parametros: [],
-    },
-  })
-
   const {
     formState: { errors },
     register,
@@ -55,42 +47,6 @@ const FormularioNuevaCalculadora = ({ parametros: params }: { parametros: parame
     watch,
   } = form;
 
-  function onSubmit(values: z.infer<typeof CalculadoraSchema>) {
-    const formulario = new FormData(document.getElementById("form_calculadora") as HTMLFormElement);
-    formulario.set('id', '0');
-    formulario.set('enlace', '');
-    const datosFormulario = Object.fromEntries(formulario.entries());
-
-    async function guardarCalculadora() {
-      const respuesta = await crearCalculadoraAction(formulario)
-      if (respuesta.error) {
-        addToast(
-          respuesta.error,
-          'error'
-        );
-        return;
-      }
-      var kebabCase = require('lodash/kebabCase');
-      const { categoria } = datosFormulario;
-      const enlace = `${kebabCase(categoria)}/${respuesta.enlace}`;
-      addToast(
-        <>
-          Calculadora guardada exitosamente <br />
-          haz click para verla: {' '}
-          <Link
-            href={`/calculadoras/${enlace}`}
-            className="underline text-blue-500 cursor-pointer hover:text-blue-700 transition-colors"
-          >
-            ver calculadora
-          </Link>
-        </>,
-        'success'
-      );
-    }
-
-    guardarCalculadora();
-  }
-
   const { fields: parametrosFields, append: appendParametros, remove: removeParametros } = useFieldArray({
     name: "parametros",
     control: control
@@ -99,13 +55,12 @@ const FormularioNuevaCalculadora = ({ parametros: params }: { parametros: parame
     name: "evidencias",
     control: control
   });
-  type Evidencia = z.infer<typeof EvidenciaSchema>;
   const [evidencia, setEvidencia] = useState<Evidencia>({
     cita: "",
     enlace: ""
   });
 
-  const parametroOptions = useMemo(() => parametros.map((parametro) => ({
+  const parametroOptions: paramOption[] = useMemo(() => parametros.map((parametro) => ({
     value: parametro,
     label: parametro.nombre
   })), [parametros]);
@@ -114,7 +69,7 @@ const FormularioNuevaCalculadora = ({ parametros: params }: { parametros: parame
     <Form {...form}>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex min-h-screen md:max-w-screen-md lg:max-w-screen-lg w-full flex-col items-center justify-between bg-container border shadow rounded-lg p-24 py-12 gap-16"
+        className="flex w-full flex-col items-center justify-between gap-16"
       >
         <div className="w-full flex flex-col gap-4">
           <h2 className="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0">Información general</h2>
@@ -157,48 +112,28 @@ const FormularioNuevaCalculadora = ({ parametros: params }: { parametros: parame
             name='parametros'
             render={({ field }) => (<>
               <FormItem>
-                <h2 className="scroll-m-20 text-lg font-semibold tracking-tight">Parametros</h2>
+                <h2 className="scroll-m-20 text-lg font-semibold tracking-tight">Parámetros</h2>
                 <div className="flex flex-row gap-2">
-                  {/* <ReactSelect
-                    value={parametros.find((parametro) => parametro.id === field.value) || null}
-                    options={parametroOptions}
-                    noOptionsMessage={() => 'No hay parametros disponibles'}
-                    onChange={(option) => field.onChange(option ? option.value.id : null)}
-                    className="w-full border border-border rounded-lg bg-input text-foreground focus:ring focus:ring-ring focus:ring-opacity-50"
-                    styles={{
-                      control: (styles) => ({ ...styles, backgroundColor: 'Background' }),
-                      option: (styles, { isSelected }) => ({ ...styles, backgroundColor: isSelected ? 'ButtonHighlight' : 'InactiveCaption', color: isSelected ? 'ActiveCaptionText' : 'CaptionText', ":hover": { backgroundColor: 'ButtonHighlight', color: 'ActiveCaptionText' } }),
-                      input: (styles) => ({ ...styles, color: 'foreground' }),
-                      singleValue: (styles) => ({ ...styles, color: 'foreground' }),
-                      menu: (styles) => ({ ...styles, backgroundColor: 'Background', color: 'foreground' }),
-                    }}
-                  /> */}
-                  <Select
-                    onValueChange={
-                      (value: string) => {
-                        const parametro = parametros?.find((parametro) => parametro.id === parseInt(value));
-                        const parametroExistente = field.value.find((param) => param.id === parametro?.id);
-                        if (parametro && !parametroExistente) {
-                          setValue('parametros', [...field.value, { ...parametro }]);
-                        }
-                      }
-                    }
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecciona un parametro" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <Each of={parametros!} render={(parametro) => (
-                        <SelectItem key={parametro.id} value={parametro.id.toString()}>{parametro.nombre}</SelectItem>
-                      )} />
-                    </SelectContent>
-                  </Select>
+                  <FormControl>
+                    <ReactSelect
+                      value={parametroOptions.find((param) => param.value === field.value.at(-1))} // Last value
+                      options={parametroOptions}
+                      noOptionsMessage={() => 'No hay parametros disponibles'}
+                      onChange={(option) => option && setValue('parametros', [...field.value, option.value])}
+                      className="w-full border border-border rounded-lg bg-input text-foreground focus:ring focus:ring-ring focus:ring-opacity-50"
+                      styles={{
+                        control: (styles) => ({ ...styles, backgroundColor: 'Background' }),
+                        option: (styles, { isSelected }) => ({ ...styles, backgroundColor: isSelected ? 'ButtonHighlight' : 'InactiveCaption', color: isSelected ? 'ActiveCaptionText' : 'CaptionText', ":hover": { backgroundColor: 'ButtonHighlight', color: 'ActiveCaptionText' } }),
+                        input: (styles) => ({ ...styles, color: 'foreground' }),
+                        singleValue: (styles) => ({ ...styles, color: 'foreground' }),
+                        menu: (styles) => ({ ...styles, backgroundColor: 'Background', color: 'foreground' }),
+                      }}
+                    />
+                  </FormControl>
                   <CrearParametro setParametros={setParametros} />
                 </div>
                 <FormDescription>
-                  Agrega parametros a la calculadora
+                  Seleccione un parámetro para agregar a la calculadora
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -226,7 +161,7 @@ const FormularioNuevaCalculadora = ({ parametros: params }: { parametros: parame
             input="textarea"
           />
 
-          <h2 className="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0">Detalles</h2>
+          <h2 className="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0 mt-4">Detalles</h2>
           <FormInput
             control={control}
             name="descripcion"
@@ -250,8 +185,8 @@ const FormularioNuevaCalculadora = ({ parametros: params }: { parametros: parame
             input="textarea"
           />
 
+          <h2 className="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0 mt-4">Evidencias</h2>
           <FormItem>
-            <h2 className="scroll-m-20 text-lg font-semibold tracking-tight">Evidencias</h2>
             <FormLabel htmlFor="cita">Cita</FormLabel>
             <Textarea
               name="cita"
@@ -311,15 +246,19 @@ const FormularioNuevaCalculadora = ({ parametros: params }: { parametros: parame
             );
           })}
 
+          <DialogFooter className="sm:justify-between mt-8">
+            <DialogClose asChild>
+              <Button variant="secondary" className="w-full" onClick={() => form.reset()}>Cancelar</Button>
+            </DialogClose>
+            <Button type="submit" variant={'success'} className="w-full">
+              <Save />
+              Guardar calculadora
+            </Button>
+          </DialogFooter>
         </div>
-
-        <Button type="submit" variant={'success'} className="w-full">
-          <Save />
-          Guardar calculadora
-        </Button>
       </form>
     </Form>
   );
 }
 
-export default FormularioNuevaCalculadora;
+export default FormularioCalculadora;

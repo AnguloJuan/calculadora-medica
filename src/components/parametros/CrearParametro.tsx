@@ -77,13 +77,13 @@ const CrearParametro = ({ setParametros }: { setParametros?: Dispatch<SetStateAc
       <DialogTrigger asChild>
         <Button variant="success" type="button">
           <Plus />
-          Crear parametro
+          Crear parámetro
         </Button>
       </DialogTrigger>
       <DialogPortal>
         <DialogContent className="sm:max-w-lg lg:max-w-lg">
           <DialogHeader>
-            <DialogTitle>Crear parametro</DialogTitle>
+            <DialogTitle>Crear parámetro</DialogTitle>
             <DialogDescription>
               {!methods ?
                 "Al crear un parámetro, este se agregará a la lista de parámetros disponibles para las calculadoras."

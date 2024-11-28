@@ -9,7 +9,7 @@ export default function ParametrosPage() {
     </header>
     <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
       <div className="bg-background dark:bg-container shadow sm:rounded-lg">
-        <div className="px-4 py-5 sm:px-6">
+        <div className="px-4 py-5 sm:px-6 space-y-4">
           <h3 className="text-lg font-medium leading-6">Parametros</h3>
           <CrearParametro />
         </div>

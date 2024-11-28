@@ -29,7 +29,7 @@ export async function authenticateAction(_currentState: unknown, formData: FormD
     throw error
   }
   if (cookies().has('session')) {
-    redirect('/nueva-calculadora');
+    redirect('/calculadoras');
   }
 }
 
