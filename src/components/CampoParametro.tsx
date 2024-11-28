@@ -24,7 +24,7 @@ interface CampoParametroProps {
 const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, setParametros, parametros, onChange }) => {
   const opciones = (parametro.tipo_campo === 'seleccion' || parametro.tipo_campo === 'radio') ? parametro.opciones !== '' ? parametro.opciones.split(',') : undefined : undefined;
   const [valor, setValor] = useState<string | number>(
-    parametro.tipo_campo === 'numerico' ? 0 : ''
+    parametro.tipo_campo === 'numerico' ? '' : ''
   );
 
   function actualizarUnidadActual(unidad: Unidad) {
@@ -67,7 +67,7 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, set
                     if (unidad) {
                       actualizarUnidadActual(unidad);
                     }
-                    setValor(e);
+                    // setValor( valor ); Actualizar el valor con la conversion de la unidad
                   }}
                 >
                   <SelectTrigger>

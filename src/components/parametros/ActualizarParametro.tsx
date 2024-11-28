@@ -11,7 +11,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useToast } from "@/hooks/use-toast";
 import { actualizarParametroAction } from "@/utils/actions";
 import { ParametroSchema, TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,25 +18,33 @@ import { Pencil } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useForm, useFormContext } from "react-hook-form";
 import FormularioParametro from "../formularios/FormularioParametro";
+import { useToast } from "../Toast";
 
 const ActualizarParametro = ({ parametro, setParametros }: { parametro: TypeParametroSchema, setParametros?: Dispatch<SetStateAction<TypeParametroSchema[]>> }) => {
-  const { toast } = useToast();
+  const { addToast } = useToast();
   const [open, setOpen] = useState(false);
 
   const methods = useFormContext();
 
+  const initialValues: TypeParametroSchema = parametro.tipo_campo === 'numerico' ? {
+    id: parametro.id,
+    nombre: parametro.nombre,
+    tipo_campo: parametro.tipo_campo,
+    unidades: parametro.unidades,
+    valorMinimo: parametro.valorMinimo as any,
+    valorMaximo: parametro.valorMaximo as any,
+  } : {
+    id: parametro.id,
+    nombre: parametro.nombre,
+    tipo_campo: parametro.tipo_campo,
+    opciones: parametro.opciones,
+  }
+  
+
   const form = useForm<TypeParametroSchema>({
     resolver: zodResolver(ParametroSchema),
     mode: 'onBlur',
-    defaultValues: {
-      id: parametro.id,
-      nombre: parametro.nombre,
-      tipo_campo: parametro.tipo_campo,
-      opciones: (parametro.tipo_campo === 'radio' || parametro.tipo_campo === 'seleccion') ? parametro.opciones : '',
-      unidades: parametro.tipo_campo === 'numerico' ? parametro.unidades : [],
-      valorMinimo: parametro.tipo_campo === 'numerico' ? parametro.valorMinimo : '' as any,
-      valorMaximo: parametro.tipo_campo === 'numerico' ? parametro.valorMaximo : '' as any,
-    },
+    defaultValues: initialValues
   })
 
   const onSubmit = async (data: TypeParametroSchema) => {
@@ -60,14 +67,14 @@ const ActualizarParametro = ({ parametro, setParametros }: { parametro: TypePara
 
       const response = await actualizarParametroAction(formData);
       if (response.error) {
-        toast({ title: 'Error al actualizar el parametro', variant: 'destructive' });
+        addToast('Error al actualizar el parametro', 'error');
         return;
       }
       if (setParametros) {
         setParametros((prev) => prev.map((p) => p.id === parametro.id ? parametro : p));
       }
       methods && methods.setValue('parametros', methods.getValues('parametros').map((p: TypeParametroSchema) => p.id === parametro.id ? parametro : p));
-      toast({ title: 'Parametro actualizado' });
+      addToast('Parametro actualizado', 'success');
       setOpen(false);
     }
     actualizarParametro();
@@ -89,7 +96,7 @@ const ActualizarParametro = ({ parametro, setParametros }: { parametro: TypePara
             </DialogDescription>
           </DialogHeader>
           <section className="grid gap-4 py-4 max-w-full">
-            <FormularioParametro form={form} onSubmit={onSubmit} />
+            <FormularioParametro form={form} />
           </section>
           <DialogFooter>
             <DialogClose asChild>

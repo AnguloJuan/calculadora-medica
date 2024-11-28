@@ -49,11 +49,13 @@ const FormularioCalculadora = ({ form, parametros: params, onSubmit }: Formulari
 
   const { fields: parametrosFields, append: appendParametros, remove: removeParametros } = useFieldArray({
     name: "parametros",
-    control: control
+    control: control,
+    keyName: "_id",
   });
   const { fields: evidencias, append: appendEvidencia, remove: removeEvidencia } = useFieldArray({
     name: "evidencias",
-    control: control
+    control: control,
+    keyName: "_id",
   });
   const [evidencia, setEvidencia] = useState<Evidencia>({
     cita: "",
@@ -228,8 +230,8 @@ const FormularioCalculadora = ({ form, parametros: params, onSubmit }: Formulari
           </Button>
           {evidencias.map((field, index) => {
             return (
-              <div key={field.id} className="flex flex-row items-center gap-4">
-                <Card key={field.id}>
+              <div key={field._id} className="flex flex-row items-center gap-4">
+                <Card key={field._id}>
                   <Link href={field.enlace} passHref>
                     <CardContent className="py-4 flex flex-row gap-4">
                       <div className="self-center">
