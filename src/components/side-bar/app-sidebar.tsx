@@ -37,11 +37,6 @@ const data = {
   },
   navMain: [
     {
-      title: "Dashboard",
-      url: "/dashboard",
-      icon: PieChart,
-    },
-    {
       title: "Calculadoras",
       url: "/calculadoras",
       icon: Calculator,
