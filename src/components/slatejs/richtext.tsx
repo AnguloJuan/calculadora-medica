@@ -72,7 +72,6 @@ const RichText = ({ onChange, value, onBlur }: RichTextProps) => {
           renderLeaf={renderLeaf}
           placeholder="Enter some rich text…"
           spellCheck
-          autoFocus
           onBlur={onBlur}
           className='p-4 pt-0 bg-container form-input border-border rounded'
           onKeyDown={event => {

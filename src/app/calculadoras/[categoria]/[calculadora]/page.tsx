@@ -1,6 +1,7 @@
 
 import Calculadora from "@/components/Calculadora";
 import { Each } from "@/components/EachOf";
+import ReadOnlyText from "@/components/slatejs/read-only";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { conectarBd } from "@/db/conectarDb";
@@ -124,7 +125,7 @@ export default async function CalculadoraPage({ params, request }: { params: { c
                   <CardTitle>Acerca de {calculadora.nombre}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="leading-7 [&:not(:first-child)]:mt-6">{calculadora.descripcion}</p>
+                  <ReadOnlyText value={calculadora.descripcion} />
                 </CardContent>
               </Card>
             </TabsContent>
