@@ -1,7 +1,5 @@
-import React, { ReactNode, Ref, PropsWithChildren } from 'react'
-import ReactDOM from 'react-dom'
-import { cx, css } from '@emotion/css'
 import { cn } from "@/lib/utils"
+import React, { PropsWithChildren } from 'react'
 
 import { ClassValue } from 'clsx'
 
@@ -24,7 +22,7 @@ export const Button = React.forwardRef<HTMLSpanElement, PropsWithChildren<Button
 
       className={cn(
         "cursor-pointer",
-        reversed ? active ? "text-white" : "text-gray-300" : active ? "text-black" : "text-gray-400",
+        reversed ? active ? "text-accent-foreground" : "text-muted-foreground" : active ? "text-accent-foreground" : "text-muted-foreground",
         className
       )}
     />
@@ -94,70 +92,50 @@ export const Button = React.forwardRef<HTMLSpanElement, PropsWithChildren<Button
 //   )
 // )
 
-export const Instruction = React.forwardRef(
-  (
-    { className, ...props }: PropsWithChildren<BaseProps>,
-    ref: Ref<OrNull<HTMLDivElement>>
-  ) => (
-    <div
-      {...props}
-      ref={ref}
-      className={cx(
-        className,
-        css`
-          white-space: pre-wrap;
-          margin: 0 -20px 10px;
-          padding: 10px 20px;
-          font-size: 14px;
-          background: #f8f8e8;
-        `
-      )}
-    />
-  )
-)
+// export const Instruction = React.forwardRef(
+//   (
+//     { className, ...props }: PropsWithChildren<BaseProps>,
+//     ref: Ref<OrNull<HTMLDivElement>>
+//   ) => (
+//     <div
+//       {...props}
+//       ref={ref}
+//       className={cx(
+//         className,
+//         css`
+//           white-space: pre-wrap;
+//           margin: 0 -20px 10px;
+//           padding: 10px 20px;
+//           font-size: 14px;
+//           background: #f8f8e8;
+//         `
+//       )}
+//     />
+//   )
+// )
 
-export const Menu = React.forwardRef(
-  (
-    { className, ...props }: PropsWithChildren<BaseProps>,
-    ref: Ref<OrNull<HTMLDivElement>>
-  ) => (
+export const Menu = React.forwardRef<HTMLDivElement, PropsWithChildren<BaseProps>>(
+  ({ className, ...props }, ref) => (
     <div
       {...props}
       data-test-id="menu"
       ref={ref}
-      className={cx(
+      className={cn(
         className,
-        css`
-          & > * {
-            display: inline-block;
-          }
-
-          & > * + * {
-            margin-left: 15px;
-          }
-        `
+        "space-x-4 [&>*]:inline-block"
       )}
     />
   )
 )
 
-export const Toolbar = React.forwardRef(
-  (
-    { className, ...props }: PropsWithChildren<BaseProps>,
-    ref: Ref<OrNull<HTMLDivElement>>
-  ) => (
+export const Toolbar = React.forwardRef<HTMLDivElement, PropsWithChildren<BaseProps>>(
+  ({ className, ...props }, ref) => (
     <Menu
       {...props}
       ref={ref}
-      className={cx(
+      className={cn(
         className,
-        css`
-          position: relative;
-          padding: 1px 18px 17px;
-          margin: 0 -20px;
-          border-bottom: 2px solid #eee;
-          margin-bottom: 20px;
-        `
+        "relative p-1 border-b-2 border-gray-200"
       )}
     />
   )
