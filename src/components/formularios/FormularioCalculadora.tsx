@@ -157,7 +157,7 @@ const FormularioCalculadora = ({ form, parametros: params, onSubmit }: Formulari
             );
           })}
 
-          <p>{JSON.stringify(errors, null, 2)}</p>
+          {/* <p>{JSON.stringify(errors, null, 2)}</p> */}
 
           <FormInput
             control={control}
@@ -211,66 +211,75 @@ const FormularioCalculadora = ({ form, parametros: params, onSubmit }: Formulari
             )}
           />
 
-          <h2 className="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0 mt-4">Evidencias</h2>
-          <FormItem>
-            <FormLabel htmlFor="cita">Cita</FormLabel>
-            <Textarea
-              name="cita"
-              value={evidencia.cita}
-              onChange={(e) => setEvidencia({ ...evidencia, cita: e.target.value })}
-              placeholder="Cita de la evidencia en formato APA"
-            />
-          </FormItem>
-          <FormItem>
-            <FormLabel htmlFor="enlace">Enlace</FormLabel>
-            <Input
-              type="url"
-              name="enlace"
-              value={evidencia.enlace}
-              onChange={(e) => setEvidencia({ ...evidencia, enlace: e.target.value })}
-              placeholder="Enlace de la calculadora"
-            />
-          </FormItem>
-          <Button
-            type="button"
-            variant='outline'
-            onClick={() => {
-              if (evidencia.cita === "" || evidencia.enlace === "") {
-                return;
-              }
-              appendEvidencia(evidencia);
-              setEvidencia({
-                cita: "",
-                enlace: ""
-              });
-            }}
-            className="w-fit"
-          >
-            <div className="flex flex-row">
-              <Plus className="pr-0 mr-0" />
-              <FileText className="pl-0 ml-0 leading-none" />
-            </div>
-            Agregar evidencia
-          </Button>
-          {evidencias.map((field, index) => {
-            return (
-              <div key={field._id} className="flex flex-row items-center gap-4">
-                <Card key={field._id}>
-                  <Link href={field.enlace} passHref>
-                    <CardContent className="py-4 flex flex-row gap-4">
-                      <div className="self-center">
-                        <FileText />
-                      </div>
-                      <p className="text-blue-500 cursor-pointer hover:text-blue-700 transition-colors">{field.cita}</p>
-                    </CardContent>
-                  </Link>
-                </Card>
-                <Button type="button" variant={'destructive'} onClick={() => removeEvidencia(index)}>
-                  <Trash2 />
+          <FormField
+            control={control}
+            name="evidencias"
+            render={({ field }) => (
+              <FormItem>
+                <h2 className="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0 mt-4">Evidencias</h2>
+                <FormItem>
+                  <FormLabel htmlFor="cita">Cita</FormLabel>
+                  <Textarea
+                    name="cita"
+                    value={evidencia.cita}
+                    onChange={(e) => setEvidencia({ ...evidencia, cita: e.target.value })}
+                    placeholder="Cita de la evidencia en formato APA"
+                  />
+                </FormItem>
+                <FormItem>
+                  <FormLabel htmlFor="enlace">Enlace</FormLabel>
+                  <Input
+                    type="url"
+                    name="enlace"
+                    value={evidencia.enlace}
+                    onChange={(e) => setEvidencia({ ...evidencia, enlace: e.target.value })}
+                    placeholder="Enlace de la calculadora"
+                  />
+                </FormItem>
+                <Button
+                  type="button"
+                  variant='outline'
+                  onClick={() => {
+                    if (evidencia.cita === "" || evidencia.enlace === "") {
+                      return;
+                    }
+                    appendEvidencia(evidencia);
+                    setEvidencia({
+                      cita: "",
+                      enlace: ""
+                    });
+                  }}
+                  className="w-fit"
+                >
+                  <div className="flex flex-row">
+                    <Plus className="pr-0 mr-0" />
+                    <FileText className="pl-0 ml-0 leading-none" />
+                  </div>
+                  Agregar evidencia
                 </Button>
-              </div>
-            );
-          })}
+                {evidencias.map((field, index) => {
+                  return (
+                    <div key={field._id} className="flex flex-row items-center gap-4">
+                      <Card key={field._id}>
+                        <Link href={field.enlace} passHref>
+                          <CardContent className="py-4 flex flex-row gap-4">
+                            <div className="self-center">
+                              <FileText />
+                            </div>
+                            <p className="text-blue-500 cursor-pointer hover:text-blue-700 transition-colors">{field.cita}</p>
+                          </CardContent>
+                        </Link>
+                      </Card>
+                      <Button type="button" variant={'destructive'} onClick={() => removeEvidencia(index)}>
+                        <Trash2 />
+                      </Button>
+                    </div>
+                  );
+                })}
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <DialogFooter className="sm:justify-between mt-8">
             <DialogClose asChild>

@@ -57,7 +57,7 @@ export async function crearCalculadoraAction(formulario: FormData) {
     parametros: JSON.parse(formulario.get('parametros')?.toString() || '[]') as Parametro[]
   };
 
-  const enlace = calculadora.enlace ? kebabCase(calculadora.enlace) : kebabCase(calculadora.nombre);
+  const enlace = calculadora.enlace !== "" ? kebabCase(calculadora.enlace) : kebabCase(calculadora.nombre);
 
   if (calculadora.parametros.length === 0) {
     return { error: 'Por favor agregue al menos un parámetro', status: 400 };
@@ -102,6 +102,34 @@ export async function crearCalculadoraAction(formulario: FormData) {
   } catch (err) {
     console.error(err);
     return { error: 'Fallo al intentar guardar la calculadora', status: 500 };
+  }
+}
+export async function eliminarCalculadoraAction(formulario: FormData) {
+  const conexion = await conectarBd();
+  const id = formulario.get('id');
+
+  try {
+    const deleteRelaciones = await conexion.query<ResultSetHeader>(
+      'DELETE FROM `calculadora_parametro` WHERE `id_calculadora` = ?',
+      [id]
+    );
+    const deleteEvidencias = await conexion.query<ResultSetHeader>(
+      'DELETE FROM `evidencia` WHERE `id_calculadora` = ?',
+      [id]
+    );
+    const deleteCalculadora = await conexion.query<ResultSetHeader>(
+      'DELETE FROM `calculadora` WHERE `id` = ?',
+      [id]
+    );
+
+    if (deleteCalculadora[0].affectedRows !== 1) {
+      return { error: 'Error al eliminar la calculadora', status: 500 };
+    }
+
+    return { status: 200 };
+  } catch (err) {
+    console.error(err);
+    return { error: 'Error al eliminar la calculadora', status: 500 };
   }
 }
 

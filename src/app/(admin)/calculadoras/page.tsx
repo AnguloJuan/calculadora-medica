@@ -1,11 +1,25 @@
+import { CalculadoraTable, columns } from "@/components/calculadoras/columns";
 import CrearCalculadora from "@/components/calculadoras/CrearCalculadora";
+import { DataTable } from "@/components/calculadoras/data-table";
 import { conectarBd } from "@/db/conectarDb";
-import { Parametro, Unidad } from "@/utils/types";
+import { Calculadora, Parametro, Unidad } from "@/utils/types";
 import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
 import { RowDataPacket } from "mysql2";
 
 const CalculadorasPage = async () => {
   const conexion = await conectarBd()
+  const obtenerCalculadoras = async () => {
+    interface Calculadoras extends RowDataPacket, Calculadora { }
+    try {
+      const [calculadorasRows] = await conexion.query<Calculadoras[]>(
+        'SELECT * FROM `calculadora`',
+      );
+
+      return calculadorasRows;
+    } catch (error) {
+      console.error(error);
+    }
+  }
   const obtenerParametros = async () => {
     interface Parametros extends RowDataPacket, Parametro { }
     try {
@@ -18,9 +32,6 @@ const CalculadorasPage = async () => {
       console.error(error);
     }
   }
-
-  const parametrosObtenidos = await obtenerParametros();
-
   const obtenerUnidades = async (parametros: Parametro[]) => {
     interface Unidades extends RowDataPacket, Unidad { }
     const parametrosConUnidades = parametros.map(async (parametro) => {
@@ -39,7 +50,20 @@ const CalculadorasPage = async () => {
     const resolvedParametros = await Promise.all(parametrosConUnidades);
     return resolvedParametros.filter((parametro) => parametro !== undefined) as TypeParametroSchema[];
   }
+
+  const calculadoras = await obtenerCalculadoras();
+  const parametrosObtenidos = await obtenerParametros();
   const parametros: TypeParametroSchema[] = await obtenerUnidades(parametrosObtenidos!);
+
+  const data: CalculadoraTable[] = calculadoras ? calculadoras.map((calculadora) => {
+    return {
+      id: calculadora.id,
+      nombre: calculadora.nombre,
+      categoria: calculadora.categoria,
+      formula: calculadora.formula,
+      calculadora: calculadora,
+    }
+  }) : []
 
   return (<>
     <header className="bg-background dark:bg-container shadow">
@@ -52,6 +76,9 @@ const CalculadorasPage = async () => {
         <div className="px-4 py-5 sm:px-6 space-y-4">
           <h3 className="text-lg font-medium leading-6">Calculadoras</h3>
           <CrearCalculadora parametros={parametros} />
+          <div className="container mx-auto">
+            <DataTable columns={columns} data={data} />
+          </div>
         </div>
       </div>
     </main>
