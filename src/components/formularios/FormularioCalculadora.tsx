@@ -21,6 +21,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useFieldArray, UseFormReturn } from "react-hook-form";
 import ReactSelect from "react-select";
+import RichText from "../slatejs/richtext";
 import { DialogClose, DialogFooter } from "../ui/dialog";
 
 type paramOption = {
@@ -83,6 +84,7 @@ const FormularioCalculadora = ({ form, parametros: params, onSubmit }: Formulari
           />
 
           <FormField
+            control={control}
             name='categoria'
             render={({ field }) => (<>
               <FormItem>
@@ -155,6 +157,8 @@ const FormularioCalculadora = ({ form, parametros: params, onSubmit }: Formulari
             );
           })}
 
+          <p>{JSON.stringify(errors, null, 2)}</p>
+
           <FormInput
             control={control}
             name="formula"
@@ -164,27 +168,47 @@ const FormularioCalculadora = ({ form, parametros: params, onSubmit }: Formulari
           />
 
           <h2 className="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0 mt-4">Detalles</h2>
-          <FormInput
+          <FormField
             control={control}
-            name="descripcion"
-            label="Descripción"
-            placeholder="Ingrese una descripción de la calculadora"
-            input="textarea"
+            name='descripcion'
+            render={({ field }) => (<>
+              <FormItem>
+                <FormLabel>Descripción</FormLabel>
+                <FormControl>
+                  <RichText value={field.value} onChange={field.onChange} onBlur={field.onBlur} />
+                </FormControl>
+                <FormDescription>
+                  Ingrese una descripción de la calculadora
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            </>
+            )}
           />
           <FormInput
             control={control}
             name="descripcion_corta"
             label="Descripción corta"
-            placeholder="Ingrese una descripción corta de la calculadora"
+            placeholder="Ingrese una descripción breve de la calculadora"
             input="textarea"
             description="Esta descripción se mostrará en la lista de calculadoras"
           />
-          <FormInput
+          <FormField
             control={control}
-            name="resultados_recomendaciones"
-            label="Resultados y recomendaciones"
-            placeholder="Ingrese resultados y recomendaciones de la calculadora"
-            input="textarea"
+            name='resultados_recomendaciones'
+            render={({ field }) => (<>
+              <FormItem>
+                <FormLabel>Resultados y recomendaciones</FormLabel>
+                <FormControl>
+                  <RichText value={field.value} onChange={field.onChange} onBlur={field.onBlur} />
+                </FormControl>
+                <FormDescription>
+                  Ingrese resultados y recomendaciones de la calculadora
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            </>
+            )}
           />
 
           <h2 className="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0 mt-4">Evidencias</h2>
@@ -252,7 +276,7 @@ const FormularioCalculadora = ({ form, parametros: params, onSubmit }: Formulari
             <DialogClose asChild>
               <Button variant="secondary" className="w-full" onClick={() => form.reset()}>Cancelar</Button>
             </DialogClose>
-            <Button type="submit" variant={'success'} className="w-full">
+            <Button variant={'success'} className="w-full">
               <Save />
               Guardar calculadora
             </Button>

@@ -26,7 +26,17 @@ const ParametroRadioSchema = z.object({
   opciones: z.string().min(1)
 })
 
-const ParametroSchema = z.union([ParametroNumericoSchema, ParametroSeleccionSchema, ParametroRadioSchema]);
+// const ParametroSchema = z.union([ParametroNumericoSchema, ParametroSeleccionSchema, ParametroRadioSchema]);
+const ParametroSchema = z.object({
+  id: z.number(),
+  nombre: z.string().min(1),
+  abreviatura: z.string().optional(),
+  tipo_campo: z.enum(['numerico', 'seleccion', 'radio']),
+  unidades: z.array(UnidadSchema).optional(),
+  valorMaximo: z.coerce.number().optional(),
+  valorMinimo: z.coerce.number().optional(),
+  opciones: z.string().optional()
+});
 
 type TypeParametroSchema = z.infer<typeof ParametroSchema>;
 

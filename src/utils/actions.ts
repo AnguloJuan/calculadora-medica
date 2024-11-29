@@ -8,6 +8,8 @@ import { logIn } from "./auth";
 import { ActualizarParametros } from "./constantes";
 import { deleteSession } from "./sessions";
 import { Parametro, Unidad, UnidadPorParametro } from "./types";
+import EvidenciaSchema from "@/validationSchemas/EvidenciaSchema";
+import { z } from "@/lib/es-zod";
 
 // Auth
 export async function authenticateAction(_currentState: unknown, formData: FormData) {
@@ -38,6 +40,7 @@ export async function cerrarSesionAction() {
   redirect('/iniciar-sesion');
 }
 
+type EvidenciaSchema = z.infer<typeof EvidenciaSchema>;
 // Calculadoras
 export async function crearCalculadoraAction(formulario: FormData) {
   var kebabCase = require('lodash/kebabCase');
@@ -50,7 +53,7 @@ export async function crearCalculadoraAction(formulario: FormData) {
     categoria: formulario.get('categoria'),
     enlace: formulario.get('enlace') || null,
     formula: formulario.get('formula'),
-    evidencias: JSON.parse(formulario.get('evidencias')?.toString() || '[]') as string[],
+    evidencias: JSON.parse(formulario.get('evidencias')?.toString() || '[]') as EvidenciaSchema[],
     parametros: JSON.parse(formulario.get('parametros')?.toString() || '[]') as Parametro[]
   };
 
@@ -87,7 +90,7 @@ export async function crearCalculadoraAction(formulario: FormData) {
     for (let i = 0; i < calculadora.evidencias.length; i++) {
       const insertEvidencias = await conexion.query<ResultSetHeader>(
         'INSERT INTO `evidencia` (`id_calculadora`, `cita`) VALUES (?, ?)',
-        [insertCalculadora[0].insertId, calculadora.evidencias[i]]
+        [insertCalculadora[0].insertId, calculadora.evidencias[i].cita]
       );
 
       if (insertEvidencias[0].affectedRows !== 1) {
@@ -301,3 +304,86 @@ export async function obtenerUnidadesPorParametroAction(formulario: FormData) {
     return { error: 'Fallo al intentar obtener los unidades por parametro', status: 500 };
   }
 }
+
+// Evidencias TODO
+// interface Evidencias extends RowDataPacket {
+//   id: number;
+//   cita: string;
+// }
+// export async function obtenerEvidenciasAction() {
+//   const conexion = await conectarBd();
+//   try {
+//     const [evidencias] = await conexion.query<Evidencias[]>(
+//       'SELECT * FROM `evidencia` ORDER BY `cita` ASC;'
+//     );
+//     return evidencias;
+//   } catch (err) {
+//     console.error(err);
+//     return { error: 'Fallo al intentar obtener las evidencias', status: 500 };
+//   }
+// }
+// export async function crearEvidenciaAction(formulario: FormData) {
+//   const conexion = await conectarBd();
+//   const evidencia = {
+//     cita: formulario.get('cita')
+//   };
+
+//   try {
+//     const insert = await conexion.query<ResultSetHeader>(
+//       'INSERT INTO `evidencia` (`cita`) VALUES (?)',
+//       [evidencia.cita]
+//     );
+
+//     if (insert[0].affectedRows !== 1) {
+//       return { error: 'Error al crear la evidencia', status: 500 };
+//     }
+
+//     return { id: insert[0].insertId, status: 200 };
+//   } catch (err) {
+//     console.error(err);
+//     return { error: 'Error al crear la evidencia', status: 500 };
+//   }
+// }
+// export async function actualizarEvidenciaAction(formulario: FormData) {
+//   const conexion = await conectarBd();
+//   const evidencia = {
+//     id: formulario.get('id'),
+//     cita: formulario.get('cita')
+//   };
+
+//   try {
+//     const update = await conexion.query<ResultSetHeader>(
+//       'UPDATE `evidencia` SET `cita` = ? WHERE `id` = ?',
+//       [evidencia.cita, evidencia.id]
+//     );
+
+//     if (update[0].affectedRows !== 1) {
+//       return { error: 'Error al actualizar la evidencia', status: 500 };
+//     }
+
+//     return { status: 200 };
+//   } catch (err) {
+//     console.error(err);
+//     return { error: 'Error al actualizar la evidencia', status: 500 };
+//   }
+// }
+// export async function eliminarEvidenciaAction(formulario: FormData) {
+//   const conexion = await conectarBd();
+//   const id = formulario.get('id');
+
+//   try {
+//     const deleteEvidencia = await conexion.query<ResultSetHeader>(
+//       'DELETE FROM `evidencia` WHERE `id` = ?',
+//       [id]
+//     );
+
+//     if (deleteEvidencia[0].affectedRows !== 1) {
+//       return { error: 'Error al eliminar la evidencia', status: 500 };
+//     }
+
+//     return { status: 200 };
+//   } catch (err) {
+//     console.error(err);
+//     return { error: 'Error al eliminar la evidencia', status: 500 };
+//   }
+// }

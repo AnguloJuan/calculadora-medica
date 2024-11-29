@@ -12,6 +12,7 @@ import {
 import { withHistory } from 'slate-history'
 import { Editable, Slate, useSlate, withReact } from 'slate-react'
 import { Button, Toolbar } from './components'
+import { Noop } from 'react-hook-form'
 
 const HOTKEYS = {
   'mod+b': 'bold',
@@ -23,14 +24,33 @@ const HOTKEYS = {
 const LIST_TYPES = ['numbered-list', 'bulleted-list']
 const TEXT_ALIGN_TYPES = ['left', 'center', 'right', 'justify']
 
-const RichText = () => {
+interface RichTextProps {
+  value?: string
+  onChange: (...event: any[]) => void
+  onBlur?: Noop
+}
+const RichText = ({ onChange, value, onBlur }: RichTextProps) => {
   const renderElement = useCallback(props => <Element {...props} />, [])
   const renderLeaf = useCallback(props => <Leaf {...props} />, [])
   const editor = useMemo(() => withHistory(withReact(createEditor())), [])
+  const initialValue = useMemo(() => value ? JSON.parse(value) : defaultValue, [value])
 
   return (
     <div className='space-y-1'>
-      <Slate editor={editor} initialValue={initialValue}>
+      <Slate
+        editor={editor}
+        initialValue={initialValue}
+        onChange={value => {
+          if (!onChange) return
+          const isAstChange = editor.operations.some(
+            op => 'set_selection' !== op.type
+          )
+          if (isAstChange) {
+            const content = JSON.stringify(value)
+            onChange(content)
+          }
+        }}
+      >
         <Toolbar>
           <MarkButton format="bold" Icon={Bold} />
           <MarkButton format="italic" Icon={Italic} />
@@ -53,6 +73,7 @@ const RichText = () => {
           placeholder="Enter some rich text…"
           spellCheck
           autoFocus
+          onBlur={onBlur}
           className='p-4 pt-0 bg-container form-input border-border rounded'
           onKeyDown={event => {
             for (const hotkey in HOTKEYS) {
@@ -269,7 +290,7 @@ const MarkButton = ({ format, Icon }: ButtonProps) => {
   )
 }
 
-const initialValue: Descendant[] = [
+const defaultValue: Descendant[] = [
   {
     type: 'paragraph',
     children: [

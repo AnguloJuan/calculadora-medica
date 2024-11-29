@@ -190,7 +190,7 @@ select {
   }
 }
 
-[data-slate-editor] > * + * {
+[data-slate-editor]>*+* {
   margin-top: 1em;
 }
 

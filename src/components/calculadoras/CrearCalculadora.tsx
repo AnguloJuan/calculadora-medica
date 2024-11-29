@@ -28,6 +28,7 @@ const CrearCalculadora = ({ parametros }: { parametros: TypeParametroSchema[] })
   const [open, setOpen] = useState(false);
   const form = useForm<TypeCalculadoraSchema>({
     resolver: zodResolver(CalculadoraSchema),
+    mode: 'onBlur',
     defaultValues: {
       id: 0,
       nombre: "",
@@ -43,10 +44,17 @@ const CrearCalculadora = ({ parametros }: { parametros: TypeParametroSchema[] })
   })
 
   function onSubmit(values: TypeCalculadoraSchema) {
-    const formulario = new FormData(document.getElementById("form_calculadora") as HTMLFormElement);
+    const formulario = new FormData();
     formulario.set('id', '0');
     formulario.set('enlace', '');
-    const datosFormulario = Object.fromEntries(formulario.entries());
+    formulario.set('nombre', values.nombre);
+    formulario.set('descripcion', values.descripcion);
+    formulario.set('descripcion_corta', values.descripcion);
+    formulario.set('resultados_recomendaciones', values.resultados_recomendaciones || '');
+    formulario.set('categoria', values.categoria);
+    formulario.set('formula', values.formula);
+    formulario.set('parametros', JSON.stringify(values.parametros));
+    formulario.set('evidencias', JSON.stringify(values.evidencias));
 
     async function guardarCalculadora() {
       const respuesta = await crearCalculadoraAction(formulario)
@@ -58,8 +66,7 @@ const CrearCalculadora = ({ parametros }: { parametros: TypeParametroSchema[] })
         return;
       }
       var kebabCase = require('lodash/kebabCase');
-      const { categoria } = datosFormulario;
-      const enlace = `${kebabCase(categoria)}/${respuesta.enlace}`;
+      const enlace = `${kebabCase(values.categoria)}/${respuesta.enlace}`;
       addToast(
         <>
           Calculadora guardada exitosamente <br />
@@ -80,7 +87,7 @@ const CrearCalculadora = ({ parametros }: { parametros: TypeParametroSchema[] })
 
   return (<>
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
+      <DialogTrigger asChild type="button">
         <Button variant="success" type="button">
           <Plus />
           Crear nueva calculadora
