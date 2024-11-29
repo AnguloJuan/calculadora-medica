@@ -49,7 +49,7 @@ const CrearCalculadora = ({ parametros }: { parametros: TypeParametroSchema[] })
     formulario.set('enlace', '');
     formulario.set('nombre', values.nombre);
     formulario.set('descripcion', values.descripcion);
-    formulario.set('descripcion_corta', values.descripcion);
+    formulario.set('descripcion_corta', values.descripcion_corta || '');
     formulario.set('resultados_recomendaciones', values.resultados_recomendaciones || '');
     formulario.set('categoria', values.categoria);
     formulario.set('formula', values.formula);
