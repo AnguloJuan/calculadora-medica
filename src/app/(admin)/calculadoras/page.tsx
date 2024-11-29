@@ -1,6 +1,6 @@
 import { CalculadoraTable, columns } from "@/components/calculadoras/columns";
 import CrearCalculadora from "@/components/calculadoras/CrearCalculadora";
-import { DataTable } from "@/components/calculadoras/data-table";
+import { DataTable } from "@/components/data-table";
 import { conectarBd } from "@/db/conectarDb";
 import { Calculadora, Parametro, Unidad } from "@/utils/types";
 import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";

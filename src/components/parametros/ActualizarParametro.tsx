@@ -14,7 +14,7 @@ import {
 import { actualizarParametroAction } from "@/utils/actions";
 import { ParametroSchema, TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Pencil } from "lucide-react";
+import { Edit, Pencil, X } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useForm, useFormContext } from "react-hook-form";
 import FormularioParametro from "../formularios/FormularioParametro";
@@ -39,7 +39,6 @@ const ActualizarParametro = ({ parametro, setParametros }: { parametro: TypePara
     tipo_campo: parametro.tipo_campo,
     opciones: parametro.opciones,
   }
-  
 
   const form = useForm<TypeParametroSchema>({
     resolver: zodResolver(ParametroSchema),
@@ -100,9 +99,9 @@ const ActualizarParametro = ({ parametro, setParametros }: { parametro: TypePara
           </section>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="secondary" onClick={() => form.reset()}>Cancelar</Button>
+              <Button variant="secondary" onClick={() => form.reset()}><X />Cancelar</Button>
             </DialogClose>
-            <Button type="button" onClick={() => onSubmit(form.getValues())}>Actualizar</Button>
+            <Button type="button" onClick={() => onSubmit(form.getValues())}><Edit />Actualizar</Button>
           </DialogFooter>
         </DialogContent>
       </DialogPortal>

@@ -3,6 +3,7 @@ import DialogItem from "../DialogItem";
 import { Button } from "../ui/button";
 import { DialogClose, DialogDescription, DialogTitle } from "../ui/dialog";
 import { useToast } from "../Toast";
+import { Trash2, X } from "lucide-react";
 
 const EliminarCalculadora = ({ id }: { id: number }) => {
   const formData = new FormData();
@@ -24,10 +25,10 @@ const EliminarCalculadora = ({ id }: { id: number }) => {
       </DialogDescription>
       <div className="flex flex-row justify-between gap-4">
         <DialogClose asChild>
-          <Button variant="default" className="w-full">Cancelar</Button>
+          <Button variant="default" className="w-full"><X />Cancelar</Button>
         </DialogClose>
         <DialogClose asChild>
-          <Button variant="destructive" className="w-full" onClick={onClick}>Eliminar</Button>
+          <Button variant="destructive" className="w-full" onClick={onClick}><Trash2 />Eliminar</Button>
         </DialogClose>
       </div>
     </DialogItem>

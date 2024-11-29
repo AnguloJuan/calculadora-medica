@@ -13,7 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { z } from "@/lib/es-zod";
 import { CATEGORIAS } from "@/utils/types";
-import CalculadoraSchema from "@/validationSchemas/CalculadoraSchema";
+import { TypeCalculadoraSchema } from "@/validationSchemas/CalculadoraSchema";
 import EvidenciaSchema from "@/validationSchemas/EvidenciaSchema";
 import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
 import { FileText, Plus, Save, Trash2 } from "lucide-react";
@@ -28,7 +28,6 @@ type paramOption = {
   value: TypeParametroSchema,
   label: string,
 }
-type TypeCalculadoraSchema = z.infer<typeof CalculadoraSchema>;
 type Evidencia = z.infer<typeof EvidenciaSchema>;
 
 interface FormularioCalculadoraProps {

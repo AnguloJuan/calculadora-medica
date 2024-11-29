@@ -14,7 +14,7 @@ import {
 import { crearParametroAction } from "@/utils/actions";
 import { ParametroSchema, TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus, Save } from "lucide-react";
+import { Plus, Save, X } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useForm, useFormContext } from "react-hook-form";
 import FormularioParametro from "../formularios/FormularioParametro";
@@ -96,10 +96,10 @@ const CrearParametro = ({ setParametros }: { setParametros?: Dispatch<SetStateAc
           </section>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="secondary" onClick={() => form.reset()}>Cancelar</Button>
+              <Button variant="secondary" onClick={() => form.reset()}><X />Cancelar</Button>
             </DialogClose>
             <Button type="button" variant={'success'} onClick={() => onSubmit(form.getValues())}>
-              <Plus />
+              <Save />
               Crear
             </Button>
           </DialogFooter>

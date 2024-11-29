@@ -9,9 +9,8 @@ import {
   DialogTitle,
   DialogTrigger
 } from "@/components/ui/dialog";
-import { z } from "@/lib/es-zod";
 import { crearCalculadoraAction } from "@/utils/actions";
-import CalculadoraSchema from "@/validationSchemas/CalculadoraSchema";
+import CalculadoraSchema, { TypeCalculadoraSchema } from "@/validationSchemas/CalculadoraSchema";
 import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus } from "lucide-react";
@@ -20,8 +19,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useToast } from "../Toast";
 import FormularioCalculadora from "../formularios/FormularioCalculadora";
-
-type TypeCalculadoraSchema = z.infer<typeof CalculadoraSchema>;
 
 const CrearCalculadora = ({ parametros }: { parametros: TypeParametroSchema[] }) => {
   const { addToast } = useToast();

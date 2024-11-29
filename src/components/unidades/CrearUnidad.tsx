@@ -13,11 +13,10 @@ import {
 } from "@/components/ui/dialog";
 import { z } from "@/lib/es-zod";
 import { crearUnidadAction } from "@/utils/actions";
-import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
 import UnidadSchema from "@/validationSchemas/UnidadSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus } from "lucide-react";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Plus, Save, X } from "lucide-react";
+import { useState } from "react";
 import { useForm, useFormContext } from "react-hook-form";
 import { useToast } from "../Toast";
 import FormularioUnidad from "../formularios/FormularioUnidad";
@@ -94,9 +93,9 @@ const CrearUnidad = () => {
           </section>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="secondary" onClick={() => form.reset()}>Cancelar</Button>
+              <Button variant="secondary" onClick={() => form.reset()}><X />Cancelar</Button>
             </DialogClose>
-            <Button type="button" variant={'success'} onClick={() => onSubmit(form.getValues())}>Crear</Button>
+            <Button type="button" variant={'success'} onClick={() => onSubmit(form.getValues())}><Save />Crear</Button>
           </DialogFooter>
         </DialogContent>
       </DialogPortal>

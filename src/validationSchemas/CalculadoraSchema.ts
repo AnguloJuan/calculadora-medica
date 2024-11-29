@@ -15,5 +15,7 @@ const CalculadoraSchema = z.object({
   enlace: z.string().optional(),
   evidencias: z.array(EvidenciaSchema).nonempty('Debe agregar al menos una evidencia'),
 });
+type TypeCalculadoraSchema = z.infer<typeof CalculadoraSchema>;
 
 export default CalculadoraSchema;
+export type { TypeCalculadoraSchema };

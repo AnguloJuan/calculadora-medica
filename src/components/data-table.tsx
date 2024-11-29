@@ -19,7 +19,7 @@ import {
 } from "@tanstack/react-table"
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
-import { Button } from "../ui/button"
+import { Button } from "./ui/button"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
