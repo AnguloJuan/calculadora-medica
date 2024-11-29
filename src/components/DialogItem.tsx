@@ -7,9 +7,10 @@ interface DialogItemProps {
   children: React.ReactNode;
   onSelect?: () => void;
   onOpenChange?: (open: boolean) => void;
+  className?: string;
 }
 const DialogItem = forwardRef<HTMLDivElement, DialogItemProps>((props, forwardedRef) => {
-  const { triggerChildren, children, onSelect, onOpenChange, ...itemProps } = props;
+  const { triggerChildren, children, onSelect, onOpenChange, className, ...itemProps } = props;
   return (
     <Dialog onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
@@ -26,7 +27,7 @@ const DialogItem = forwardRef<HTMLDivElement, DialogItemProps>((props, forwarded
       </DialogTrigger>
       <DialogPortal>
         <DialogOverlay />
-        <DialogContent>
+        <DialogContent className={className}>
           {children}
         </DialogContent>
       </DialogPortal>

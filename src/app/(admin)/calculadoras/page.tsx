@@ -3,6 +3,7 @@ import CrearCalculadora from "@/components/calculadoras/CrearCalculadora";
 import { DataTable } from "@/components/data-table";
 import { conectarBd } from "@/db/conectarDb";
 import { Calculadora, Parametro, Unidad } from "@/utils/types";
+import { TypeCalculadoraSchema } from "@/validationSchemas/CalculadoraSchema";
 import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
 import { RowDataPacket } from "mysql2";
 
@@ -54,14 +55,29 @@ const CalculadorasPage = async () => {
   const calculadoras = await obtenerCalculadoras();
   const parametrosObtenidos = await obtenerParametros();
   const parametros: TypeParametroSchema[] = await obtenerUnidades(parametrosObtenidos!);
+  const calculadorasConParametros: TypeCalculadoraSchema[] = calculadoras ? calculadoras.map((calculadora) => {
+    return {
+      id: calculadora.id,
+      nombre: calculadora.nombre,
+      descripcion: calculadora.descripcion,
+      categoria: calculadora.categoria,
+      formula: calculadora.formula,
+      parametros: parametros.filter((parametro) => parametro.id === calculadora.id) as [TypeParametroSchema, ...TypeParametroSchema[]],
+      evidencias: calculadora.evidencias,
+      descripcion_corta: calculadora.descripcion_corta,
+      resultados_recomendaciones: calculadora.resultados_recomendaciones,
+      enlace: calculadora.enlace,
+    }
+  }) : []
 
-  const data: CalculadoraTable[] = calculadoras ? calculadoras.map((calculadora) => {
+  const data: CalculadoraTable[] = calculadorasConParametros ? calculadorasConParametros.map((calculadora) => {
     return {
       id: calculadora.id,
       nombre: calculadora.nombre,
       categoria: calculadora.categoria,
       formula: calculadora.formula,
       calculadora: calculadora,
+      parametros: parametros,
     }
   }) : []
 

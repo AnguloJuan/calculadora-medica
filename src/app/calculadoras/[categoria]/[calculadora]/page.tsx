@@ -44,8 +44,6 @@ export default async function CalculadoraPage({ params, request }: { params: { c
   const calculadora: ICalculadora = await obtenerCalculadora();
 
   async function obtenerParametros() {
-    console.log(calculadora);
-    
     try {
       const [parametrosRows] = await conexion.query<Parametros[]>(
         'SELECT * FROM `calculadora_parametro` as `cp` RIGHT JOIN `parametro` as `p` ON cp.id_parametro = p.id WHERE id_calculadora = ?',

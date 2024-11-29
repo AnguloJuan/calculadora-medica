@@ -2,7 +2,8 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 
-import { Calculadora } from "@/utils/types"
+import { TypeCalculadoraSchema } from "@/validationSchemas/CalculadoraSchema"
+import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema"
 import AccionesCalculadora from "./Acciones"
 
 // This type is used to define the shape of our data.
@@ -11,7 +12,8 @@ export type CalculadoraTable = {
   nombre: string
   categoria: string
   formula: string
-  calculadora: Calculadora
+  calculadora: TypeCalculadoraSchema
+  parametros: TypeParametroSchema[]
 }
 
 export const columns: ColumnDef<CalculadoraTable>[] = [
@@ -35,10 +37,11 @@ export const columns: ColumnDef<CalculadoraTable>[] = [
     id: "actions",
     cell: ({ row }) => {
       const calculadora = row.original.calculadora
+      const parametros = row.original.parametros
 
       return (
         <div className="flex gap-8">
-          <AccionesCalculadora calculadora={calculadora} />
+          <AccionesCalculadora calculadora={calculadora} parametros={parametros} />
         </div>
       )
     },

@@ -1,13 +1,13 @@
 "use client"
-import { Calculadora } from "@/utils/types";
+import { TypeCalculadoraSchema } from "@/validationSchemas/CalculadoraSchema";
+import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
 import { MoreHorizontal } from "lucide-react";
-import DialogItem from "../DialogItem";
 import { Button } from "../ui/button";
-import { DialogDescription, DialogTitle } from "../ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import ActualizarCalculadora from "./ActualizarCalculadora";
 import EliminarCalculadora from "./EliminarCalculadora";
 
-export default function AccionesCalculadora({ calculadora }: { calculadora: Calculadora }) {
+export default function AccionesCalculadora({ calculadora, parametros }: { calculadora: TypeCalculadoraSchema, parametros: TypeParametroSchema[] }) {
   const formData = new FormData();
   formData.set('id', calculadora.id.toString());
   return (
@@ -20,13 +20,7 @@ export default function AccionesCalculadora({ calculadora }: { calculadora: Calc
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-        <DialogItem triggerChildren="Editar">
-          <DialogTitle>Editar</DialogTitle>
-          <DialogDescription>
-            Editar calculadora.
-          </DialogDescription>
-          <p>…</p>
-        </DialogItem>
+        <ActualizarCalculadora calculadora={calculadora} parametros={parametros} />
         <EliminarCalculadora id={calculadora.id} />
       </DropdownMenuContent>
     </DropdownMenu>

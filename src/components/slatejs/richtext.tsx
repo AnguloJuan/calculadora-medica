@@ -33,7 +33,7 @@ const RichText = ({ onChange, value, onBlur }: RichTextProps) => {
   const renderElement = useCallback(props => <Element {...props} />, [])
   const renderLeaf = useCallback(props => <Leaf {...props} />, [])
   const editor = useMemo(() => withHistory(withReact(createEditor())), [])
-  const initialValue = useMemo(() => value ? JSON.parse(value) : defaultValue, [value])
+  const initialValue = useMemo(() => (value && value !== "") ? JSON.parse(value) : defaultValue, [value])
 
   return (
     <div className='space-y-1'>

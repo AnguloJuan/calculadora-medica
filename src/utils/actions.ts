@@ -132,6 +132,69 @@ export async function eliminarCalculadoraAction(formulario: FormData) {
     return { error: 'Error al eliminar la calculadora', status: 500 };
   }
 }
+export async function actualizarCalculadoraAction(formulario: FormData) {
+  const conexion = await conectarBd();
+  const calculadora = {
+    id: formulario.get('id'),
+    nombre: formulario.get('nombre'),
+    descripcion: formulario.get('descripcion'),
+    descripcion_corta: formulario.get('descripcion_corta'),
+    resultados_recomendaciones: formulario.get('resultados_recomendaciones'),
+    categoria: formulario.get('categoria'),
+    enlace: formulario.get('enlace') || null,
+    formula: formulario.get('formula'),
+    evidencias: JSON.parse(formulario.get('evidencias')?.toString() || '[]') as EvidenciaSchema[],
+    parametros: JSON.parse(formulario.get('parametros')?.toString() || '[]') as Parametro[]
+  };
+
+  const enlace = calculadora.enlace !== "" ? calculadora.enlace : calculadora.nombre;
+
+  if (calculadora.parametros.length === 0) {
+    return { error: 'Por favor agregue al menos un parámetro', status: 400 };
+  }
+
+  try {
+    const updateCalculadora = await conexion.query<ResultSetHeader>(
+      'UPDATE `calculadora` SET `nombre` = ?, `descripcion` = ?, `descripcion_corta` = ?, `resultados_recomendaciones` = ?, `categoria` = ?, `formula` = ?, `enlace` = ? WHERE `id` = ?',
+      [calculadora.nombre, calculadora.descripcion, calculadora.descripcion_corta, calculadora.resultados_recomendaciones, calculadora.categoria, calculadora.formula, enlace, calculadora.id]
+    );
+
+    if (updateCalculadora[0].affectedRows !== 1) {
+      return { error: 'Error al actualizar la calculadora', status: 500 };
+    }
+
+    // insert new parameters if any
+    for (let i = 0; i < calculadora.parametros.length; i++) {
+      await conexion.query<ResultSetHeader>(
+        'INSERT IGNORE INTO `calculadora_parametro` (`id_calculadora`, `id_parametro`) VALUES (?, ?)',
+        [calculadora.id, calculadora.parametros[i].id]
+      );
+    }
+    // delete all the parameters that are not in the new list
+    await conexion.query<ResultSetHeader>(
+      'DELETE FROM `calculadora_parametro` WHERE `id_calculadora` = ? AND `id_parametro` NOT IN (?)',
+      [calculadora.id, calculadora.parametros.map((parametro) => parametro.id)]
+    );
+
+    // insert new evidences if any
+    for (let i = 0; i < calculadora.evidencias.length; i++) {
+      await conexion.query<ResultSetHeader>(
+        'INSERT IGNORE INTO `evidencia` (`id_calculadora`, `cita`) VALUES (?, ?)',
+        [calculadora.id, calculadora.evidencias[i].cita]
+      );
+    }
+    // delete all the evidences that are not in the new list
+    await conexion.query<ResultSetHeader>(
+      'DELETE FROM `evidencia` WHERE `id_calculadora` = ? AND `cita` NOT IN (?)',
+      [calculadora.id, calculadora.evidencias.map((evidencia) => evidencia.cita)]
+    );
+
+    return { status: 200 };
+  } catch (err) {
+    console.error(err);
+    return { error: 'Error al actualizar la calculadora', status: 500 };
+  }
+}
 
 // Parametros
 interface Parametros extends RowDataPacket, Parametro { }
