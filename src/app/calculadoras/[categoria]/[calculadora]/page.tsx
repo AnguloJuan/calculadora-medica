@@ -9,6 +9,7 @@ import { Calculadora as ICalculadora, Parametro, Unidad } from "@/utils/types";
 import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
 import { FileText } from "lucide-react";
 import { RowDataPacket } from "mysql2";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { NextRequest } from "next/server";
 
@@ -22,6 +23,7 @@ interface Evidencia {
   id: number;
   id_calculadora: number;
   cita: string;
+  enlace?: string;
 }
 interface Evidencias extends RowDataPacket, Evidencia { }
 
@@ -146,14 +148,25 @@ export default async function CalculadoraPage({ params, request }: { params: { c
                 </CardHeader>
                 <CardContent>
                   <Each of={evidencias} render={
-                    (evidencia, index) => (
-                      <Card key={index} className="w-full py-4 ps-4 pe-0">
-                        <CardContent className="p-0 flex flex-row gap-2">
-                          <FileText className="min-w-6 min-h-6" />
-                          <p className="text-sm text-muted-foreground">{evidencia.cita}</p>
-                        </CardContent>
-                      </Card>
-                    )
+                    (evidencia, index) => (<>
+                      {evidencia.enlace ?
+                        <a href={evidencia.enlace} target="_blank">
+                          <Card key={index} className="w-full py-4 ps-4 pe-0">
+                            <CardContent className="p-0 flex flex-row gap-2">
+                              <FileText className="min-w-6 min-h-6" />
+                              <p className="text-sm text-muted-foreground">{evidencia.cita}</p>
+                            </CardContent>
+                          </Card>
+                        </a> :
+                        <Card key={index} className="w-full py-4 ps-4 pe-0">
+                          <CardContent className="p-0 flex flex-row gap-2">
+                            <FileText className="min-w-6 min-h-6" />
+                            <p className="text-sm text-muted-foreground">{evidencia.cita}</p>
+                          </CardContent>
+                        </Card>
+                      }
+
+                    </>)
                   } />
                 </CardContent>
               </Card>

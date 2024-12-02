@@ -100,8 +100,8 @@ export async function crearCalculadoraAction(formulario: FormData) {
 
     for (let i = 0; i < calculadora.evidencias.length; i++) {
       const insertEvidencias = await conexion.query<ResultSetHeader>(
-        'INSERT INTO `evidencia` (`id_calculadora`, `cita`) VALUES (?, ?)',
-        [insertCalculadora[0].insertId, calculadora.evidencias[i].cita]
+        'INSERT INTO `evidencia` (`id_calculadora`, `cita`, `enlace`) VALUES (?, ?, ?)',
+        [insertCalculadora[0].insertId, calculadora.evidencias[i].cita, calculadora.evidencias[i].enlace]
       );
 
       if (insertEvidencias[0].affectedRows !== 1) {
