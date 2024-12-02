@@ -1,7 +1,8 @@
 "use client"
-import React, { useMemo } from 'react'
-import { createEditor, Descendant } from 'slate'
-import { Slate, Editable, withReact } from 'slate-react'
+import { useCallback, useMemo } from 'react'
+import { createEditor } from 'slate'
+import { Editable, Slate, withReact } from 'slate-react'
+import { Element, Leaf } from './Elements'
 
 const ReadOnlyText = ({ value }: { value: string }) => {
   const editor = useMemo(() => withReact(createEditor()), [])
@@ -16,14 +17,20 @@ const ReadOnlyText = ({ value }: { value: string }) => {
   }
   if (!isValueJson(value)) {
     console.log('value is not json');
-    
+
     return <p className="leading-7">{value}</p>
   }
   const initialValue = useMemo(() => JSON.parse(value), [value])
+  const renderElement = useCallback(props => <Element {...props} />, [])
+  const renderLeaf = useCallback(props => <Leaf {...props} />, [])
 
   return (
     <Slate editor={editor} initialValue={initialValue}>
-      <Editable readOnly />
+      <Editable
+        readOnly
+        renderElement={renderElement}
+        renderLeaf={renderLeaf}
+      />
     </Slate>
   )
 }

@@ -134,7 +134,7 @@ export default async function CalculadoraPage({ params, request }: { params: { c
                   <CardTitle>Recomendaciones</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="leading-7 [&:not(:first-child)]:mt-6">{calculadora.resultados_recomendaciones}</p>
+                  <ReadOnlyText value={calculadora.resultados_recomendaciones} />
                 </CardContent>
               </Card>
             </TabsContent>
