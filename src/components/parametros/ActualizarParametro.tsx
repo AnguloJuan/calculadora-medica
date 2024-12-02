@@ -46,7 +46,7 @@ const ActualizarParametro = ({ parametro, setParametros }: { parametro: TypePara
     defaultValues: initialValues
   })
 
-  const onSubmit = async (data: TypeParametroSchema) => {
+  const onSubmit = async () => {
     const output = await form.trigger();
     if (!output) return;
 
@@ -101,7 +101,7 @@ const ActualizarParametro = ({ parametro, setParametros }: { parametro: TypePara
             <DialogClose asChild>
               <Button variant="secondary" onClick={() => form.reset()}><X />Cancelar</Button>
             </DialogClose>
-            <Button type="button" onClick={() => onSubmit(form.getValues())}><Edit />Actualizar</Button>
+            <Button type="button" onClick={() => onSubmit()}><Edit />Actualizar</Button>
           </DialogFooter>
         </DialogContent>
       </DialogPortal>

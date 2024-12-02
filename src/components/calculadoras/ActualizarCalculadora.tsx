@@ -14,18 +14,6 @@ import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
 const ActualizarCalculadora = ({ calculadora, parametros }: { calculadora: TypeCalculadoraSchema, parametros: TypeParametroSchema[] }) => {
   const { addToast } = useToast();
 
-  const onClick = () => {
-    const formData = new FormData();
-    formData.set('id', calculadora.id.toString());
-
-
-    eliminarCalculadoraAction(formData);
-    addToast(
-      'La calculadora ha sido eliminada correctamente.',
-      'success',
-    );
-  }
-
   const initialValues: TypeCalculadoraSchema = {
     id: calculadora.id,
     nombre: calculadora.nombre,
@@ -50,26 +38,28 @@ const ActualizarCalculadora = ({ calculadora, parametros }: { calculadora: TypeC
     if (!output) return;
 
     const calculadora = form.getValues();
-    async function actualizarCalculadora() {
-      const formData = new FormData();
-      formData.append('id', calculadora.id.toString());
-      formData.append('nombre', calculadora.nombre);
-      formData.append('descripcion', calculadora.descripcion);
-      formData.append('descripcion_corta', calculadora.descripcion_corta || '');
-      formData.append('resultados_recomendaciones', calculadora.resultados_recomendaciones || '');
-      formData.append('categoria', calculadora.categoria);
-      formData.append('formula', calculadora.formula);
-      formData.append('enlace', calculadora.enlace || '');
-      formData.append('parametros', JSON.stringify(calculadora.parametros));
-      formData.append('evidencias', JSON.stringify(calculadora.evidencias));
+    const formData = new FormData();
+    formData.append('id', calculadora.id.toString());
+    formData.append('nombre', calculadora.nombre);
+    formData.append('descripcion', calculadora.descripcion);
+    formData.append('descripcion_corta', calculadora.descripcion_corta || '');
+    formData.append('resultados_recomendaciones', calculadora.resultados_recomendaciones || '');
+    formData.append('categoria', calculadora.categoria);
+    formData.append('formula', calculadora.formula);
+    formData.append('enlace', calculadora.enlace || '');
+    formData.append('parametros', JSON.stringify(calculadora.parametros));
+    formData.append('evidencias', JSON.stringify(calculadora.evidencias));
 
-      await actualizarCalculadoraAction(formData);
-      addToast(
-        'La calculadora ha sido actualizada correctamente.',
-        'success',
-      );
+    try {
+      const response = await actualizarCalculadoraAction(formData);
+      if (response.error) {
+        addToast('Error al actualizar la calculadora', 'error');
+        return;
+      }
+      addToast('Calculadora actualizada', 'success');
+    } catch (error) {
+      console.error(error);
     }
-    // actualizarCalculadora();
   }
 
 
@@ -79,13 +69,13 @@ const ActualizarCalculadora = ({ calculadora, parametros }: { calculadora: TypeC
       {/* <DialogDescription>
         Editar calculadora.
       </DialogDescription> */}
-      <FormularioCalculadora form={form} onSubmit={onSubmit} parametros={parametros} />
+      <FormularioCalculadora form={form} parametros={parametros} />
       <div className="flex flex-row justify-between gap-4">
         <DialogClose asChild>
           <Button variant="default" className="w-full"><X />Cancelar</Button>
         </DialogClose>
         <DialogClose asChild>
-          <Button type="button" variant="warning" className="w-full" onClick={onClick}><Edit />Actualizar</Button>
+          <Button type="button" variant="warning" className="w-full" onClick={() => onSubmit}><Edit />Actualizar</Button>
         </DialogClose>
       </div>
     </DialogItem>

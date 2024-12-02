@@ -2,8 +2,10 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogPortal,
   DialogTitle,
@@ -13,7 +15,7 @@ import { crearCalculadoraAction } from "@/utils/actions";
 import CalculadoraSchema, { TypeCalculadoraSchema } from "@/validationSchemas/CalculadoraSchema";
 import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus } from "lucide-react";
+import { Plus, Save } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -40,7 +42,11 @@ const CrearCalculadora = ({ parametros }: { parametros: TypeParametroSchema[] })
     },
   })
 
-  function onSubmit(values: TypeCalculadoraSchema) {
+  const onSubmit = async () => {
+    const output = await form.trigger();
+    if (!output) return;
+
+    const values = form.getValues();
     const formulario = new FormData();
     formulario.set('id', '0');
     formulario.set('enlace', '');
@@ -99,8 +105,17 @@ const CrearCalculadora = ({ parametros }: { parametros: TypeParametroSchema[] })
             </DialogDescription>
           </DialogHeader>
           <section className="grid gap-4 py-4 w-full">
-            <FormularioCalculadora form={form} onSubmit={onSubmit} parametros={parametros} />
+            <FormularioCalculadora form={form} parametros={parametros} />
           </section>
+          <DialogFooter className="sm:justify-between mt-8">
+            <DialogClose asChild>
+              <Button variant="secondary" className="w-full" onClick={() => form.reset()}>Cancelar</Button>
+            </DialogClose>
+            <Button type="button" variant={'success'} className="w-full" onClick={() => onSubmit()}>
+              <Save />
+              Guardar calculadora
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </DialogPortal>
     </Dialog>

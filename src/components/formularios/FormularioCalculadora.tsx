@@ -16,13 +16,12 @@ import { CATEGORIAS } from "@/utils/types";
 import { TypeCalculadoraSchema } from "@/validationSchemas/CalculadoraSchema";
 import EvidenciaSchema from "@/validationSchemas/EvidenciaSchema";
 import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
-import { FileText, Plus, Save, Trash2 } from "lucide-react";
+import { FileText, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useFieldArray, UseFormReturn } from "react-hook-form";
 import ReactSelect from "react-select";
 import RichText from "../slatejs/richtext";
-import { DialogClose, DialogFooter } from "../ui/dialog";
 
 type paramOption = {
   value: TypeParametroSchema,
@@ -33,15 +32,13 @@ type Evidencia = z.infer<typeof EvidenciaSchema>;
 interface FormularioCalculadoraProps {
   form: UseFormReturn<TypeCalculadoraSchema>
   parametros: TypeParametroSchema[],
-  onSubmit(values: TypeCalculadoraSchema): void
 }
 
-const FormularioCalculadora = ({ form, parametros: params, onSubmit }: FormularioCalculadoraProps) => {
+const FormularioCalculadora = ({ form, parametros: params }: FormularioCalculadoraProps) => {
   const [parametros, setParametros] = useState<TypeParametroSchema[]>(params || []);
   const {
     formState: { errors },
     register,
-    handleSubmit,
     control,
     setValue,
     watch,
@@ -70,7 +67,6 @@ const FormularioCalculadora = ({ form, parametros: params, onSubmit }: Formulari
   return (
     <Form {...form}>
       <form
-        onSubmit={handleSubmit(onSubmit)}
         className="flex w-full flex-col items-center justify-between gap-16"
       >
         <div className="w-full flex flex-col gap-4">
@@ -279,16 +275,6 @@ const FormularioCalculadora = ({ form, parametros: params, onSubmit }: Formulari
               </FormItem>
             )}
           />
-
-          <DialogFooter className="sm:justify-between mt-8">
-            <DialogClose asChild>
-              <Button variant="secondary" className="w-full" onClick={() => form.reset()}>Cancelar</Button>
-            </DialogClose>
-            <Button variant={'success'} className="w-full">
-              <Save />
-              Guardar calculadora
-            </Button>
-          </DialogFooter>
         </div>
       </form>
     </Form>
