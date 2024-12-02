@@ -4,7 +4,7 @@ import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { conectarBd } from "../db/conectarDb";
-import { logIn } from "./auth";
+import { logIn, signUp } from "./auth";
 import { ActualizarParametros } from "./constantes";
 import { deleteSession } from "./sessions";
 import { Parametro, Unidad, UnidadPorParametro } from "./types";
@@ -32,6 +32,17 @@ export async function authenticateAction(_currentState: unknown, formData: FormD
   }
   if (cookies().has('session')) {
     redirect('/calculadoras');
+  }
+}
+export async function signUpAction(_currentState: unknown, formData: FormData) {
+  try {
+    const success = await signUp(formData)
+    return success && 'Usuario registrado con exito'
+  } catch (error: any) {
+    if (error.message === 'ErrorRegistering') {
+      return 'Error al registrar el usuario'
+    }
+    throw error
   }
 }
 
@@ -147,7 +158,8 @@ export async function actualizarCalculadoraAction(formulario: FormData) {
     parametros: JSON.parse(formulario.get('parametros')?.toString() || '[]') as Parametro[]
   };
 
-  const enlace = calculadora.enlace !== "" ? calculadora.enlace : calculadora.nombre;
+  var kebabCase = require('lodash/kebabCase');
+  const enlace = calculadora.enlace !== "" ? kebabCase(calculadora.enlace) : kebabCase(calculadora.nombre);
 
   if (calculadora.parametros.length === 0) {
     return { error: 'Por favor agregue al menos un parámetro', status: 400 };
@@ -293,17 +305,19 @@ export async function actualizarParametroAction(formulario: FormData) {
     }
 
     // insert new units if any
-    for (let i = 0; i < unidades.length; i++) {
+    if (parametro.tipo_campo === 'numerico' && unidades) {
+      for (let i = 0; i < unidades.length; i++) {
+        await conexion.query<ResultSetHeader>(
+          'INSERT IGNORE INTO `parametro_unidad` (`id_parametro`, `id_unidad`) VALUES (?, ?)',
+          [parametro.id, unidades[i].id]
+        );
+      }
+      // delete all the units that are not in the new list
       await conexion.query<ResultSetHeader>(
-        'INSERT IGNORE INTO `parametro_unidad` (`id_parametro`, `id_unidad`) VALUES (?, ?)',
-        [parametro.id, unidades[i].id]
+        'DELETE FROM `parametro_unidad` WHERE `id_parametro` = ? AND `id_unidad` NOT IN (?)',
+        [parametro.id, unidades.map((unidad) => unidad.id)]
       );
     }
-    // delete all the units that are not in the new list
-    await conexion.query<ResultSetHeader>(
-      'DELETE FROM `parametro_unidad` WHERE `id_parametro` = ? AND `id_unidad` NOT IN (?)',
-      [parametro.id, unidades.map((unidad) => unidad.id)]
-    );
 
     return { message: 'Parámetro actualizado con exito', status: 200 };
   } catch (err) {

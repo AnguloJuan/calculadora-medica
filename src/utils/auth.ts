@@ -1,8 +1,10 @@
 import { conectarBd } from "@/db/conectarDb";
+import bcrypt from 'bcrypt';
 import { ResultSetHeader } from "mysql2";
 import { createSession } from "./sessions";
 
 interface Usuario extends ResultSetHeader {
+  id: number;
   usuario: string;
   contrasena: string;
   rol: string;
@@ -17,24 +19,45 @@ export async function logIn(formData: FormData) {
     throw new Error('MissingCredentials');
   }
 
-  // //encrypt password
-  // contrasena = contrasena.toString();
-  // const crypto = require('crypto');
-  // const hash = crypto.createHash('sha256');
-  // hash.update(contrasena);
-  // contrasena = hash.digest('hex');
-
-
-  const [rows] = await conexion.query<Usuario[]>(
-    'SELECT * FROM `usuario` WHERE `usuario` = ? AND `contrasena` = ?',
-    [usuario, contrasena]
+  // Fetch the user's hashed password from the database
+  const [user] = await conexion.execute<Usuario[]>(
+    'SELECT * FROM usuario WHERE usuario = ?',
+    [usuario]
   );
 
-  if (rows.length === 0) {
+  if (user.length === 0) {
     throw new Error('CredentialsSignin');
   }
 
-  const user = rows[0];
+  const hashedPassword = user[0].contrasena;
 
-  await createSession(user.rol);
+  // Compare the entered password with the stored hash
+  const isMatch = await bcrypt.compare(contrasena, hashedPassword);
+
+  if (isMatch) {
+    await createSession(user[0].rol);
+  } else {
+    throw new Error('CredentialsSignin');
+  }
+}
+
+const saltRounds = 10; // Adjust as needed for performance vs security
+
+export async function signUp(formData: FormData) {
+  const usuario = formData.get('usuario');
+  let contrasena = formData.get('contrasena');
+  try {
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(contrasena, saltRounds);
+
+    // Save the hashed password in the database
+    const conexion = await conectarBd();
+
+    const query = 'INSERT INTO usuario (usuario, contrasena) VALUES (?, ?)';
+    await conexion.execute(query, [usuario, hashedPassword]);
+    return true;
+  } catch (error) {
+    console.error(error);
+    throw new Error('ErrorRegistering');
+  }
 }

@@ -2,7 +2,7 @@ import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 import { decrypt } from './utils/sessions';
 
-const protectedRoutes = ['/calculadoras', '/parametros', '/unidades'];
+const protectedRoutes = ['/calculadoras', '/parametros', '/unidades', '/registrar-usuario'];
 const publicRoutes = ['/iniciar-sesion', '/calculadoras:path*', '/'];
 
 export default async function middleware(request: NextRequest) {

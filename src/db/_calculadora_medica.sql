@@ -67,5 +67,3 @@ CREATE TABLE IF NOT EXISTS usuario (
   contrasena VARCHAR(120) NOT NULL,
   rol ENUM('admin', 'usuario') NOT NULL
 );
-
-INSERT INTO `usuario`(`id`, `usuario`, `contrasena`, `rol`) VALUES (1, 'admin','1234','admin')
