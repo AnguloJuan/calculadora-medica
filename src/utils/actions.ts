@@ -1,5 +1,7 @@
 'use server'
 
+import { z } from "@/lib/es-zod";
+import EvidenciaSchema from "@/validationSchemas/EvidenciaSchema";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -8,8 +10,6 @@ import { logIn, signUp } from "./auth";
 import { ActualizarParametros } from "./constantes";
 import { deleteSession } from "./sessions";
 import { Parametro, Unidad, UnidadPorParametro } from "./types";
-import EvidenciaSchema from "@/validationSchemas/EvidenciaSchema";
-import { z } from "@/lib/es-zod";
 
 // Auth
 export async function authenticateAction(_currentState: unknown, formData: FormData) {
@@ -62,8 +62,10 @@ export async function crearCalculadoraAction(formulario: FormData) {
     descripcion_corta: formulario.get('descripcion_corta'),
     resultados_recomendaciones: formulario.get('resultados_recomendaciones'),
     categoria: formulario.get('categoria'),
-    enlace: formulario.get('enlace') || null,
+    enlace: formulario.get('enlace'),
     formula: formulario.get('formula'),
+    formula_display: formulario.get('formula_display'),
+    unidad_resultado: formulario.get('unidad_resultado'),
     evidencias: JSON.parse(formulario.get('evidencias')?.toString() || '[]') as EvidenciaSchema[],
     parametros: JSON.parse(formulario.get('parametros')?.toString() || '[]') as Parametro[]
   };
@@ -78,8 +80,8 @@ export async function crearCalculadoraAction(formulario: FormData) {
 
   try {
     const insertCalculadora = await conexion.query<ResultSetHeader>(
-      'INSERT INTO `calculadora` (`nombre`, `descripcion`, `descripcion_corta`, `resultados_recomendaciones`, `categoria`, `formula`, `enlace`) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      [calculadora.nombre, calculadora.descripcion, calculadora.descripcion_corta, calculadora.resultados_recomendaciones, calculadora.categoria, calculadora.formula, enlace]
+      'INSERT INTO `calculadora` (`nombre`, `descripcion`, `descripcion_corta`, `resultados_recomendaciones`, `categoria`, `formula`, `formula_display`, `unidad_resultado`, `enlace`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      [calculadora.nombre, calculadora.descripcion, calculadora.descripcion_corta, calculadora.resultados_recomendaciones, calculadora.categoria, calculadora.formula, calculadora.formula_display, calculadora.unidad_resultado, enlace]
     );
 
     if (insertCalculadora[0].affectedRows !== 1) {
@@ -152,8 +154,10 @@ export async function actualizarCalculadoraAction(formulario: FormData) {
     descripcion_corta: formulario.get('descripcion_corta'),
     resultados_recomendaciones: formulario.get('resultados_recomendaciones'),
     categoria: formulario.get('categoria'),
-    enlace: formulario.get('enlace') || null,
+    enlace: formulario.get('enlace'),
     formula: formulario.get('formula'),
+    formula_display: formulario.get('formula_display'),
+    unidad_resultado: formulario.get('unidad_resultado'),
     evidencias: JSON.parse(formulario.get('evidencias')?.toString() || '[]') as EvidenciaSchema[],
     parametros: JSON.parse(formulario.get('parametros')?.toString() || '[]') as Parametro[]
   };
@@ -161,25 +165,33 @@ export async function actualizarCalculadoraAction(formulario: FormData) {
   var kebabCase = require('lodash/kebabCase');
   const enlace = calculadora.enlace !== "" ? kebabCase(calculadora.enlace) : kebabCase(calculadora.nombre);
 
+
   if (calculadora.parametros.length === 0) {
     return { error: 'Por favor agregue al menos un parámetro', status: 400 };
   }
 
   try {
     const updateCalculadora = await conexion.query<ResultSetHeader>(
-      'UPDATE `calculadora` SET `nombre` = ?, `descripcion` = ?, `descripcion_corta` = ?, `resultados_recomendaciones` = ?, `categoria` = ?, `formula` = ?, `enlace` = ? WHERE `id` = ?',
-      [calculadora.nombre, calculadora.descripcion, calculadora.descripcion_corta, calculadora.resultados_recomendaciones, calculadora.categoria, calculadora.formula, enlace, calculadora.id]
+      'UPDATE `calculadora` SET `nombre` = ?, `descripcion` = ?, `descripcion_corta` = ?, `resultados_recomendaciones` = ?, `categoria` = ?, `formula` = ?, `formula_display` = ?, `unidad_resultado` = ?, `enlace` = ? WHERE `id` = ?',
+      [calculadora.nombre, calculadora.descripcion, calculadora.descripcion_corta, calculadora.resultados_recomendaciones, calculadora.categoria, calculadora.formula, calculadora.formula_display, calculadora.unidad_resultado, enlace, calculadora.id]
     );
 
     if (updateCalculadora[0].affectedRows !== 1) {
       return { error: 'Error al actualizar la calculadora', status: 500 };
     }
 
+    // check if the parameters are already in the database
+    const [parametros] = await conexion.query<RowDataPacket[]>(
+      'SELECT `id_parametro` FROM `calculadora_parametro` WHERE `id_calculadora` = ?',
+      [calculadora.id]
+    );
+    // filter the parameters that are already in the database
+    const newParametros = calculadora.parametros.filter((parametro) => !parametros.some((param) => param.id_parametro === parametro.id));
     // insert new parameters if any
-    for (let i = 0; i < calculadora.parametros.length; i++) {
+    for (let i = 0; i < newParametros.length; i++) {
       await conexion.query<ResultSetHeader>(
         'INSERT IGNORE INTO `calculadora_parametro` (`id_calculadora`, `id_parametro`) VALUES (?, ?)',
-        [calculadora.id, calculadora.parametros[i].id]
+        [calculadora.id, newParametros[i].id]
       );
     }
     // delete all the parameters that are not in the new list
@@ -191,8 +203,8 @@ export async function actualizarCalculadoraAction(formulario: FormData) {
     // insert new evidences if any
     for (let i = 0; i < calculadora.evidencias.length; i++) {
       await conexion.query<ResultSetHeader>(
-        'INSERT IGNORE INTO `evidencia` (`id_calculadora`, `cita`) VALUES (?, ?)',
-        [calculadora.id, calculadora.evidencias[i].cita]
+        'INSERT IGNORE INTO `evidencia` (`id`, `id_calculadora`, `cita`, `enlace`) VALUES (?, ?, ?, ?)',
+        [calculadora.evidencias[i].id, calculadora.id, calculadora.evidencias[i].cita, calculadora.evidencias[i].enlace]
       );
     }
     // delete all the evidences that are not in the new list

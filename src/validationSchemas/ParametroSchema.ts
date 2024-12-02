@@ -32,7 +32,7 @@ const ParametroSchema = z.object({
   nombre: z.string().min(1),
   abreviatura: z.string().optional(),
   tipo_campo: z.enum(['numerico', 'seleccion', 'radio']),
-  unidades: z.array(UnidadSchema).optional(),
+  unidades: z.array(z.any()).optional(),
   valorMaximo: z.coerce.number().optional(),
   valorMinimo: z.coerce.number().optional(),
   opciones: z.string().optional()

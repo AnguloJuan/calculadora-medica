@@ -20,11 +20,13 @@ const ActualizarCalculadora = ({ calculadora, parametros }: { calculadora: TypeC
     id: calculadora.id,
     nombre: calculadora.nombre,
     descripcion: calculadora.descripcion,
-    descripcion_corta: calculadora.descripcion,
+    descripcion_corta: calculadora.descripcion_corta,
     resultados_recomendaciones: calculadora.resultados_recomendaciones,
     categoria: calculadora.categoria,
     enlace: calculadora.enlace,
     formula: calculadora.formula,
+    formula_display: calculadora.formula_display,
+    unidad_resultado: calculadora.unidad_resultado,
     evidencias: calculadora.evidencias,
     parametros: calculadora.parametros,
   }
@@ -35,7 +37,7 @@ const ActualizarCalculadora = ({ calculadora, parametros }: { calculadora: TypeC
     defaultValues: initialValues
   })
 
-  const onSubmit = async (data: TypeCalculadoraSchema) => {
+  const onSubmit = async () => {
     const output = await form.trigger();
     if (!output) return;
 
@@ -48,6 +50,8 @@ const ActualizarCalculadora = ({ calculadora, parametros }: { calculadora: TypeC
     formData.append('resultados_recomendaciones', calculadora.resultados_recomendaciones || '');
     formData.append('categoria', calculadora.categoria);
     formData.append('formula', calculadora.formula);
+    formData.append('formula_display', calculadora.formula_display || '');
+    formData.append('unidad_resultado', calculadora.unidad_resultado || '');
     formData.append('enlace', calculadora.enlace || '');
     formData.append('parametros', JSON.stringify(calculadora.parametros));
     formData.append('evidencias', JSON.stringify(calculadora.evidencias));
@@ -78,7 +82,7 @@ const ActualizarCalculadora = ({ calculadora, parametros }: { calculadora: TypeC
           <Button variant="default" className="w-full"><X />Cancelar</Button>
         </DialogClose>
         <DialogClose asChild>
-          <Button type="button" variant="warning" className="w-full" onClick={() => onSubmit}><Edit />Actualizar</Button>
+          <Button type="button" variant="warning" className="w-full" onClick={() => onSubmit()}><Edit />Actualizar</Button>
         </DialogClose>
       </div>
     </DialogItem>

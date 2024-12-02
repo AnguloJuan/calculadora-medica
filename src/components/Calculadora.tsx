@@ -21,7 +21,8 @@ const Calculadora = ({ formula, parametros }: CalculadoraProps) => {
   const [error, setError] = useState(false);
 
   const handleInputChange = useCallback((parametro: string, valor: number) => {
-    setValores((prev) => ({ ...prev, [parametro]: valor }));
+    const param = parametro.replace(" ", "");
+    setValores((prev) => ({ ...prev, [param]: valor }));
   }, []);
 
   const calcularResultado = useCallback(() => {

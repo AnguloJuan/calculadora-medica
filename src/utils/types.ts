@@ -36,6 +36,8 @@ interface Calculadora {
   resultados_recomendaciones: string,
   categoria: typeof CATEGORIAS[number]['kebabCase'],
   formula: string,
+  formula_display: string,
+  unidad_resultado: string,
   enlace: string
 }
 

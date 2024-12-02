@@ -55,8 +55,10 @@ const FormularioCalculadora = ({ form, parametros: params }: FormularioCalculado
     keyName: "_id",
   });
   const [evidencia, setEvidencia] = useState<Evidencia>({
+    id: 0,
     cita: "",
-    enlace: ""
+    enlace: "",
+    id_calculadora: 0
   });
 
   const parametroOptions: paramOption[] = useMemo(() => parametros.map((parametro) => ({
@@ -159,7 +161,23 @@ const FormularioCalculadora = ({ form, parametros: params }: FormularioCalculado
             name="formula"
             label="Fórmula"
             placeholder="Ingrese la fórmula de la calculadora"
+            description="Ingrese los nombres de los parametros sin espacios para que la formula se evalue correctamente"
+            input="input"
+          />
+          <FormInput
+            control={control}
+            name="formula_display"
+            label="Fórmula (visual)"
+            placeholder="Ingrese la fórmula de la calculadora en formato visual"
+            description="Esta fórmula se mostrará en la calculadora, puede agregar más detalles aquí"
             input="textarea"
+          />
+          <FormInput
+            control={control}
+            name="unidad_resultado"
+            label="Unidad de resultado"
+            placeholder="Ingrese la unidad de resultado de la calculadora"
+            input="input"
           />
 
           <h2 className="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0 mt-4">Detalles</h2>
@@ -205,6 +223,14 @@ const FormularioCalculadora = ({ form, parametros: params }: FormularioCalculado
             </>
             )}
           />
+          <FormInput
+            control={control}
+            name="enlace"
+            label="Enlace"
+            placeholder="Ingrese un enlace de la calculadora si es necesario"
+            input="input"
+          />
+
 
           <FormField
             control={control}
@@ -240,8 +266,10 @@ const FormularioCalculadora = ({ form, parametros: params }: FormularioCalculado
                     }
                     appendEvidencia(evidencia);
                     setEvidencia({
+                      id: 0,
                       cita: "",
-                      enlace: ""
+                      enlace: "",
+                      id_calculadora: 0
                     });
                   }}
                   className="w-fit"

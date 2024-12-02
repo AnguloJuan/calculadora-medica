@@ -1,11 +1,11 @@
 
-import Calculadora from "@/components/Calculadora";
+import CalculadoraComponent from "@/components/Calculadora";
 import { Each } from "@/components/EachOf";
 import ReadOnlyText from "@/components/slatejs/read-only";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { conectarBd } from "@/db/conectarDb";
-import { Calculadora as ICalculadora, Parametro, Unidad } from "@/utils/types";
+import { Calculadora, Evidencia, Parametro, Unidad } from "@/utils/types";
 import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
 import { FileText } from "lucide-react";
 import { RowDataPacket } from "mysql2";
@@ -13,18 +13,13 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { NextRequest } from "next/server";
 
-interface RowsCalculadora extends RowDataPacket, ICalculadora { }
+interface RowsCalculadora extends RowDataPacket, Calculadora { }
 interface Parametros extends RowDataPacket, Parametro { }
 interface Unidades extends RowDataPacket, Unidad { }
 type IParametro = TypeParametroSchema & {
   unidadActual?: Unidad;
 }
-interface Evidencia {
-  id: number;
-  id_calculadora: number;
-  cita: string;
-  enlace?: string;
-}
+
 interface Evidencias extends RowDataPacket, Evidencia { }
 
 export default async function CalculadoraPage({ params, request }: { params: { categoria: string, calculadora: string }, request: NextRequest }) {
@@ -43,7 +38,7 @@ export default async function CalculadoraPage({ params, request }: { params: { c
       redirect('/404');
     }
   }
-  const calculadora: ICalculadora = await obtenerCalculadora();
+  const calculadora: Calculadora = await obtenerCalculadora();
 
   async function obtenerParametros() {
     try {
@@ -102,7 +97,7 @@ export default async function CalculadoraPage({ params, request }: { params: { c
         <div className="flex flex-col gap-8 sm:flex sm:flex-row gap-y-8 divide-y gap-x-8">
           <div className="flex flex-col">
             <div className="flex flex-col gap-4">
-              <Calculadora formula={calculadora.formula} parametros={parametros} />
+              <CalculadoraComponent formula={calculadora.formula} parametros={parametros} />
             </div>
           </div>
 
@@ -119,7 +114,7 @@ export default async function CalculadoraPage({ params, request }: { params: { c
                   <CardTitle>Formula</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm">{calculadora.formula}</p>
+                  <p className="text-sm">{calculadora.formula_display ? calculadora.formula_display : calculadora.formula}</p>
                 </CardContent>
                 <CardHeader>
                   <CardTitle>Acerca de {calculadora.nombre}</CardTitle>
@@ -133,7 +128,7 @@ export default async function CalculadoraPage({ params, request }: { params: { c
             <TabsContent value="Recomendaciones">
               <Card className="bg-container">
                 <CardHeader>
-                  <CardTitle>Recomendaciones</CardTitle>
+                  <CardTitle>Resultados y Recomendaciones</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <ReadOnlyText value={calculadora.resultados_recomendaciones} />

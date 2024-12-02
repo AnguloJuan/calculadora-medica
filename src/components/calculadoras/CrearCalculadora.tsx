@@ -39,6 +39,8 @@ const CrearCalculadora = ({ parametros }: { parametros: TypeParametroSchema[] })
       categoria: "",
       enlace: "",
       formula: "",
+      formula_display: "",
+      unidad_resultado: "",
       evidencias: [],
       parametros: [],
     },
@@ -58,6 +60,8 @@ const CrearCalculadora = ({ parametros }: { parametros: TypeParametroSchema[] })
     formulario.set('resultados_recomendaciones', values.resultados_recomendaciones || '');
     formulario.set('categoria', values.categoria);
     formulario.set('formula', values.formula);
+    formulario.set('formula_display', values.formula_display || '');
+    formulario.set('unidad_resultado', values.unidad_resultado || '');
     formulario.set('parametros', JSON.stringify(values.parametros));
     formulario.set('evidencias', JSON.stringify(values.evidencias));
 
@@ -68,6 +72,7 @@ const CrearCalculadora = ({ parametros }: { parametros: TypeParametroSchema[] })
           respuesta.error,
           'error'
         );
+        setOpen(true);
         return;
       }
       var kebabCase = require('lodash/kebabCase');

@@ -65,9 +65,11 @@ const CalculadorasPage = async () => {
         return {
           ...calc,
           evidencias: (evidencieaRows.filter((evidencia) => evidencia.id_calculadora === calc.id).map((evidencia) => ({
+            id: evidencia.id,
             enlace: evidencia.enlace,
             cita: evidencia.cita,
-          })) as [{ enlace: string; cita: string; }, ...{ enlace: string; cita: string; }[]])
+            id_calculadora: evidencia.id_calculadora
+          })) as [ Evidencia , ...Evidencia[]])
         }
       });
 
