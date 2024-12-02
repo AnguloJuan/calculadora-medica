@@ -6,7 +6,6 @@ export default function TarjetaCalculadora(
   calculadora: Calculadora
 ) {
   return (
-
     <Link href={`${calculadora.categoria}/${calculadora.enlace}`} className="w-full">
       <Card className="w-full bg-container">
         <CardHeader>

@@ -25,11 +25,11 @@ interface Evidencia {
 }
 interface Evidencias extends RowDataPacket, Evidencia { }
 
-export default async function CalculadoraPage({ params, request }: { params: { calculadora: string }, request: NextRequest }) {
+export default async function CalculadoraPage({ params, request }: { params: { categoria: string, calculadora: string }, request: NextRequest }) {
   const conexion = await conectarBd();
   async function obtenerCalculadora() {
     try {
-      const [rows] = await conexion.query<RowsCalculadora[]>('SELECT * FROM calculadora WHERE enlace = ?', [params.calculadora]);
+      const [rows] = await conexion.query<RowsCalculadora[]>('SELECT * FROM calculadora WHERE categoria = ? AND enlace = ?', [params.categoria, params.calculadora]);
 
       if (rows.length === 0) {
         redirect('/404');
@@ -51,7 +51,7 @@ export default async function CalculadoraPage({ params, request }: { params: { c
       );
 
       if (parametrosRows.length === 0) {
-        console.log('No se encontraron parametros');
+        console.error('No se encontraron parametros');
         redirect('/404');
       }
 
