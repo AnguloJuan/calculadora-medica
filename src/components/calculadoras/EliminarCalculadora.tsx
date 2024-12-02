@@ -1,11 +1,14 @@
+"use client"
 import { eliminarCalculadoraAction } from "@/utils/actions";
+import { Trash2, X } from "lucide-react";
+import { useRouter } from "next/navigation";
 import DialogItem from "../DialogItem";
+import { useToast } from "../Toast";
 import { Button } from "../ui/button";
 import { DialogClose, DialogDescription, DialogTitle } from "../ui/dialog";
-import { useToast } from "../Toast";
-import { Trash2, X } from "lucide-react";
 
 const EliminarCalculadora = ({ id }: { id: number }) => {
+  const router = useRouter();
   const formData = new FormData();
   formData.set('id', id.toString());
   const { addToast } = useToast();
@@ -16,6 +19,7 @@ const EliminarCalculadora = ({ id }: { id: number }) => {
       'La calculadora ha sido eliminada correctamente.',
       'success',
     );
+    router.refresh();
   }
   return (
     <DialogItem triggerChildren="Eliminar">

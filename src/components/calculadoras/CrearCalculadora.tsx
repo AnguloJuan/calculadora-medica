@@ -17,6 +17,7 @@ import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus, Save } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useToast } from "../Toast";
@@ -24,6 +25,7 @@ import FormularioCalculadora from "../formularios/FormularioCalculadora";
 
 const CrearCalculadora = ({ parametros }: { parametros: TypeParametroSchema[] }) => {
   const { addToast } = useToast();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const form = useForm<TypeCalculadoraSchema>({
     resolver: zodResolver(CalculadoraSchema),
@@ -83,6 +85,7 @@ const CrearCalculadora = ({ parametros }: { parametros: TypeParametroSchema[] })
         </>,
         'success'
       );
+      router.refresh();
     }
 
     guardarCalculadora();

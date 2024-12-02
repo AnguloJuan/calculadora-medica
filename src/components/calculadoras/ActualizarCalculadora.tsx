@@ -1,18 +1,20 @@
-import { actualizarCalculadoraAction, eliminarCalculadoraAction } from "@/utils/actions";
+import { actualizarCalculadoraAction } from "@/utils/actions";
 import CalculadoraSchema, { TypeCalculadoraSchema } from "@/validationSchemas/CalculadoraSchema";
+import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Edit, X } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import DialogItem from "../DialogItem";
 import FormularioCalculadora from "../formularios/FormularioCalculadora";
 import { useToast } from "../Toast";
 import { Button } from "../ui/button";
-import { DialogClose, DialogDescription, DialogTitle } from "../ui/dialog";
-import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
+import { DialogClose, DialogTitle } from "../ui/dialog";
 
 
 const ActualizarCalculadora = ({ calculadora, parametros }: { calculadora: TypeCalculadoraSchema, parametros: TypeParametroSchema[] }) => {
   const { addToast } = useToast();
+  const router = useRouter();
 
   const initialValues: TypeCalculadoraSchema = {
     id: calculadora.id,
@@ -57,6 +59,7 @@ const ActualizarCalculadora = ({ calculadora, parametros }: { calculadora: TypeC
         return;
       }
       addToast('Calculadora actualizada', 'success');
+      router.refresh();
     } catch (error) {
       console.error(error);
     }
