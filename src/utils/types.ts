@@ -66,10 +66,5 @@ interface Unidad {
   id_unidad_conversion?: number | null
 }
 
-interface UnidadPorParametro {
-  id_parametro: number;
-  unidades: Unidad[];
-};
-
 export { CATEGORIAS };
-export type { Calculadora, Evidencia, Parametro, Unidad, UnidadPorParametro };
+export type { Calculadora, Evidencia, Parametro, Unidad };
