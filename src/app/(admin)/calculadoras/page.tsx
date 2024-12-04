@@ -87,9 +87,9 @@ const CalculadorasPage = async () => {
       id: calculadora.id,
       nombre: calculadora.nombre,
       categoria: calculadora.categoria,
-      formula: calculadora.formula,
+      formula: calculadora.formula_display ? calculadora.formula_display : calculadora.formula,
       calculadora: calculadora,
-      parametros: calculadora.parametros.length > 0 ? calculadora.parametros : [] as any,
+      parametros: parametros,
     }
   }) : []
 

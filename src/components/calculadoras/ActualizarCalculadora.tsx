@@ -79,7 +79,7 @@ const ActualizarCalculadora = ({ calculadora, parametros }: { calculadora: TypeC
       <FormularioCalculadora form={form} parametros={parametros} />
       <div className="flex flex-row justify-between gap-4">
         <DialogClose asChild>
-          <Button variant="default" className="w-full"><X />Cancelar</Button>
+          <Button variant="default" className="w-full" onClick={() => form.reset()}><X />Cancelar</Button>
         </DialogClose>
         <DialogClose asChild>
           <Button type="button" variant="warning" className="w-full" onClick={() => onSubmit()}><Edit />Actualizar</Button>

@@ -120,7 +120,11 @@ const FormularioCalculadora = ({ form, parametros: params }: FormularioCalculado
                       value={parametroOptions.find((param) => param.value === field.value.at(-1))} // Last value
                       options={parametroOptions}
                       noOptionsMessage={() => 'No hay parametros disponibles'}
-                      onChange={(option) => option && setValue('parametros', [...field.value, option.value])}
+                      onChange={(option) => option && (
+                        // check if the option already exists
+                        !field.value.some((param) => param.id === option.value.id) &&
+                        setValue('parametros', [...field.value, option.value])
+                      )}
                       className="w-full border border-border rounded-lg bg-input text-foreground focus:ring focus:ring-ring focus:ring-opacity-50"
                       styles={{
                         control: (styles) => ({ ...styles, backgroundColor: 'Background' }),
