@@ -1,4 +1,4 @@
-import { CalculadoraTable, columns } from "@/components/calculadoras/columns";
+import { CalculadoraColumn, calculadoraColumns } from "@/components/calculadoras/columns";
 import CrearCalculadora from "@/components/calculadoras/CrearCalculadora";
 import { DataTable } from "@/components/data-table";
 import { conectarBd } from "@/db/conectarDb";
@@ -82,7 +82,7 @@ const CalculadorasPage = async () => {
 
   const calculadoras: TypeCalculadoraSchema[] = await obtenerCalculadoras();
 
-  const data: CalculadoraTable[] = calculadoras ? calculadoras.map((calculadora) => {
+  const data: CalculadoraColumn[] = calculadoras ? calculadoras.map((calculadora) => {
     return {
       id: calculadora.id,
       nombre: calculadora.nombre,
@@ -105,7 +105,7 @@ const CalculadorasPage = async () => {
           <h3 className="text-lg font-medium leading-6">Calculadoras</h3>
           <CrearCalculadora parametros={parametros} />
           <div className="container mx-auto">
-            <DataTable columns={columns} data={data} />
+            <DataTable columns={calculadoraColumns} data={data} />
           </div>
         </div>
       </div>

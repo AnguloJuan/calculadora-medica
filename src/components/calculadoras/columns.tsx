@@ -9,7 +9,7 @@ import { ExternalLink } from "lucide-react"
 import Link from "next/link"
 
 // This type is used to define the shape of our data.
-export type CalculadoraTable = {
+export type CalculadoraColumn = {
   id: number
   nombre: string
   categoria: string
@@ -18,7 +18,7 @@ export type CalculadoraTable = {
   parametros: TypeParametroSchema[]
 }
 
-export const columns: ColumnDef<CalculadoraTable>[] = [
+export const calculadoraColumns: ColumnDef<CalculadoraColumn>[] = [
   {
     accessorKey: "id",
     header: "ID",
