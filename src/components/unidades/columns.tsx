@@ -1,9 +1,8 @@
 "use client"
 
-import { ColumnDef } from "@tanstack/react-table"
-
-// import AccionesUnidad from "./Acciones"
 import { Unidad } from "@/utils/types"
+import { ColumnDef } from "@tanstack/react-table"
+import AccionesUnidad from "./Acciones"
 
 export type UnidadColumn = {
   id: number
@@ -11,7 +10,6 @@ export type UnidadColumn = {
   id_unidad_conversion?: number | null
   conversion?: string | null
   unidad: Unidad
-  unidades: Unidad[]
 }
 
 export const unidadColumns: ColumnDef<UnidadColumn>[] = [
@@ -35,11 +33,10 @@ export const unidadColumns: ColumnDef<UnidadColumn>[] = [
     id: "actions",
     cell: ({ row }) => {
       const unidad = row.original.unidad
-      const unidades = row.original.unidades
 
       return (
         <div className="flex gap-8">
-          {/* <AccionesUnidad unidad={unidad} unidades={unidades} /> */}
+          <AccionesUnidad unidad={unidad} />
         </div>
       )
     },

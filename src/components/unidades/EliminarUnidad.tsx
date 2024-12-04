@@ -1,5 +1,6 @@
 "use client"
-import { eliminarCalculadoraAction } from "@/utils/actions";
+
+import { eliminarUnidadAction } from "@/utils/actions";
 import { Trash2, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import DialogItem from "../DialogItem";
@@ -7,32 +8,42 @@ import { useToast } from "../Toast";
 import { Button } from "../ui/button";
 import { DialogClose, DialogDescription, DialogTitle } from "../ui/dialog";
 
-const EliminarCalculadora = ({ id }: { id: number }) => {
+const EliminarUnidad = ({ id }: { id: number }) => {
   const router = useRouter();
-  const formData = new FormData();
-  formData.set('id', id.toString());
   const { addToast } = useToast();
 
-  const onClick = () => {
+  const onClick = async () => {
+    const formData = new FormData();
+    formData.set('id', id.toString());
     try {
-      eliminarCalculadoraAction(formData);
+      const response = await eliminarUnidadAction(formData);
+      if (response.status !== 200) {
+        addToast(
+          response.error || 'Ha ocurrido un error al eliminar la unidad.',
+          'error',
+        );
+        return;
+      }
       addToast(
-        'La calculadora ha sido eliminada correctamente.',
+        'La unidad ha sido eliminada correctamente.',
         'success',
       );
       router.refresh();
     } catch (error) {
       addToast(
-        'Ha ocurrido un error al eliminar la calculadora.',
+        'Ha ocurrido un error al eliminar la unidad.',
         'error',
       );
     }
+
   }
   return (
     <DialogItem triggerChildren="Eliminar">
       <DialogTitle>Eliminar</DialogTitle>
       <DialogDescription>
-        ¿Estás seguro que quieres eliminar esta calculadora?
+        ¿Estás seguro que quieres eliminar esta unidad?
+        <br />
+        <small>Asegurate primero de que la unidad no esté en uso</small>
       </DialogDescription>
       <div className="flex flex-row justify-between gap-4">
         <DialogClose asChild>
@@ -46,4 +57,4 @@ const EliminarCalculadora = ({ id }: { id: number }) => {
   )
 }
 
-export default EliminarCalculadora;
+export default EliminarUnidad;

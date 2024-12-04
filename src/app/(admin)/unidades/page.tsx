@@ -26,7 +26,6 @@ export default async function UnidadesPage() {
       id_unidad_conversion: unidad.id_unidad_conversion,
       conversion: unidad.conversion,
       unidad: unidad,
-      unidades: unidades
     }
   })
   
@@ -42,7 +41,7 @@ export default async function UnidadesPage() {
           <h3 className="text-lg font-medium leading-6">Unidades</h3>
           <CrearUnidad />
           <div className="container mx-auto">
-            <DataTable columns={unidadColumns} data={data} />
+            <DataTable columns={unidadColumns} data={data} filter="nombre" />
           </div>
         </div>
       </div>

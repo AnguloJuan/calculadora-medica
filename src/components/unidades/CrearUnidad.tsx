@@ -11,8 +11,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { z } from "@/lib/es-zod";
 import { crearUnidadAction } from "@/utils/actions";
+import { Unidad } from "@/utils/types";
 import UnidadSchema from "@/validationSchemas/UnidadSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus, Save, X } from "lucide-react";
@@ -20,16 +20,15 @@ import { useState } from "react";
 import { useForm, useFormContext } from "react-hook-form";
 import { useToast } from "../Toast";
 import FormularioUnidad from "../formularios/FormularioUnidad";
-
-type TypeUnidadSchema = z.infer<typeof UnidadSchema>;
+import { useRouter } from "next/navigation";
 
 const CrearUnidad = () => {
   const { addToast } = useToast();
   const [open, setOpen] = useState(false);
-
   const methods = useFormContext();
+  const router = useRouter();
 
-  const form = useForm<TypeUnidadSchema>({
+  const form = useForm<Unidad>({
     resolver: zodResolver(UnidadSchema),
     mode: 'onBlur',
     defaultValues: {
@@ -40,7 +39,7 @@ const CrearUnidad = () => {
     },
   })
 
-  const onSubmit = async (data: TypeUnidadSchema) => {
+  const onSubmit = async (data: Unidad) => {
     const output = await form.trigger();
     if (!output) return;
 
@@ -57,10 +56,12 @@ const CrearUnidad = () => {
         addToast(response.error!, 'error');
         return;
       }
-      const nuevaUnidad: TypeUnidadSchema = { ...parametro, id: response.id };
+      const nuevaUnidad: Unidad = { ...parametro, id: response.id };
       if (methods) {
         methods.setValue('unidadActual', nuevaUnidad);
         methods.setValue('unidades', [...methods.getValues('unidades'), nuevaUnidad]);
+      } else {
+        router.refresh();
       }
 
       addToast('Unidad creada', 'success');

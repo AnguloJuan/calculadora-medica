@@ -11,7 +11,7 @@ import FormInput from "../ui/form-input"
 type UnidadFields = z.infer<typeof UnidadSchema>
 
 const FormularioUnidad = ({ form }: {
-  form: UseFormReturn<UnidadFields>
+  form: UseFormReturn<Unidad>
 }) => {
   const idUnidadConversion = form.watch('id_unidad_conversion', null)
   const [Unidades, setUnidades] = useState<{ value: Unidad, label: string }[]>([])
