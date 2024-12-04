@@ -1,5 +1,5 @@
 
-import CalculadoraComponent from "@/components/Calculadora";
+import CalculadoraComponent from "@/components/calculadoras/Calculadora";
 import { Each } from "@/components/EachOf";
 import ReadOnlyText from "@/components/slatejs/read-only";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

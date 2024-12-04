@@ -2,7 +2,7 @@ import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/react
 import { IconMenu2, IconX } from "@tabler/icons-react";
 import Image from "next/image";
 import NavOpcion from "./NavOpcion";
-import { ModeToggle } from "./mode-toggle";
+import { ModeToggle } from "../mode-toggle";
 
 export default async function Header({ rol }: { rol?: string }) {
   return (

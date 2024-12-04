@@ -3,8 +3,8 @@ import { Unidad } from "@/utils/types";
 import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
 import { evaluate } from "mathjs";
 import { useCallback, useEffect, useState } from "react";
-import ListaParametros from "./ListaParametros";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "./ui/card";
+import ListaParametros from "../parametros/ListaParametros";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "../ui/card";
 
 type IParametro = TypeParametroSchema & {
   unidadActual?: Unidad;

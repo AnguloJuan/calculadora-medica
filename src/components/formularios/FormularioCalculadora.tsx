@@ -1,6 +1,6 @@
 "use client"
 
-import CampoParametro from "@/components/CampoParametro";
+import CampoParametro from "@/components/parametros/CampoParametro";
 import { Each } from "@/components/EachOf";
 import ActualizarParametro from "@/components/parametros/ActualizarParametro";
 import CrearParametro from "@/components/parametros/CrearParametro";

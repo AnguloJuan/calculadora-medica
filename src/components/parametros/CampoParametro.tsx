@@ -4,11 +4,11 @@ import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema"
 import { Radio, RadioGroup } from "@headlessui/react"
 import { IconCircle } from "@tabler/icons-react"
 import { FunctionComponent, useState } from "react"
-import { Unidad } from "../utils/types"
-import { Each } from "./EachOf"
-import { Input } from "./ui/input"
-import { Label } from "./ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
+import { Unidad } from "../../utils/types"
+import { Each } from "../EachOf"
+import { Input } from "../ui/input"
+import { Label } from "../ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 
 type Parametro = TypeParametroSchema & {
   unidadActual?: Unidad;

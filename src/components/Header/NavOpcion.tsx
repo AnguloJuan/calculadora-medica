@@ -3,7 +3,7 @@
 import { DisclosureButton } from "@headlessui/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CATEGORIAS } from "../utils/types";
+import { CATEGORIAS } from "../../utils/types";
 
 export default function NavOpcion({ mobile }: { mobile?: boolean }) {
   const enrutador = usePathname();

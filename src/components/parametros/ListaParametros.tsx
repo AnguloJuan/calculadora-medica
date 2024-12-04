@@ -4,8 +4,8 @@ import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
 import { IconTrash } from "@tabler/icons-react";
 import { memo } from "react";
 import CampoParametro from "./CampoParametro";
-import { Each } from "./EachOf";
-import { Button } from "./ui/button";
+import { Each } from "../EachOf";
+import { Button } from "../ui/button";
 
 interface ListaParametrosProps {
   parametros: TypeParametroSchema[];
