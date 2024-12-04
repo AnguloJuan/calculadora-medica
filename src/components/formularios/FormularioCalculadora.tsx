@@ -166,7 +166,7 @@ const FormularioCalculadora = ({ form, parametros: params }: FormularioCalculado
             label="Fórmula"
             placeholder="Ingrese la fórmula de la calculadora"
             description="Ingrese los nombres de los parametros sin espacios para que la formula se evalue correctamente"
-            input="input"
+            input="textarea"
           />
           <FormInput
             control={control}

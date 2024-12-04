@@ -88,7 +88,10 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, set
       {parametro.tipo_campo === 'seleccion' && opciones && (
         <Select
           name={`campo_${parametro.nombre}`}
-          onValueChange={(e) => setValor(e)}
+          onValueChange={(e) => {
+            setValor(e)
+            onChange && onChange(parametro.nombre, Number(e))
+          }}
           defaultValue=""
           value={String(valor)}
         >
@@ -99,7 +102,7 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, set
             <Each
               of={opciones}
               render={(opcion, index) => (<>
-                {opcion !== '' && <SelectItem key={index} value={opcion}>{opcion}</SelectItem>}
+                {opcion !== '' && <SelectItem key={index} value={String(index)}>{opcion}</SelectItem>}
               </>)} />
           </SelectContent>
         </Select>
@@ -111,7 +114,10 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, set
             id={`campo_${parametro.nombre}`}
             name={`campo_${parametro.nombre}`}
             value={valor}
-            onChange={setValor}
+            onChange={(value) => {
+              setValor(value)
+              // onChange && onChange(parametro.nombre, Number(value))
+            }}
             aria-label={parametro.nombre}
             className={`flex flex-col gap-2 w-full justify-between`}
           // ${opciones.length > 3 ? 'flex-col' : 'flex-col'} 
@@ -122,7 +128,10 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, set
                 <Radio
                   key={index}
                   value={opcion}
-                  onClick={() => setValor(valor === opcion ? '' : opcion)}
+                  onClick={() => {
+                    setValor(valor === opcion ? '' : opcion)
+                    onChange && onChange(parametro.nombre, Number(index))
+                    }}
                   className="group relative flex w-full cursor-pointer rounded-lg col-span-1 bg-background border-gray-300 outline-gray-300 py-2 px-5 outline-none outline-offset-0 transition focus:outline-blue-500 data-[focus]:border-blue-500 data-[checked]:border-blue-500 data-[checked]:outline-blue-500"
                 >
                   <div className="flex w-full items-center justify-between">
