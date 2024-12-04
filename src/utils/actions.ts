@@ -247,6 +247,17 @@ export async function crearParametroAction(formulario: FormData) {
   const unidades = JSON.parse(formulario.get('unidades')?.toString() || '[]') as Unidad[]
 
   try {
+    // check if the parameter already exists
+    const [parametros] = await conexion.query<Parametros[]>(
+      'SELECT * FROM `parametro` WHERE `nombre` = ?',
+      [parametro.nombre]
+    );
+
+    if (parametros.length > 0) {
+      return { error: 'El parámetro ya existe', status: 400 };
+    }
+
+    // insert the parameter
     let insertParametro;
     if (parametro.tipo_campo === 'numerico') {
       insertParametro = await conexion.query<ResultSetHeader>(
@@ -264,6 +275,7 @@ export async function crearParametroAction(formulario: FormData) {
       return { error: 'Fallo inesperado guardando el parámetro', status: 500 };
     }
 
+    // insert the units
     let insertUnidades;
     if (unidades) {
       for (let i = 0; i < unidades.length; i++) {
@@ -392,5 +404,79 @@ export async function crearUnidadAction(formulario: FormData) {
   } catch (err) {
     console.error(err);
     return { error: 'Error al crear la unidad', status: 500 };
+  }
+}
+export async function actualizarUnidadAction(formulario: FormData) {
+  const conexion = await conectarBd();
+  const unidad = {
+    id: formulario.get('id'),
+    unidad: formulario.get('unidad'),
+    conversion: formulario.get('conversion'),
+    id_unidad_conversion: formulario.get('id_unidad_conversion')
+  };
+
+  const conversion = unidad.conversion !== '' ? unidad.conversion : null
+  const id_unidad_conversion = (unidad.id_unidad_conversion !== '' && unidad.id_unidad_conversion !== '0') ? unidad.id_unidad_conversion : null
+
+  // check if the unit already exists
+  const [unidades] = await conexion.query<Unidades[]>(
+    'SELECT * FROM `unidad` WHERE `unidad` = ? AND `id` != ?',
+    [unidad.unidad, unidad.id]
+  );
+
+  if (unidades.length > 0) {
+    return { error: 'La unidad ya existe', status: 400 };
+  }
+
+  // check if the conversion unit its the same as the unit
+  if (unidad.id === unidad.id_unidad_conversion) {
+    return { error: 'La unidad de conversion no puede ser la misma que la unidad', status: 400 };
+  }
+
+  try {
+    const update = await conexion.query<ResultSetHeader>(
+      'UPDATE `unidad` SET `unidad` = ?, `conversion` = ?, `id_unidad_conversion` = ? WHERE `id` = ?',
+      [unidad.unidad, conversion, id_unidad_conversion, unidad.id]
+    );
+
+    if (update[0].affectedRows !== 1) {
+      return { error: 'Error al actualizar la unidad', status: 500 };
+    }
+
+    return { status: 200 };
+  } catch (err) {
+    console.error(err);
+    return { error: 'Error al actualizar la unidad', status: 500 };
+  }
+}
+export async function eliminarUnidadAction(formulario: FormData) {
+  const conexion = await conectarBd();
+  const id = formulario.get('id');
+
+  try {
+    // check if the unit is being used
+    const [parametros] = await conexion.query<RowDataPacket[]>(
+      'SELECT * FROM `parametro_unidad` WHERE `id_unidad` = ?',
+      [id]
+    );
+
+    if (parametros.length > 0) {
+      return { error: 'La unidad esta siendo usada por un parámetro', status: 400 };
+    }
+
+    // delete the unit
+    const deleteUnidad = await conexion.query<ResultSetHeader>(
+      'DELETE FROM `unidad` WHERE `id` = ?',
+      [id]
+    );
+
+    if (deleteUnidad[0].affectedRows !== 1) {
+      return { error: 'Error al eliminar la unidad', status: 500 };
+    }
+
+    return { status: 200 };
+  } catch (err) {
+    console.error(err);
+    return { error: 'Error al eliminar la unidad', status: 500 };
   }
 }
