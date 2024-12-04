@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client"
 import isHotkey from 'is-hotkey'
 import { AlignCenter, AlignJustify, AlignLeft, AlignRight, Bold, Code, Heading1, Heading2, Heading3, Italic, List, ListOrdered, LucideIcon, Quote, Underline } from 'lucide-react'

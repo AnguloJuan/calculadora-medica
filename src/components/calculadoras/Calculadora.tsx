@@ -12,9 +12,10 @@ type IParametro = TypeParametroSchema & {
 interface CalculadoraProps {
   formula: string;
   parametros: IParametro[];
+  unidad_resultado?: string;
 }
 
-const Calculadora = ({ formula, parametros }: CalculadoraProps) => {
+const Calculadora = ({ formula, parametros, unidad_resultado }: CalculadoraProps) => {
   const [valores, setValores] = useState({});
   const [resultado, setResultado] = useState(null);
 
@@ -52,7 +53,7 @@ const Calculadora = ({ formula, parametros }: CalculadoraProps) => {
       <CardFooter>
         <div className="flex flex-row gap-4 w-full bg-muted rounded p-8 py-4 ">
           <p className="text-lg">Resultado:</p>
-          <p className="text-lg font-bold">{!Number.isNaN(resultado) ? resultado : ''}</p>
+          <p className="text-lg font-bold">{!Number.isNaN(resultado) ? resultado : ''} {unidad_resultado && (' ' + unidad_resultado)}</p>
         </div>
       </CardFooter>
     </Card>

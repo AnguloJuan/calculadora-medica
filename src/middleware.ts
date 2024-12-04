@@ -3,12 +3,17 @@ import { NextRequest, NextResponse } from 'next/server';
 import { decrypt } from './utils/sessions';
 
 const protectedRoutes = ['/calculadoras', '/parametros', '/unidades', '/registrar-usuario'];
-const publicRoutes = ['/iniciar-sesion', '/calculadoras:path*', '/'];
+const publicRoutes = ['/iniciar-sesion', '/calculadoras/:path*', '/'];
 
 export default async function middleware(request: NextRequest) {
   const cookie = cookies().get('session')?.value;
   const session = await decrypt(cookie);
   const path = request.nextUrl.pathname;
+  // path equals /calculadoras
+  if (path.startsWith('/calculadoras/')) {
+    return NextResponse.next();
+  }
+
   const isProtectedRoute = protectedRoutes.some(route => path.startsWith(route));
   const isPublicRoute = publicRoutes.some(route => path.startsWith(route));
 
@@ -21,6 +26,7 @@ export default async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!api|_next/static|_next/image|.*\\.png$).*)'
+    '/((?!api|_next/static|_next/image|.*\\.png$).*)',
+    '/calculadoras/:path*'
   ],
 };

@@ -22,7 +22,7 @@ type IParametro = TypeParametroSchema & {
 
 interface Evidencias extends RowDataPacket, Evidencia { }
 
-export default async function CalculadoraPage({ params, request }: { params: { categoria: string, calculadora: string }, request: NextRequest }) {
+export default async function CalculadoraPage({ params }: { params: { categoria: string, calculadora: string } }) {
   const conexion = await conectarBd();
   async function obtenerCalculadora() {
     try {
@@ -97,7 +97,7 @@ export default async function CalculadoraPage({ params, request }: { params: { c
         <div className="flex flex-col gap-8 sm:flex sm:flex-row gap-y-8 divide-y gap-x-8">
           <div className="flex flex-col">
             <div className="flex flex-col gap-4">
-              <CalculadoraComponent formula={calculadora.formula} parametros={parametros} />
+              <CalculadoraComponent formula={calculadora.formula} parametros={parametros} unidad_resultado={calculadora.unidad_resultado} />
             </div>
           </div>
 
