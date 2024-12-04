@@ -19,12 +19,13 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { useForm, useFormContext } from "react-hook-form";
 import FormularioParametro from "../formularios/FormularioParametro";
 import { useToast } from "../Toast";
+import { useRouter } from "next/navigation";
 
 const CrearParametro = ({ setParametros }: { setParametros?: Dispatch<SetStateAction<TypeParametroSchema[]>> }) => {
   const { addToast } = useToast();
   const [open, setOpen] = useState(false);
-
   const methods = useFormContext();
+  const router = useRouter();
 
   const form = useForm<TypeParametroSchema>({
     resolver: zodResolver(ParametroSchema),
@@ -64,7 +65,11 @@ const CrearParametro = ({ setParametros }: { setParametros?: Dispatch<SetStateAc
         return;
       }
       const nuevoParametro: TypeParametroSchema = { ...parametro, id: response.id };
-      methods && methods.setValue('parametros', [...methods.getValues('parametros'), nuevoParametro]);
+      if (methods) {
+        methods && methods.setValue('parametros', [...methods.getValues('parametros'), nuevoParametro]);
+      } else {
+        router.refresh();
+      }
       setParametros && setParametros((parametros) => [...parametros, nuevoParametro]);
       addToast('Parametro creado', 'success');
       setOpen(false);

@@ -349,6 +349,43 @@ export async function actualizarParametroAction(formulario: FormData) {
     return { error: 'Fallo al intentar actualizar el parámetro', status: 500 };
   }
 }
+export async function eliminarParametroAction(formulario: FormData) {
+  const conexion = await conectarBd();
+  const id = formulario.get('id');
+
+  // check if the parameter is being used
+  const [parametros] = await conexion.query<RowDataPacket[]>(
+    'SELECT * FROM `calculadora_parametro` WHERE `id_parametro` = ?',
+    [id]
+  );
+
+  if (parametros.length > 0) {
+    return { error: 'El parámetro esta siendo usado por una calculadora', status: 400 };
+  }
+
+  try {
+    // delete the relationship
+    const deleteParametroUnidad = await conexion.query<ResultSetHeader>(
+      'DELETE FROM `parametro_unidad` WHERE `id_parametro` = ?',
+      [id]
+    );
+
+    // delete the parameter
+    const deleteParametro = await conexion.query<ResultSetHeader>(
+      'DELETE FROM `parametro` WHERE `id` = ?',
+      [id]
+    );
+
+    if (deleteParametro[0].affectedRows !== 1) {
+      return { error: 'Error al eliminar el parámetro', status: 500 };
+    }
+
+    return { status: 200 };
+  } catch (err) {
+    console.error(err);
+    return { error: 'Error al eliminar el parámetro', status: 500 };
+  }
+}
 export async function actualizarParametrosServidorAction() {
   ActualizarParametros();
 }

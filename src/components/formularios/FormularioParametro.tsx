@@ -35,8 +35,8 @@ const FormularioParametro = ({ form }: {
         <FormInput
           control={form.control}
           name="nombre"
-          label="Parametro"
-          placeholder="Nombre del parametro"
+          label="Parámetro"
+          placeholder="Nombre del parámetro"
         />
         <FormField
           control={form.control}
