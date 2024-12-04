@@ -105,7 +105,7 @@ const CalculadorasPage = async () => {
           <h3 className="text-lg font-medium leading-6">Calculadoras</h3>
           <CrearCalculadora parametros={parametros} />
           <div className="container mx-auto">
-            <DataTable columns={calculadoraColumns} data={data} />
+            <DataTable columns={calculadoraColumns} data={data} filter="categoria" />
           </div>
         </div>
       </div>
