@@ -54,7 +54,7 @@ const ActualizarUnidad = ({ unidad }: { unidad: Unidad }) => {
 
 
   return (
-    <DialogItem triggerChildren="Editar" className={'top-[50%] -bottom-[40%] overflow-y-auto max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl px-20 py-12'}>
+    <DialogItem triggerChildren="Editar" className={'sm:max-w-lg lg:max-w-lg'}>
       <DialogTitle className="text-3xl font-semibold tracking-tight first:mt-0">Actualizar unidad</DialogTitle>
       <DialogDescription></DialogDescription>
       <FormularioUnidad form={form} />

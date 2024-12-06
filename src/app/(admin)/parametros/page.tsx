@@ -39,6 +39,7 @@ export default async function ParametrosPage() {
     const resolvedParametros = await Promise.all(parametrosConUnidades);
     return resolvedParametros.filter((parametro) => parametro !== undefined) as TypeParametroSchema[];
   }
+  
   const parametros: TypeParametroSchema[] = await obtenerParametros();
   const data: ParametroColumn[] = parametros ? parametros.map((parametro) => {
     return {
@@ -46,7 +47,7 @@ export default async function ParametrosPage() {
       nombre: parametro.nombre,
       tipo_campo: parametro.tipo_campo,
       unidadesOpciones: parametro.tipo_campo === "seleccion" || parametro.tipo_campo === "radio" ? parametro.opciones! :
-        parametro.tipo_campo === "numerico" ? parametro.unidades?.map((unidad) => unidad.nombre) || [] : "No definido",
+        parametro.tipo_campo === "numerico" ? parametro.unidades?.map((unidad) => unidad.unidad) || [] : "No definido",
       parametro: parametro
     }
   }) : []

@@ -101,7 +101,7 @@ const ActualizarParametro = ({ parametro, setParametros }: { parametro: TypePara
             <DialogClose asChild>
               <Button variant="secondary" onClick={() => form.reset()}><X />Cancelar</Button>
             </DialogClose>
-            <Button type="button" onClick={() => onSubmit()}><Edit />Actualizar</Button>
+            <Button type="button" variant={"warning"} onClick={() => onSubmit()}><Edit />Actualizar</Button>
           </DialogFooter>
         </DialogContent>
       </DialogPortal>

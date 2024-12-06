@@ -328,12 +328,21 @@ export async function actualizarParametroAction(formulario: FormData) {
       return { error: 'Fallo inesperado actualizando el parámetro', status: 500 };
     }
 
+    // check if the parameter already has units
+    const [parametroUnidades] = await conexion.query<RowDataPacket[]>(
+      'SELECT `id_unidad` FROM `parametro_unidad` WHERE `id_parametro` = ?',
+      [parametro.id]
+    );
+    // check if the units are already in the database
+    const newUnidades = unidades.filter((unidad) => !parametroUnidades.some((param) => param.id_unidad === unidad.id));
+    console.log(newUnidades, parametroUnidades, unidades);
+    
     // insert new units if any
     if (parametro.tipo_campo === 'numerico' && unidades) {
-      for (let i = 0; i < unidades.length; i++) {
+      for (let i = 0; i < newUnidades.length; i++) {
         await conexion.query<ResultSetHeader>(
           'INSERT IGNORE INTO `parametro_unidad` (`id_parametro`, `id_unidad`) VALUES (?, ?)',
-          [parametro.id, unidades[i].id]
+          [parametro.id, newUnidades[i].id]
         );
       }
       // delete all the units that are not in the new list
