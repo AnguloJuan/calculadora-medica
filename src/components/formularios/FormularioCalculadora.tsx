@@ -146,6 +146,7 @@ const FormularioCalculadora = ({ form, parametros: params }: FormularioCalculado
             )}
           />
 
+          {parametrosFields.length > 0 && <p>Vista previa:</p>}
           {parametrosFields.map((field, index) => {
             return (
               <div key={field.id} className="flex flex-row items-end gap-4">

@@ -80,7 +80,7 @@ const FormularioParametro = ({ form }: {
             name='unidades'
             render={({ field }) => (<>
               <FormItem>
-                <FormLabel>Parametros</FormLabel>
+                <FormLabel>Unidades</FormLabel>
                 <div className="flex flex-row gap-2 w-full justify-between items-center">
                   <FormControl>
                     <Select
