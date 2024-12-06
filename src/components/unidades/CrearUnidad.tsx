@@ -16,13 +16,13 @@ import { Unidad } from "@/utils/types";
 import UnidadSchema from "@/validationSchemas/UnidadSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus, Save, X } from "lucide-react";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useForm, useFormContext } from "react-hook-form";
 import { useToast } from "../Toast";
 import FormularioUnidad from "../formularios/FormularioUnidad";
 import { useRouter } from "next/navigation";
 
-const CrearUnidad = () => {
+const CrearUnidad = ({ setUnidades }: { setUnidades?: Dispatch<SetStateAction<Unidad[]>> }) => {
   const { addToast } = useToast();
   const [open, setOpen] = useState(false);
   const methods = useFormContext();
@@ -63,6 +63,7 @@ const CrearUnidad = () => {
       } else {
         router.refresh();
       }
+      setUnidades && setUnidades((unidades) => [...unidades, nuevaUnidad]);
 
       addToast('Unidad creada', 'success');
       setOpen(false);

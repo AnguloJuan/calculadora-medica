@@ -16,7 +16,8 @@ type UnidadOption = { value: Unidad, label: string }
 const FormularioParametro = ({ form }: {
   form: UseFormReturn<ParametroFields>,
 }) => {
-  const [Unidades, setUnidades] = useState<{ value: Unidad, label: string }[]>([])
+  const [options, setOptions] = useState<{ value: Unidad, label: string }[]>([])
+  const [unidades, setUnidades] = useState<Unidad[]>([])
   const fields = form.watch()
 
   useEffect(() => {
@@ -24,10 +25,15 @@ const FormularioParametro = ({ form }: {
       const response = await fetch('/api/unidades')
       const data = await response.json()
 
-      setUnidades(data.unidades.map((unidad: Unidad) => ({ value: unidad, label: unidad.unidad })))
+      setUnidades(data.unidades)
+      setOptions(data.unidades.map((unidad: Unidad) => ({ value: unidad, label: unidad.unidad })))
     }
     obtenerUnidades()
   }, [])
+
+  useEffect(() => {
+    setOptions(unidades.map((unidad: Unidad) => ({ value: unidad, label: unidad.unidad })))
+  }, [unidades])
 
   return (<>
     <Form {...form}>
@@ -79,7 +85,7 @@ const FormularioParametro = ({ form }: {
                   <FormControl>
                     <Select
                       value={field.value?.map((unidad: Unidad) => ({ value: unidad, label: unidad.unidad }))}
-                      options={Unidades}
+                      options={options}
                       noOptionsMessage={() => 'No hay unidades disponibles'}
                       isMulti
                       onChange={(value: MultiValue<UnidadOption>) => {
@@ -97,7 +103,7 @@ const FormularioParametro = ({ form }: {
                       }}
                     />
                   </FormControl>
-                  <CrearUnidad />
+                  <CrearUnidad setUnidades={setUnidades} />
                 </div>
                 <FormDescription>
                   La/las unidad/unidades en las que se mide el parámetro
