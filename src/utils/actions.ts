@@ -95,7 +95,6 @@ export async function crearCalculadoraAction(formulario: FormData) {
       );
 
       if (insertParametros[0].affectedRows !== 1) {
-        console.log(insertParametros);
         return { error: 'Fallo inesperado guardando los parametros de la calculadora', status: 500 };
       }
     }
@@ -335,7 +334,6 @@ export async function actualizarParametroAction(formulario: FormData) {
     );
     // check if the units are already in the database
     const newUnidades = unidades.filter((unidad) => !parametroUnidades.some((param) => param.id_unidad === unidad.id));
-    console.log(newUnidades, parametroUnidades, unidades);
     
     // insert new units if any
     if (parametro.tipo_campo === 'numerico' && unidades) {
