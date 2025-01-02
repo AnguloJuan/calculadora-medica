@@ -1,7 +1,7 @@
 
 import CalculadoraComponent from "@/components/calculadoras/Calculadora";
 import { Each } from "@/components/EachOf";
-import ReadOnlyText from "@/components/slatejs/read-only";
+import ReadOnlyRichText from "@/components/slatejs/read-only";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { conectarBd } from "@/db/conectarDb";
@@ -120,7 +120,7 @@ export default async function CalculadoraPage({ params }: { params: { categoria:
                   <CardTitle>Acerca de {calculadora.nombre}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ReadOnlyText value={calculadora.descripcion} />
+                  <ReadOnlyRichText value={calculadora.descripcion} />
                 </CardContent>
               </Card>
             </TabsContent>
@@ -131,7 +131,7 @@ export default async function CalculadoraPage({ params }: { params: { categoria:
                   <CardTitle>Resultados y Recomendaciones</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ReadOnlyText value={calculadora.resultados_recomendaciones} />
+                  <ReadOnlyRichText value={calculadora.resultados_recomendaciones} />
                 </CardContent>
               </Card>
             </TabsContent>

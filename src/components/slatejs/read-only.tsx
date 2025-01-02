@@ -1,11 +1,10 @@
-// @ts-nocheck
 "use client"
 import { useCallback, useMemo } from 'react'
 import { createEditor } from 'slate'
-import { Editable, Slate, withReact } from 'slate-react'
+import { Editable, RenderElementProps, RenderLeafProps, Slate, withReact } from 'slate-react'
 import { Element, Leaf } from './Elements'
 
-const ReadOnlyText = ({ value }: { value: string }) => {
+const ReadOnlyRichText = ({ value }: { value: string }) => {
   const editor = useMemo(() => withReact(createEditor()), [])
   //  validate the value
   const isValueJson = (value: string) => {// temporary function to validate json
@@ -22,8 +21,8 @@ const ReadOnlyText = ({ value }: { value: string }) => {
     return <p className="leading-7">{value}</p>
   }
   const initialValue = useMemo(() => JSON.parse(value), [value])
-  const renderElement = useCallback(props => <Element {...props} />, [])
-  const renderLeaf = useCallback(props => <Leaf {...props} />, [])
+  const renderElement = useCallback((props: RenderElementProps) => <Element {...props} />, [])
+  const renderLeaf = useCallback((props: RenderLeafProps) => <Leaf {...props} />, [])
 
   return (
     <Slate editor={editor} initialValue={initialValue}>
@@ -36,4 +35,4 @@ const ReadOnlyText = ({ value }: { value: string }) => {
   )
 }
 
-export default ReadOnlyText
+export default ReadOnlyRichText

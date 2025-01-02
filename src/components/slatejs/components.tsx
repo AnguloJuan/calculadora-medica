@@ -1,3 +1,4 @@
+"use client"
 import { cn } from "@/lib/utils"
 import React, { PropsWithChildren } from 'react'
 
@@ -7,7 +8,7 @@ interface BaseProps {
   className?: ClassValue
   [key: string]: any
 }
-type OrNull<T> = T | null
+// type OrNull<T> = T | null
 
 interface ButtonProps extends BaseProps {
   active: boolean

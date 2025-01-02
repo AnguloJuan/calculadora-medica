@@ -1,16 +1,23 @@
-import { Descendant, BaseEditor, BaseRange, Range, Element } from 'slate'
-import { ReactEditor } from 'slate-react'
+import { BaseEditor, BaseRange, Descendant, Element, Range } from 'slate'
 import { HistoryEditor } from 'slate-history'
+import { ReactEditor } from 'slate-react'
+
+export type ALIGNMET_TYPES = 'left' | 'center' | 'right' | 'justify'
 
 export type BlockQuoteElement = {
   type: 'block-quote'
-  align?: string
+  align?: ALIGNMET_TYPES
   children: Descendant[]
 }
 
 export type BulletedListElement = {
   type: 'bulleted-list'
-  align?: string
+  align?: ALIGNMET_TYPES
+  children: Descendant[]
+}
+export type NumberedListElement = {
+  type: 'numbered-list'
+  align?: ALIGNMET_TYPES
   children: Descendant[]
 }
 
@@ -25,14 +32,18 @@ export type EditableVoidElement = {
   children: EmptyText[]
 }
 
-export type HeadingElement = {
-  type: 'heading'
+export type HeadingOneElement = {
+  type: 'heading-one'
   align?: string
   children: Descendant[]
 }
-
 export type HeadingTwoElement = {
   type: 'heading-two'
+  align?: string
+  children: Descendant[]
+}
+export type HeadingThreeElement = {
+  type: 'heading-three'
   align?: string
   children: Descendant[]
 }
@@ -85,31 +96,38 @@ export type CodeLineElement = {
 }
 
 type CustomElement =
-  | BlockQuoteElement
-  | BulletedListElement
-  | CheckListItemElement
-  | EditableVoidElement
-  | HeadingElement
-  | HeadingTwoElement
-  | ImageElement
-  | LinkElement
-  | ButtonElement
-  | BadgeElement
-  | ListItemElement
-  | MentionElement
-  | ParagraphElement
-  | TableElement
-  | TableRowElement
-  | TableCellElement
-  | TitleElement
-  | VideoElement
-  | CodeBlockElement
-  | CodeLineElement
+  {
+    align?: ALIGNMET_TYPES
+  } & (
+    | BlockQuoteElement
+    | BulletedListElement
+    | NumberedListElement
+    | CheckListItemElement
+    | EditableVoidElement
+    | HeadingOneElement
+    | HeadingTwoElement
+    | HeadingThreeElement
+    | ImageElement
+    | LinkElement
+    | ButtonElement
+    | BadgeElement
+    | ListItemElement
+    | MentionElement
+    | ParagraphElement
+    | TableElement
+    | TableRowElement
+    | TableCellElement
+    | TitleElement
+    | VideoElement
+    | CodeBlockElement
+    | CodeLineElement
+  )
 
 export type CustomText = {
   bold?: boolean
   italic?: boolean
   code?: boolean
+  underline?: boolean
   text: string
 }
 

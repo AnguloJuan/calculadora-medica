@@ -1,6 +1,10 @@
-// @ts-nocheck
-export const Element = ({ attributes, children, element }) => {
-  const style = { textAlign: element.align }
+"use client"
+import { CustomText } from "@/types/slate"
+import { useCallback } from "react"
+import { RenderElementProps, RenderLeafProps } from "slate-react"
+
+export const Element = ({ attributes, children, element }: RenderElementProps) => {
+  const style = { textAlign: (element as any).align }
   switch (element.type) {
     case 'block-quote':
       return (
@@ -75,21 +79,32 @@ export const Element = ({ attributes, children, element }) => {
   }
 }
 
-export const Leaf = ({ attributes, children, leaf }) => {
-  if (leaf.bold) {
-    children = <strong>{children}</strong>
-  }
+export const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
+  const isCustomText = useCallback((value: any): value is CustomText => {
+    return value && typeof value.text === 'string' && (
+      value.bold !== undefined ||
+      value.italic !== undefined ||
+      value.code !== undefined ||
+      value.underline !== undefined
+    );
+  }, [])
 
-  if (leaf.code) {
-    children = <code className='relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold'>{children}</code>
-  }
+  if (isCustomText(leaf)) {
+    if (leaf.bold) {
+      children = <strong>{children}</strong>
+    }
 
-  if (leaf.italic) {
-    children = <em>{children}</em>
-  }
+    if (leaf.code) {
+      children = <code className='relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold'>{children}</code>
+    }
 
-  if (leaf.underline) {
-    children = <u>{children}</u>
+    if (leaf.italic) {
+      children = <em>{children}</em>
+    }
+
+    if (leaf.underline) {
+      children = <u>{children}</u>
+    }
   }
 
   return <span {...attributes}>{children}</span>

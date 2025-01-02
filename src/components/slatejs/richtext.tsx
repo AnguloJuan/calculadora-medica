@@ -1,19 +1,20 @@
-// @ts-nocheck
 "use client"
+import { CustomText, ALIGNMET_TYPES } from '@/types/slate'
 import isHotkey from 'is-hotkey'
 import { AlignCenter, AlignJustify, AlignLeft, AlignRight, Bold, Code, Heading1, Heading2, Heading3, Italic, List, ListOrdered, LucideIcon, Quote, Underline } from 'lucide-react'
 import { useCallback, useMemo } from 'react'
+import { Noop } from 'react-hook-form'
 import {
   createEditor,
   Descendant,
   Editor,
+  Node,
   Element as SlateElement,
-  Transforms,
+  Transforms
 } from 'slate'
 import { withHistory } from 'slate-history'
-import { Editable, Slate, useSlate, withReact } from 'slate-react'
+import { Editable, RenderElementProps, RenderLeafProps, Slate, useSlate, withReact } from 'slate-react'
 import { Button, Toolbar } from './components'
-import { Noop } from 'react-hook-form'
 import { Element, Leaf } from './Elements'
 
 const HOTKEYS = {
@@ -26,6 +27,9 @@ const HOTKEYS = {
 const LIST_TYPES = ['numbered-list', 'bulleted-list']
 const TEXT_ALIGN_TYPES = ['left', 'center', 'right', 'justify']
 
+type ELEMENT_FORMAT = SlateElement['type']
+type TEXT_FORMAT = keyof Omit<CustomText, "text">
+
 interface RichTextProps {
   value?: string
   onChange: (...event: any[]) => void
@@ -33,11 +37,12 @@ interface RichTextProps {
   placeholder?: string
 }
 const RichText = ({ onChange, value, onBlur, placeholder }: RichTextProps) => {
-  const renderElement = useCallback(props => <Element {...props} />, [])
-  const renderLeaf = useCallback(props => <Leaf {...props} />, [])
+  const renderElement = useCallback((props: RenderElementProps) => <Element {...props} />, [])
+  const renderLeaf = useCallback((props: RenderLeafProps) => <Leaf {...props} />, [])
   const editor = useMemo(() => withHistory(withReact(createEditor())), [])
   //  validate the value
   const isValueJson = useCallback(() => {// temporary function to validate json
+    if (!value) return false
     try {
       JSON.parse(value)
       return true
@@ -90,9 +95,9 @@ const RichText = ({ onChange, value, onBlur, placeholder }: RichTextProps) => {
           className='p-4 pt-0 bg-container form-input border-border rounded'
           onKeyDown={event => {
             for (const hotkey in HOTKEYS) {
-              if (isHotkey(hotkey, event as any)) {
+              if (isHotkey(hotkey, event)) {
                 event.preventDefault()
-                const mark = HOTKEYS[hotkey as keyof typeof HOTKEYS]
+                const mark = HOTKEYS[hotkey as keyof typeof HOTKEYS] as TEXT_FORMAT
                 toggleMark(editor, mark)
               }
             }
@@ -103,7 +108,7 @@ const RichText = ({ onChange, value, onBlur, placeholder }: RichTextProps) => {
   )
 }
 
-const toggleBlock = (editor, format) => {
+const toggleBlock = (editor: Editor, format: ELEMENT_FORMAT | ALIGNMET_TYPES) => {
   const isActive = isBlockActive(
     editor,
     format,
@@ -122,22 +127,22 @@ const toggleBlock = (editor, format) => {
   let newProperties: Partial<SlateElement>
   if (TEXT_ALIGN_TYPES.includes(format)) {
     newProperties = {
-      align: isActive ? undefined : format,
+      align: isActive ? undefined : (format as ALIGNMET_TYPES),
     }
   } else {
     newProperties = {
-      type: isActive ? 'paragraph' : isList ? 'list-item' : format,
+      type: isActive ? 'paragraph' : isList ? 'list-item' : (format as ELEMENT_FORMAT),
     }
   }
   Transforms.setNodes<SlateElement>(editor, newProperties)
 
   if (!isActive && isList) {
-    const block = { type: format, children: [] }
+    const block = { type: format, children: [] } as SlateElement
     Transforms.wrapNodes(editor, block)
   }
 }
 
-const toggleMark = (editor, format) => {
+const toggleMark = (editor: Editor, format: TEXT_FORMAT) => {
   const isActive = isMarkActive(editor, format)
 
   if (isActive) {
@@ -147,14 +152,14 @@ const toggleMark = (editor, format) => {
   }
 }
 
-const isBlockActive = (editor, format, blockType = 'type') => {
+const isBlockActive = (editor: Editor, format: ELEMENT_FORMAT | ALIGNMET_TYPES, blockType: 'align' | 'type') => {
   const { selection } = editor
   if (!selection) return false
 
   const [match] = Array.from(
     Editor.nodes(editor, {
       at: Editor.unhangRange(editor, selection),
-      match: n =>
+      match: (n: Node) =>
         !Editor.isEditor(n) &&
         SlateElement.isElement(n) &&
         n[blockType] === format,
@@ -164,16 +169,13 @@ const isBlockActive = (editor, format, blockType = 'type') => {
   return !!match
 }
 
-const isMarkActive = (editor, format) => {
-  const marks = Editor.marks(editor)
+const isMarkActive = (editor: Editor, format: TEXT_FORMAT) => {
+  const marks = Editor.marks(editor) as CustomText
   return marks ? marks[format] === true : false
 }
 
-interface ButtonProps {
-  format: string
-  Icon: LucideIcon
-}
-const BlockButton = ({ format, Icon }: ButtonProps) => {
+
+const BlockButton = ({ format, Icon }: { format: ELEMENT_FORMAT | ALIGNMET_TYPES, Icon: LucideIcon }) => {
   const editor = useSlate()
   return (
     <Button
@@ -182,7 +184,7 @@ const BlockButton = ({ format, Icon }: ButtonProps) => {
         format,
         TEXT_ALIGN_TYPES.includes(format) ? 'align' : 'type'
       )}
-      onMouseDown={event => {
+      onMouseDown={(event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
         toggleBlock(editor, format)
       }}
@@ -192,12 +194,12 @@ const BlockButton = ({ format, Icon }: ButtonProps) => {
   )
 }
 
-const MarkButton = ({ format, Icon }: ButtonProps) => {
+const MarkButton = ({ format, Icon }: { format: TEXT_FORMAT, Icon: LucideIcon }) => {
   const editor = useSlate()
   return (
     <Button
       active={isMarkActive(editor, format)}
-      onMouseDown={event => {
+      onMouseDown={(event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
         toggleMark(editor, format)
       }}
