@@ -6,8 +6,8 @@ import { ModeToggle } from "../mode-toggle";
 
 export default async function Header({ rol }: { rol?: string }) {
   return (
-    <div className="w-full">
-      <Disclosure as="nav" className="top-0 z-40 backdrop-blur flex-none transition-colors duration-500 bg-background supports-backdrop-blur:bg-background/95 border-b lg:px-8">
+    <header className="sticky top-0 z-40 w-full backdrop-blur flex-none transition-colors duration-500 lg:z-50 lg:border-b lg:border-slate-900/10 dark:border-slate-50/[0.06] bg-background supports-backdrop-blur:bg-background/95 dark:bg-background/75">
+      <Disclosure as="nav" className="border-b lg:px-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center">
@@ -51,6 +51,6 @@ export default async function Header({ rol }: { rol?: string }) {
           </div>
         </DisclosurePanel>
       </Disclosure>
-    </div>
+    </header>
   );
 }
