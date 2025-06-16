@@ -12,7 +12,6 @@ function LoginButton() {
 
   const handleClick = (event: any) => {
     if (pending) {
-      console.log(data, action);
       event.preventDefault()
     }
   }

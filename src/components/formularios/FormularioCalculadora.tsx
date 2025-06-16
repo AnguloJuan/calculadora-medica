@@ -159,8 +159,6 @@ const FormularioCalculadora = ({ form, parametros: params }: FormularioCalculado
             );
           })}
 
-          {/* <p>{JSON.stringify(errors, null, 2)}</p> */}
-
           <FormInput
             control={control}
             name="formula"

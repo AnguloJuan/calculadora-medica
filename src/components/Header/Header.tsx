@@ -32,8 +32,8 @@ export default async function Header({ rol }: { rol?: string }) {
               </div>
             </div>
             <div className="-mr-2 flex gap-4 md:hidden">
-              {/* Mobile menu button */}
               <ModeToggle />
+              {/* Mobile menu button */}
               <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md 
                              focus:outline-none focus:ring-2  focus:ring-offset-2 ">
                 <span className="absolute -inset-0.5" />

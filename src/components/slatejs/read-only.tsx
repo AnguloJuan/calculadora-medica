@@ -16,8 +16,6 @@ const ReadOnlyRichText = ({ value }: { value: string }) => {
     }
   }
   if (!isValueJson(value)) {
-    console.log('value is not json');
-
     return <p className="leading-7">{value}</p>
   }
   const initialValue = useMemo(() => JSON.parse(value), [value])
