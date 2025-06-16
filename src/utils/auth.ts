@@ -47,12 +47,9 @@ export async function signUp(formData: FormData) {
   const usuario = formData.get('usuario');
   let contrasena = formData.get('contrasena');
   try {
-    // Hash the password
     const hashedPassword = await bcrypt.hash(contrasena, saltRounds);
 
-    // Save the hashed password in the database
     const conexion = await conectarBd();
-
     const query = 'INSERT INTO usuario (usuario, contrasena) VALUES (?, ?)';
     await conexion.execute(query, [usuario, hashedPassword]);
     return true;

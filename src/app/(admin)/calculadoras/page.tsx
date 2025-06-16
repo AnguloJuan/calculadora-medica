@@ -44,7 +44,7 @@ const CalculadorasPage = async () => {
 
   const parametros: TypeParametroSchema[] = await obtenerParametros();
 
-  // Obtener calculadoras con evidencias y parametros
+  // Get calculadoras with evidencias and parametros
   async function obtenerCalculadoras() {
     interface RowsCalculadora extends RowDataPacket, Calculadora { }
     interface Evidencias extends RowDataPacket, Evidencia { }

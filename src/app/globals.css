@@ -17,79 +17,8 @@ html,
 body {
   min-height: 100% !important;
   height: 100%;
-}
-
-@layer base {
-  :root {
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-  }
-
-  .dark {
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-  }
-}
-
-body {
-  /* background: 
-    radial-gradient(
-      circle farthest-corner at 100% 25%,
-      rgba(var(--background-end-rgb), 0.9) 1px,
-      transparent
-    ),
-    radial-gradient(
-      circle closest-corner at 0% 65%,
-      rgba(var(--background-end-rgb), 0.9) 1px,
-      transparent
-    ) 0 100vh; */
-
   margin: 0;
-  background: #ff5757;
 }
-
-/* @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-} */
-
-/* text {
-  @apply text-balance text-slate-900 truncate dark:text-slate-200;
-} */
-
-/* input,
-textarea,
-select {
-  @apply mt-1 block w-full px-3 py-2 text-base leading-normal bg-backgroud border-gray-300 appearance-none rounded-lg focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50;
-  @apply bg-gray-100 text-gray-900;
-
-  &:focus {
-    @apply bg-backgroud text-black;
-  }
-
-  &::placeholder {
-    @apply text-gray-500;
-  }
-
-  &::-webkit-input-placeholder {
-    @apply text-gray-500;
-  }
-
-  &::-moz-placeholder {
-    @apply text-gray-500;
-  }
-
-  &:-ms-input-placeholder {
-    @apply text-gray-500;
-  }
-} */
 
 @layer base {
   :root {
@@ -178,9 +107,7 @@ select {
     --sidebar-ring: 217.2 91.2% 59.8%;
     --container: 240 10% 10.9%;
   }
-}
 
-@layer base {
   * {
     @apply border-border;
   }

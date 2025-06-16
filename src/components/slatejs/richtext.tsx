@@ -40,7 +40,7 @@ const RichText = ({ onChange, value, onBlur, placeholder }: RichTextProps) => {
   const renderElement = useCallback((props: RenderElementProps) => <Element {...props} />, [])
   const renderLeaf = useCallback((props: RenderLeafProps) => <Leaf {...props} />, [])
   const editor = useMemo(() => withHistory(withReact(createEditor())), [])
-  //  validate the value
+  
   const isValueJson = useCallback(() => {// temporary function to validate json
     if (!value) return false
     try {

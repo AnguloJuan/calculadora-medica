@@ -1,11 +1,5 @@
 
-// var kebabCase = require('lodash/kebabCase');
-
-// const CATEGORIA_OPTIONS = ['Química sanguínea', 'Hematología', 'Perfil de lípidos', 'Proteínas', 'Otros'];
-// convert de options of CATEGORIA_OPTIONS to an array of strings in kebabcase
-// const CATEGORIA = z.enum(CATEGORIA_OPTIONS.map((categoria) => kebabCase(categoria)) as [string, ...string[]]);
-// const CATEGORIA = z.enum(['Química sanguínea', 'Hematología', 'Perfil de lípidos', 'Proteínas', 'Otros']);
-const CATEGORIAS = [
+const CATEGORIAS = [ //temporarily hardcoded
   {
     nombre: 'Química sanguínea',
     kebabCase: 'quimica-sanguinea'

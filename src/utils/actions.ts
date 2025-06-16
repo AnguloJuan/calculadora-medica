@@ -275,7 +275,6 @@ export async function crearParametroAction(formulario: FormData) {
     }
 
     // insert the units
-    let insertUnidades;
     if (unidades) {
       for (let i = 0; i < unidades.length; i++) {
         const insertUnidades = await conexion.query<ResultSetHeader>(
@@ -334,7 +333,7 @@ export async function actualizarParametroAction(formulario: FormData) {
     );
     // check if the units are already in the database
     const newUnidades = unidades.filter((unidad) => !parametroUnidades.some((param) => param.id_unidad === unidad.id));
-    
+
     // insert new units if any
     if (parametro.tipo_campo === 'numerico' && unidades) {
       for (let i = 0; i < newUnidades.length; i++) {
@@ -372,7 +371,7 @@ export async function eliminarParametroAction(formulario: FormData) {
 
   try {
     // delete the relationship
-    const deleteParametroUnidad = await conexion.query<ResultSetHeader>(
+    await conexion.query<ResultSetHeader>(
       'DELETE FROM `parametro_unidad` WHERE `id_parametro` = ?',
       [id]
     );

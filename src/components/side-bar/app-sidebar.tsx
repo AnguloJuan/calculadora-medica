@@ -1,34 +1,23 @@
 "use client"
 
-import * as React from "react"
 import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  Map,
-  PieChart,
-  Settings2,
-  SquareTerminal,
-  User2Icon,
-  Calculator,
   Box,
+  Calculator,
   TextCursorInput,
+  User2Icon
 } from "lucide-react"
+import * as React from "react"
 
 import { NavMain } from "@/components/side-bar/nav-main"
 import { NavUser } from "@/components/side-bar/nav-user"
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarHeader,
-  SidebarRail,
+  SidebarRail
 } from "@/components/ui/sidebar"
 
-// This is sample data.
+// Sample data.
 const data = {
   user: {
     name: "Admin",

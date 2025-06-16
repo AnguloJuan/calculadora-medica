@@ -9,7 +9,7 @@ export default async function middleware(request: NextRequest) {
   const cookie = cookies().get('session')?.value;
   const session = await decrypt(cookie);
   const path = request.nextUrl.pathname;
-  // path equals /calculadoras
+
   if (path.startsWith('/calculadoras/')) {
     return NextResponse.next();
   }

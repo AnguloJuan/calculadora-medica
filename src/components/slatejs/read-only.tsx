@@ -6,7 +6,7 @@ import { Element, Leaf } from './Elements'
 
 const ReadOnlyRichText = ({ value }: { value: string }) => {
   const editor = useMemo(() => withReact(createEditor()), [])
-  //  validate the value
+  
   const isValueJson = (value: string) => {// temporary function to validate json
     try {
       JSON.parse(value)

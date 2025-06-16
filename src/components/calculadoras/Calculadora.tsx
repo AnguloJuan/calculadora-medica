@@ -30,10 +30,8 @@ const Calculadora = ({ formula, parametros, unidad_resultado }: CalculadoraProps
     try {
       const result = evaluate(formula, valores);
       setError(false);
-      // formatear el resultado a 6 decimales
       setResultado(result.toFixed(6));
     } catch (error) {
-      // console.error("Error en la evaluación de la fórmula:", error);
       setError(true);
     }
   }, [formula, valores]);
