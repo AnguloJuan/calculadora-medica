@@ -7,7 +7,6 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/react-tailwindcss-select/dist/index.esm.js"
   ],
-  // darkMode: ['selector', "class"],
   theme: {
     extend: {
       colors: {
@@ -96,6 +95,9 @@ const config: Config = {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)'
+      },
+      spacing: {
+        'spacing': 'var(--spacing)',
       }
     }
   },

@@ -25,12 +25,14 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   filter?: string
+  pinnedColumn?: string
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   filter,
+  pinnedColumn
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     []
@@ -89,7 +91,11 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell
+                      key={cell.id}
+                      className={`${pinnedColumn}:sticky ${pinnedColumn}:right-0 transition-colors data-[state=selected]:bg-muted ${pinnedColumn}:border-none ${pinnedColumn}:bg-gradient-to-r ${pinnedColumn}:from-transparent ${pinnedColumn}:to-container ${pinnedColumn}:to-[12px] ${pinnedColumn}:pl-4`
+                      }
+                    >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}

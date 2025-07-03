@@ -55,9 +55,7 @@ export const calculadoraColumns: ColumnDef<CalculadoraColumn>[] = [
       const parametros = row.original.parametros
 
       return (
-        <div className="flex gap-8">
-          <AccionesCalculadora calculadora={calculadora} parametros={parametros} />
-        </div>
+        <AccionesCalculadora calculadora={calculadora} parametros={parametros} />
       )
     },
   },

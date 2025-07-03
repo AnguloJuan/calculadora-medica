@@ -72,7 +72,7 @@ const FormularioCalculadora = ({ form, parametros: params }: FormularioCalculado
         className="flex w-full flex-col items-center justify-between gap-16"
       >
         <div className="w-full flex flex-col gap-4">
-          <h2 className="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0">Información general</h2>
+          <h2 className="scroll-m-20 border-b pb-2 text-lg md:text-2xl font-semibold tracking-tight first:mt-0">Información general</h2>
           <FormInput
             control={control}
             name="nombre"
@@ -114,7 +114,7 @@ const FormularioCalculadora = ({ form, parametros: params }: FormularioCalculado
             render={({ field }) => (<>
               <FormItem>
                 <h2 className="scroll-m-20 text-lg font-semibold tracking-tight">Parámetros</h2>
-                <div className="flex flex-row gap-2">
+                <div className="flex flex-col md:flex-row gap-2">
                   <FormControl>
                     <ReactSelect
                       value={parametroOptions.find((param) => param.value === field.value.at(-1))} // Last value
@@ -183,7 +183,7 @@ const FormularioCalculadora = ({ form, parametros: params }: FormularioCalculado
             input="input"
           />
 
-          <h2 className="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0 mt-4">Detalles</h2>
+          <h2 className="scroll-m-20 border-b pb-2 text-lg md:text-2xl font-semibold tracking-tight first:mt-0 mt-4">Detalles</h2>
           <FormField
             control={control}
             name='descripcion'

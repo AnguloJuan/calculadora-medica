@@ -105,9 +105,11 @@ const CrearCalculadora = ({ parametros }: { parametros: TypeParametroSchema[] })
         </Button>
       </DialogTrigger>
       <DialogPortal>
-        <DialogContent className="top-[50%] -bottom-[40%] overflow-y-auto max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl px-20 py-12">
+        <DialogContent className=
+          "top-[50%] -bottom-[40%] overflow-y-auto max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl px-2 py-4 md:px-20 md:py-12"
+        >
           <DialogHeader>
-            <DialogTitle className="text-3xl font-semibold tracking-tight first:mt-0">Crear nueva calculadora</DialogTitle>
+            <DialogTitle className="text-xl md:text-3xl font-semibold tracking-tight first:mt-0">Crear nueva calculadora</DialogTitle>
             <DialogDescription>
               Llena los campos para crear una nueva calculadora
             </DialogDescription>
@@ -115,7 +117,7 @@ const CrearCalculadora = ({ parametros }: { parametros: TypeParametroSchema[] })
           <section className="grid gap-4 py-4 w-full">
             <FormularioCalculadora form={form} parametros={parametros} />
           </section>
-          <DialogFooter className="sm:justify-between mt-8">
+          <DialogFooter className="sm:justify-between gap-2 mt-8">
             <DialogClose asChild>
               <Button variant="secondary" className="w-full" onClick={() => form.reset()}>Cancelar</Button>
             </DialogClose>

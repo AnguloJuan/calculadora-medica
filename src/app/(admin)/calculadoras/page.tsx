@@ -53,7 +53,7 @@ const CalculadorasPage = async () => {
       const [calcRows] = await conexion.query<RowsCalculadora[]>('SELECT * FROM calculadora');
       const [evidencieaRows] = await conexion.query<Evidencias[]>('SELECT * FROM evidencia');
       const [relations] = await conexion.query<RowDataPacket[]>('SELECT * FROM `calculadora_parametro`');
-      
+
       const calculadorasConParametros = calcRows.map((calculadora) => {
         return {
           ...calculadora,
@@ -69,7 +69,7 @@ const CalculadorasPage = async () => {
             enlace: evidencia.enlace,
             cita: evidencia.cita,
             id_calculadora: evidencia.id_calculadora
-          })) as [ Evidencia , ...Evidencia[]])
+          })) as [Evidencia, ...Evidencia[]])
         }
       });
 
@@ -94,20 +94,16 @@ const CalculadorasPage = async () => {
   }) : []
 
   return (<>
-    <header className="bg-background dark:bg-container shadow">
-      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-bold tracking-tight">Calculadoras</h1>
+    <div className="bg-background dark:bg-container shadow flex items-stretch">
+      <div className="mx-auto px-4 py-6 sm:px-6 lg:px-8">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Calculadoras</h1>
       </div>
-    </header>
-    <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-      <div className="bg-background dark:bg-container shadow sm:rounded-lg">
-        <div className="px-4 py-5 sm:px-6 space-y-4">
-          <h3 className="text-lg font-medium leading-6">Calculadoras</h3>
-          <CrearCalculadora parametros={parametros} />
-          <div className="container mx-auto">
-            <DataTable columns={calculadoraColumns} data={data} filter="categoria" />
-          </div>
-        </div>
+    </div>
+    <main className="mx-auto px-4 py-6 sm:px-6 lg:px-8 contain-inline-size flex items-stretch">
+      <div className="bg-background dark:bg-container shadow sm:rounded-lg px-4 py-5 sm:px-6 space-y-4">
+        <h3 className="text-lg font-medium leading-6">Calculadoras</h3>
+        <CrearCalculadora parametros={parametros} />
+        <DataTable columns={calculadoraColumns} data={data} filter="categoria" pinnedColumn="last" />
       </div>
     </main>
   </>)

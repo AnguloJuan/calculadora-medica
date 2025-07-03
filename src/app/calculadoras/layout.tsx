@@ -18,10 +18,10 @@ export default async function AdminLayout({
     <SidebarProvider>
       {session && <AppSidebar />}
       <SidebarInset>
-        <section className="h-full">
+        <div className="bg-background relative z-10 flex min-h-svh flex-col">
           <Header rol="admin" />
           {children}
-        </section>
+        </div>
       </SidebarInset>
     </SidebarProvider>
   )

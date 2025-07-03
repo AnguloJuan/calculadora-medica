@@ -71,11 +71,11 @@ const ActualizarCalculadora = ({ calculadora, parametros }: { calculadora: TypeC
 
 
   return (
-    <DialogItem triggerChildren="Editar" className={'top-[50%] -bottom-[40%] overflow-y-auto max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl px-20 py-12'}>
-      <DialogTitle className="text-3xl font-semibold tracking-tight first:mt-0">Actualizar calculadora</DialogTitle>
-      {/* <DialogDescription>
-        Editar calculadora.
-      </DialogDescription> */}
+    <DialogItem triggerChildren="Editar"
+      className=
+      "top-[50%] -bottom-[40%] overflow-y-auto max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl px-2 py-4 md:px-20 md:py-12"
+    >
+      <DialogTitle className="text-xl md:text-3xl font-semibold tracking-tight first:mt-0">Actualizar calculadora</DialogTitle>
       <FormularioCalculadora form={form} parametros={parametros} />
       <div className="flex flex-row justify-between gap-4">
         <DialogClose asChild>
