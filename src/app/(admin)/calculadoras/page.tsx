@@ -1,6 +1,7 @@
 import { CalculadoraColumn, calculadoraColumns } from "@/components/calculadoras/columns";
 import CrearCalculadora from "@/components/calculadoras/CrearCalculadora";
 import { DataTable } from "@/components/data-table";
+import { Command, CommandInput } from "@/components/ui/command";
 import { conectarBd } from "@/db/conectarDb";
 import { Calculadora, Evidencia, Parametro, Unidad } from "@/utils/types";
 import { TypeCalculadoraSchema } from "@/validationSchemas/CalculadoraSchema";
@@ -94,16 +95,21 @@ const CalculadorasPage = async () => {
   }) : []
 
   return (<>
-    <div className="bg-background dark:bg-container shadow flex items-stretch">
+    <div className="bg-background dark:bg-container shadow">
       <div className="mx-auto px-4 py-6 sm:px-6 lg:px-8">
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Calculadoras</h1>
       </div>
     </div>
-    <main className="mx-auto px-4 py-6 sm:px-6 lg:px-8 contain-inline-size flex items-stretch">
+    <main className="mx-auto px-4 py-6 sm:px-6 lg:px-8 contain-inline-size">
       <div className="bg-background dark:bg-container shadow sm:rounded-lg px-4 py-5 sm:px-6 space-y-4">
         <h3 className="text-lg font-medium leading-6">Calculadoras</h3>
         <CrearCalculadora parametros={parametros} />
-        <DataTable columns={calculadoraColumns} data={data} filter="categoria" pinnedColumn="last" />
+        <DataTable
+          columns={calculadoraColumns}
+          data={data}
+          filter="categoria"
+          columnsClassname="last:sticky last:right-0 last:bg-gradient-to-r from-transparent to-background dark:to-container last:to-[12px] last:pl-4 sm:last:static sm:last:p-2 sm:last:bg-none"
+        />
       </div>
     </main>
   </>)

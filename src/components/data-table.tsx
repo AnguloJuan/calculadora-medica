@@ -20,19 +20,20 @@ import {
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
 import { Button } from "./ui/button"
+import { cn } from "@/lib/utils"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   filter?: string
-  pinnedColumn?: string
+  columnsClassname?: string
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   filter,
-  pinnedColumn
+  columnsClassname
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     []
@@ -93,8 +94,8 @@ export function DataTable<TData, TValue>({
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className={`${pinnedColumn}:sticky ${pinnedColumn}:right-0 transition-colors data-[state=selected]:bg-muted ${pinnedColumn}:border-none ${pinnedColumn}:bg-gradient-to-r ${pinnedColumn}:from-transparent ${pinnedColumn}:to-container ${pinnedColumn}:to-[12px] ${pinnedColumn}:pl-4`
-                      }
+                      className={cn("transition-colors data-[state=selected]:bg-muted",
+                        columnsClassname)}
                     >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>

@@ -28,22 +28,23 @@ export default async function UnidadesPage() {
       unidad: unidad,
     }
   })
-  
+
   return (<>
-    <header className="bg-background dark:bg-container shadow">
-      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-bold tracking-tight">Unidades</h1>
+    <div className="bg-background dark:bg-container shadow">
+      <div className="mx-auto px-4 py-6 sm:px-6 lg:px-8">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Unidades</h1>
       </div>
-    </header>
-    <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-      <div className="bg-background dark:bg-container shadow sm:rounded-lg">
-        <div className="px-4 py-5 sm:px-6 space-y-4">
-          <h3 className="text-lg font-medium leading-6">Unidades</h3>
-          <CrearUnidad />
-          <div className="container mx-auto">
-            <DataTable columns={unidadColumns} data={data} filter="nombre" />
-          </div>
-        </div>
+    </div>
+    <main className="mx-auto px-4 py-6 sm:px-6 lg:px-8 contain-inline-size">
+      <div className="bg-background dark:bg-container shadow sm:rounded-lg px-4 py-5 sm:px-6 space-y-4">
+        <h3 className="text-lg font-medium leading-6">Unidades</h3>
+        <CrearUnidad />
+        <DataTable
+          columns={unidadColumns}
+          data={data}
+          filter="categoria"
+          columnsClassname="last:sticky last:right-0 last:bg-gradient-to-r from-transparent to-background dark:to-container last:to-[12px] last:pl-4 sm:last:static sm:last:p-2 sm:last:bg-none"
+        />
       </div>
     </main>
   </>)
