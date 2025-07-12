@@ -1,9 +1,8 @@
-import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/react";
-import { IconMenu2, IconX } from "@tabler/icons-react";
 import Image from "next/image";
-import NavOpcion from "./NavOpcion";
 import { ModeToggle } from "../mode-toggle";
 import { SidebarTrigger } from "../ui/sidebar";
+import { MobileNav } from "./MobileNav";
+import NavOpcion from "./NavOpcion";
 import SearchBar from "./SearchBar";
 
 export default async function Header({ rol }: { rol?: string }) {
@@ -11,73 +10,24 @@ export default async function Header({ rol }: { rol?: string }) {
     <header className="sticky top-0 z-50 w-full bg-background">
       <div className="w-full mx-auto 3xl:fixed:px-0 px-6">
         <div className="3xl:fixed:container flex h-[theme(spacing.14)] items-center gap-2">
+          <Image
+            alt="ToronjaLab"
+            src="/logo.png"
+            width={80}
+            height={32}
+            style={{ objectFit: 'contain' }}
+          />
           <nav className="items-center gap-0.5 hidden lg:flex ">
-            <div className="items-center justify-center whitespace-nowrap hidden lg:flex">
-              <Image
-                alt="ToronjaLab"
-                src="/logo.png"
-                width={80}
-                height={32}
-                style={{ objectFit: 'contain' }}
-              />
-            </div>
             <NavOpcion />
-            <div className="ml-auto flex items-center gap-2 md:flex-1 md:justify-end">
-              <div className="hidden w-full flex-1 md:flex md:w-auto md:flex-none">
-                {/* <SearchBar /> */}
-              </div>
-              <ModeToggle />
-            </div>
           </nav>
+          <MobileNav />
+          <div className="ml-auto flex items-center gap-2 md:flex-1 md:justify-end">
+            <SearchBar />
+            <ModeToggle />
+            {rol === "admin" && <SidebarTrigger variant={"outline"} className="size-8 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] focus-visible:border-none transition-all" />}
+          </div>
         </div>
       </div>
     </header>
-    // <header className="sticky top-0 z-40 w-full backdrop-blur flex-none transition-colors duration-500 lg:z-50 lg:border-b lg:border-slate-900/10 dark:border-slate-50/[0.06] bg-background supports-backdrop-blur:bg-background/95 dark:bg-background/75">
-    //   <Disclosure as="nav" className="border-b lg:px-8">
-    //     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    //       <div className="flex h-16 items-center justify-between">
-    //         <SidebarTrigger className="" />
-    //         <div className="flex items-center">
-    //           <div className="flex-shrink-0">
-    //             <Image
-    //               alt="ToronjaLab"
-    //               src="/logo.png"
-    //               width={100}
-    //               height={40}
-    //               style={{ objectFit: 'contain' }}
-    //             />
-    //           </div>
-    //           <div className="hidden md:block">
-    //             <div className="ml-10 flex items-center space-x-4">
-    //               <NavOpcion />
-    //             </div>
-    //           </div>
-    //         </div>
-    //         <div className="hidden md:block">
-    //           <div className="ml-4 flex items-center md:ml-6">
-    //             <ModeToggle />
-    //           </div>
-    //         </div>
-    //         <div className="-mr-2 flex gap-4 md:hidden">
-    //           <ModeToggle />
-    //           {/* Mobile menu button */}
-    //           <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md 
-    //                          focus:outline-none focus:ring-2  focus:ring-offset-2 ">
-    //             <span className="absolute -inset-0.5" />
-    //             <span className="sr-only">Abrir menu</span>
-    //             <IconMenu2 aria-hidden="true" className="block h-6 w-6 group-data-[open]:hidden" />
-    //             <IconX aria-hidden="true" className="hidden h-6 w-6 group-data-[open]:block" />
-    //           </DisclosureButton>
-    //         </div>
-    //       </div>
-    //     </div>
-
-    //     <DisclosurePanel className="md:hidden">
-    //       <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
-    //         <NavOpcion mobile />
-    //       </div>
-    //     </DisclosurePanel>
-    //   </Disclosure>
-    // </header>
   );
 }

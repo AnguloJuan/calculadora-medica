@@ -136,3 +136,13 @@ blockquote[dir='rtl'] {
   padding-right: 10px;
   border-right: 2px solid;
 }
+
+[cmdk-root] {
+  @apply bg-popover text-popover-foreground flex h-full w-full flex-col overflow-hidden rounded-lg border;
+}
+
+[cmdk-input] {
+  @apply placeholder:text-muted-foreground flex h-10 w-full rounded-md bg-transparent py-3 text-sm border-none focus:ring-0 focus:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
