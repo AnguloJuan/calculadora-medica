@@ -1,13 +1,13 @@
 'use client'
 
 import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema"
-import { Radio, RadioGroup } from "@headlessui/react"
 import { IconCircle } from "@tabler/icons-react"
 import { FunctionComponent, useState } from "react"
 import { Unidad } from "../../utils/types"
 import { Each } from "../EachOf"
 import { Input } from "../ui/input"
 import { Label } from "../ui/label"
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 
 type Parametro = TypeParametroSchema & {
@@ -113,8 +113,7 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, set
           <RadioGroup
             id={`campo_${parametro.nombre}`}
             name={`campo_${parametro.nombre}`}
-            value={valor}
-            onChange={(value) => {
+            onValueChange={(value) => {
               setValor(value)
               // onChange && onChange(parametro.nombre, Number(value))
             }}
@@ -125,7 +124,7 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, set
             <Each
               of={opciones}
               render={(opcion, index) => (
-                <Radio
+                <RadioGroupItem
                   key={index}
                   value={opcion}
                   onClick={() => {
@@ -143,7 +142,7 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, set
                       <IconCircle className="size-6 text-blue-500 fill-white opacity-0 transition group-data-[checked]:opacity-100" />
                     </span>
                   </div>
-                </Radio>
+                </RadioGroupItem>
               )}
             />
           </RadioGroup>
