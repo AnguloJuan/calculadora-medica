@@ -3,8 +3,9 @@ import { Unidad } from "@/utils/types";
 import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
 import { evaluate } from "mathjs";
 import { useCallback, useEffect, useState } from "react";
-import ListaParametros from "../parametros/ListaParametros";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "../ui/card";
+import { Each } from "../EachOf";
+import CampoParametro from "../parametros/CampoParametro";
 
 type IParametro = TypeParametroSchema & {
   unidadActual?: Unidad;
@@ -41,12 +42,19 @@ const Calculadora = ({ formula, parametros, unidad_resultado }: CalculadoraProps
   }, [valores]);
 
   return (<>
-    <Card className="w-[400px] bg-container">
+    <Card className="bg-container">
       <CardHeader>
         <CardDescription>Ingrese los datos</CardDescription>
       </CardHeader>
       <CardContent>
-        <ListaParametros parametros={parametros} onChange={handleInputChange} />
+        <div className="flex flex-col w-full gap-6">
+          <Each
+            of={parametros}
+            render={(parametro) => {
+              return (<CampoParametro key={parametro.id} parametro={parametro} onChange={handleInputChange} />)
+            }}
+          />
+        </div>
       </CardContent>
       <CardFooter>
         <div className="flex flex-row gap-4 w-full bg-muted rounded p-8 py-4 ">

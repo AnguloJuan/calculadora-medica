@@ -2,7 +2,7 @@
 
 import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema"
 import { IconCircle } from "@tabler/icons-react"
-import { FunctionComponent, useState } from "react"
+import { FunctionComponent, useCallback, useState } from "react"
 import { Unidad } from "../../utils/types"
 import { Each } from "../EachOf"
 import { Input } from "../ui/input"
@@ -36,10 +36,21 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, set
     setParametros(acutalizarParametos);
   }
 
-  return (
-    <div className={`w-full gap-y-2 flex flex-col items-start'}`}>
+  const validarNumero = useCallback((valor: string | number) => {
+    if (typeof valor === 'string') {
+      const numero = parseFloat(valor);
+      if (isNaN(numero)) {
+        return '';
+      }
+      return numero;
+    }
+    return valor;
+  }, []);
 
-      <Label htmlFor={parametro.nombre} className="">{parametro.nombre}</Label>
+  return (
+    <div className="w-full gap-y-2 flex flex-col items-start">
+
+      <Label htmlFor={parametro.nombre}>{parametro.nombre}</Label>
       {parametro.tipo_campo === 'numerico' && (
         <div className="flex flex-row w-full">
           <Input
@@ -49,19 +60,24 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, set
             min={parametro.valorMinimo}
             max={parametro.valorMaximo}
             value={valor}
-            onChange={(e) => { setValor(e.target.value); onChange && onChange(parametro.nombre, e.target.valueAsNumber) }}
+            onChange={(e) => {
+              const valorNumerico = validarNumero(e.target.value);
+              if (valorNumerico){
+                setValor(valorNumerico);
+                onChange && onChange(parametro.nombre, valorNumerico) 
+              }
+            }}
             className="mt-0 rounded-e-none"
           />
-          <div className="h-9 col-span-1 text-center self-cente content-center px-4 bg-muted border border-input rounded-e-lg">
+          <div className="h-9 min-w-fit px-2 text-center content-center bg-muted border border-input rounded-e-lg text-xs md:text-sm font-medium leading-none">
             {parametro.unidades && (
               parametro.unidades.length === 1 ? (
-                <small className="text-sm font-medium leading-none">{parametro.unidades[0].unidad}</small>
+                <small>{parametro.unidades[0].unidad}</small>
               ) : parametro.unidades.length > 1 && (
                 <Select
                   name={`unidad_${parametro.nombre}`}
                   defaultValue={String(parametro.unidadActual?.id)}
                   value={String(valor)}
-
                   onValueChange={(e) => {
                     const unidad = parametro.unidades!.find((unidad) => unidad.id === Number(e));
                     if (unidad) {
@@ -130,7 +146,7 @@ const CampoParametro: FunctionComponent<CampoParametroProps> = ({ parametro, set
                   onClick={() => {
                     setValor(valor === opcion ? '' : opcion)
                     onChange && onChange(parametro.nombre, Number(index))
-                    }}
+                  }}
                   className="group relative flex w-full cursor-pointer rounded-lg col-span-1 bg-background border-gray-300 outline-gray-300 py-2 px-5 outline-none outline-offset-0 transition focus:outline-blue-500 data-[focus]:border-blue-500 data-[checked]:border-blue-500 data-[checked]:outline-blue-500"
                 >
                   <div className="flex w-full items-center justify-between">

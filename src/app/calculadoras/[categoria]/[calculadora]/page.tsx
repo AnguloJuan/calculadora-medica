@@ -1,5 +1,6 @@
 
 import CalculadoraComponent from "@/components/calculadoras/Calculadora";
+import CalculadoraInfo from "@/components/calculadoras/CalculadoraInfo";
 import { Each } from "@/components/EachOf";
 import ReadOnlyRichText from "@/components/slatejs/read-only";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -89,86 +90,14 @@ export default async function CalculadoraPage({ params }: { params: { categoria:
 
 
   return (
-    <div className="w-full bg-background flex flex-col items-center">
-      <main className="flex md:max-w-screen-md lg:max-w-screen-lg flex-col items-center rounded-lg p-12 py-12 bg-background gap-8">
-        <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
-          {calculadora.nombre}
-        </h2>
-        <div className="flex flex-col gap-8 sm:flex sm:flex-row gap-y-8 divide-y gap-x-8">
-          <div className="flex flex-col">
-            <div className="flex flex-col gap-4">
-              <CalculadoraComponent formula={calculadora.formula} parametros={parametros} unidad_resultado={calculadora.unidad_resultado} />
-            </div>
-          </div>
-
-          <Tabs defaultValue="Formula" className="w-[400px] lg:w-[650px]">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="Formula">Formula</TabsTrigger>
-              <TabsTrigger value="Recomendaciones">Recomendaciones</TabsTrigger>
-              <TabsTrigger value="Evidencias">Evidencias</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="Formula">
-              <Card className="bg-container">
-                <CardHeader>
-                  <CardTitle>Formula</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm">{calculadora.formula_display ? calculadora.formula_display : calculadora.formula}</p>
-                </CardContent>
-                <CardHeader>
-                  <CardTitle>Acerca de {calculadora.nombre}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ReadOnlyRichText value={calculadora.descripcion} />
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="Recomendaciones">
-              <Card className="bg-container">
-                <CardHeader>
-                  <CardTitle>Resultados y Recomendaciones</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ReadOnlyRichText value={calculadora.resultados_recomendaciones} />
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="Evidencias">
-              <Card className="bg-container">
-                <CardHeader>
-                  <CardTitle>Evidencias</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <Each of={evidencias} render={
-                    (evidencia, index) => (<>
-                      {evidencia.enlace ?
-                        <a href={evidencia.enlace} target="_blank">
-                          <Card key={index} className="w-full py-4 ps-4 pe-0">
-                            <CardContent className="p-0 flex flex-row gap-2">
-                              <FileText className="min-w-6 min-h-6" />
-                              <p className="text-sm text-muted-foreground">{evidencia.cita}</p>
-                            </CardContent>
-                          </Card>
-                        </a> :
-                        <Card key={index} className="w-full py-4 ps-4 pe-0">
-                          <CardContent className="p-0 flex flex-row gap-2">
-                            <FileText className="min-w-6 min-h-6" />
-                            <p className="text-sm text-muted-foreground">{evidencia.cita}</p>
-                          </CardContent>
-                        </Card>
-                      }
-
-                    </>)
-                  } />
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-        </div>
-      </main>
-    </div>
+    <main className="w-full flex flex-col items-center rounded-lg pt-12 md:p-12 bg-background gap-8">
+      <h2 className="border-b pb-2 text-2xl sm:text-3xl font-semibold tracking-tight text-center">
+        {calculadora.nombre}
+      </h2>
+      <div className="flex flex-col gap-6 md:flex-row divide-y">
+        <CalculadoraComponent formula={calculadora.formula} parametros={parametros} unidad_resultado={calculadora.unidad_resultado} />
+        <CalculadoraInfo calculadora={calculadora} evidencias={evidencias} />
+      </div>
+    </main>
   )
 }
