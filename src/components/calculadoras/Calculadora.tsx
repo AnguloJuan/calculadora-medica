@@ -3,12 +3,12 @@ import { Unidad } from "@/utils/types";
 import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
 import { evaluate } from "mathjs";
 import { useCallback, useEffect, useState } from "react";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "../ui/card";
 import { Each } from "../EachOf";
 import CampoParametro from "../parametros/CampoParametro";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "../ui/card";
 
 type IParametro = TypeParametroSchema & {
-  unidadActual?: Unidad;
+  unidadPredeterminada?: Unidad;
 }
 interface CalculadoraProps {
   formula: string;
@@ -22,7 +22,7 @@ const Calculadora = ({ formula, parametros, unidad_resultado }: CalculadoraProps
 
   const [error, setError] = useState(false);
 
-  const handleInputChange = useCallback((parametro: string, valor: number) => {
+  const handleInputChange = useCallback((parametro: string, valor: number | string) => {
     const param = parametro.replace(" ", "");
     setValores((prev) => ({ ...prev, [param]: valor }));
   }, []);
@@ -42,7 +42,7 @@ const Calculadora = ({ formula, parametros, unidad_resultado }: CalculadoraProps
   }, [valores]);
 
   return (<>
-    <Card className="bg-container">
+    <Card className="bg-container w-full md:w-3/5 lg:w-3/6">
       <CardHeader>
         <CardDescription>Ingrese los datos</CardDescription>
       </CardHeader>

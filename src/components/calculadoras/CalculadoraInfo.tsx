@@ -1,9 +1,9 @@
+import { Calculadora, Evidencia } from "@/utils/types";
 import { FileText } from "lucide-react";
 import { Each } from "../EachOf";
 import ReadOnlyRichText from "../slatejs/read-only";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import { Calculadora, Evidencia } from "@/utils/types";
 
 interface CalculadoraInfoProps {
   calculadora: Calculadora
@@ -12,7 +12,7 @@ interface CalculadoraInfoProps {
 
 export default function CalculadoraInfo({ calculadora, evidencias }: CalculadoraInfoProps) {
   return (
-    <Tabs defaultValue="Formula" className="w-full sm:w-[400px] lg:w-[650px]">
+    <Tabs defaultValue="Formula" className="w-full">
       <TabsList className="grid w-full grid-cols-3 rounded-t-none">
         <TabsTrigger value="Formula" className="text-xs sm:text-sm">Formula</TabsTrigger>
         <TabsTrigger value="Recomendaciones" className="text-xs sm:text-sm">Recomendaciones</TabsTrigger>

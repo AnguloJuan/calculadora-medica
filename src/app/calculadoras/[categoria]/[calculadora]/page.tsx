@@ -1,18 +1,11 @@
 
 import CalculadoraComponent from "@/components/calculadoras/Calculadora";
 import CalculadoraInfo from "@/components/calculadoras/CalculadoraInfo";
-import { Each } from "@/components/EachOf";
-import ReadOnlyRichText from "@/components/slatejs/read-only";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { conectarBd } from "@/db/conectarDb";
 import { Calculadora, Evidencia, Parametro, Unidad } from "@/utils/types";
 import { TypeParametroSchema } from "@/validationSchemas/ParametroSchema";
-import { FileText } from "lucide-react";
 import { RowDataPacket } from "mysql2";
-import Link from "next/link";
 import { redirect } from "next/navigation";
-import { NextRequest } from "next/server";
 
 interface RowsCalculadora extends RowDataPacket, Calculadora { }
 interface Parametros extends RowDataPacket, Parametro { }
@@ -59,7 +52,7 @@ export default async function CalculadoraPage({ params }: { params: { categoria:
             'SELECT * FROM `parametro_unidad` as `pu` RIGHT JOIN `unidad` as `u` ON pu.id_unidad = u.id AND `id_parametro` = ? WHERE pu.id IS NOT NULL;',
             [parametro.id],
           );
-          return { ...parametro, unidades: unidadesRows, unidadActual: unidadesRows[0] };
+          return { ...parametro, unidades: unidadesRows, unidadPredeterminada: unidadesRows[0] };
         } catch (error) {
           console.error(error);
           return undefined;
@@ -90,11 +83,11 @@ export default async function CalculadoraPage({ params }: { params: { categoria:
 
 
   return (
-    <main className="w-full flex flex-col items-center rounded-lg pt-12 md:p-12 bg-background gap-8">
+    <main className="w-full flex flex-col items-center rounded-lg pt-12 sm:p-4 md:p-6 lg:p-12 lg:px-16 bg-background gap-8">
       <h2 className="border-b pb-2 text-2xl sm:text-3xl font-semibold tracking-tight text-center">
         {calculadora.nombre}
       </h2>
-      <div className="flex flex-col gap-6 md:flex-row divide-y">
+      <div className="flex flex-col gap-6 md:flex-row divide-y w-full">
         <CalculadoraComponent formula={calculadora.formula} parametros={parametros} unidad_resultado={calculadora.unidad_resultado} />
         <CalculadoraInfo calculadora={calculadora} evidencias={evidencias} />
       </div>

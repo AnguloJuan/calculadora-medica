@@ -461,16 +461,6 @@ export async function actualizarUnidadAction(formulario: FormData) {
   const conversion = unidad.conversion !== '' ? unidad.conversion : null
   const id_unidad_conversion = (unidad.id_unidad_conversion !== '' && unidad.id_unidad_conversion !== '0') ? unidad.id_unidad_conversion : null
 
-  // check if the unit already exists
-  const [unidades] = await conexion.query<Unidades[]>(
-    'SELECT * FROM `unidad` WHERE `unidad` = ? AND `id` != ?',
-    [unidad.unidad, unidad.id]
-  );
-
-  if (unidades.length > 0) {
-    return { error: 'La unidad ya existe', status: 400 };
-  }
-
   // check if the conversion unit its the same as the unit
   if (unidad.id === unidad.id_unidad_conversion) {
     return { error: 'La unidad de conversion no puede ser la misma que la unidad', status: 400 };

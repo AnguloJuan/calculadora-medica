@@ -42,7 +42,7 @@ export default async function UnidadesPage() {
         <DataTable
           columns={unidadColumns}
           data={data}
-          filter="categoria"
+          // filter="categoria"
           columnsClassname="last:sticky last:right-0 last:bg-gradient-to-r from-transparent to-background dark:to-container last:to-[12px] last:pl-4 sm:last:static sm:last:p-2 sm:last:bg-none"
         />
       </div>
