@@ -22,7 +22,7 @@ export function MobileNav() {
     <Popover open={open} onOpenChange={onOpenChange} >
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
+          variant="ghost"
           className={"extend-touch-target h-8 touch-manipulation items-center justify-start gap-2.5 !py-0 !px-2 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] border-none flex lg:hidden"}
         >
           <div className="relative flex h-8 w-4 items-center justify-center">

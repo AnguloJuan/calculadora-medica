@@ -30,25 +30,25 @@ export default function Toast() {
 
   const styleType = {
     success: {
-      bg: 'bg-success-container',
+      bg: 'bg-success-card',
       iconStyle: 'bg-success text-success-foreground',
       lineColor: 'bg-green-500',
       icon: <IconCircleCheck />,
     },
     warning: {
-      bg: 'bg-warning-container',
+      bg: 'bg-warning-card',
       iconStyle: 'bg-warning text-warning-foreground',
       lineColor: 'bg-yellow-500',
       icon: <IconAlertTriangle />,
     },
     error: {
-      bg: 'bg-destructive-container',
+      bg: 'bg-destructive-card',
       iconStyle: 'bg-destructive text-destructive-foreground',
       lineColor: 'bg-red-500',
       icon: <IconHexagonLetterX />,
     },
     default: {
-      bg: 'bg-container',
+      bg: 'bg-card',
       iconStyle: 'bg-muted text-muted-foreground',
       lineColor: 'bg-zinc-500',
       icon: <IconBell />,

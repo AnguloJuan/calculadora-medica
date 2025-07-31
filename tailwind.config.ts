@@ -40,17 +40,17 @@ const config: Config = {
         },
         success: {
           DEFAULT: 'hsl(var(--success))',
-          container: 'hsl(var(--success-container))',
+          card: 'hsl(var(--success-card))',
           foreground: 'hsl(var(--success-foreground))'
         },
         destructive: {
           DEFAULT: 'hsl(var(--destructive))',
-          container: 'hsl(var(--destructive-container))',
+          card: 'hsl(var(--destructive-card))',
           foreground: 'hsl(var(--destructive-foreground))'
         },
         warning: {
           DEFAULT: 'hsl(var(--warning))',
-          container: 'hsl(var(--warning-container))',
+          card: 'hsl(var(--warning-card))',
           foreground: 'hsl(var(--warning-foreground))'
         },
         border: 'hsl(var(--border))',
@@ -73,7 +73,6 @@ const config: Config = {
           border: 'hsl(var(--sidebar-border))',
           ring: 'hsl(var(--sidebar-ring))'
         },
-        container: 'hsl(var(--container))',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

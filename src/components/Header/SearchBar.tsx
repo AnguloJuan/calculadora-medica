@@ -29,7 +29,7 @@ export default function SearchBar() {
     <div className="hidden w-full flex-1 md:flex md:w-auto md:flex-none border rounded-md">
       <Button
         data-slot="dialog-trigger"
-        className="transition-all shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] hover:bg-secondary/80 px-4 py-2 bg-surface text-muted-foreground dark:bg-card relative h-8 w-full justify-start pl-2.5 shadow sm:pr-12 md:w-40 lg:w-56 xl:w-64 hover:text-accent-foreground dark:hover:bg-accent/50"
+        className="transition-all shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] hover:bg-secondary/80 px-4 py-2 bg-surface text-muted-foreground dark:bg-background relative h-8 w-full justify-start pl-2.5 shadow sm:pr-12 md:w-40 lg:w-56 xl:w-64 hover:text-accent-foreground dark:hover:bg-accent/50"
         type="button"
         aria-haspopup="dialog"
         aria-expanded="false"

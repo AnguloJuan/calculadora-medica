@@ -39,7 +39,7 @@ const Calculadora = ({ formula, parametros, unidad_resultado }: CalculadoraProps
   }, [valores]);
 
   return (<>
-    <Card className="bg-container w-full md:w-3/5 lg:w-3/6">
+    <Card className="bg-card w-full md:w-3/5 lg:w-3/6">
       <CardHeader>
         <CardDescription>Ingrese los datos</CardDescription>
       </CardHeader>

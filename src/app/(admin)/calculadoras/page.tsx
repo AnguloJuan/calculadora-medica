@@ -95,20 +95,20 @@ const CalculadorasPage = async () => {
   }) : []
 
   return (<>
-    <div className="bg-background dark:bg-container shadow">
+    <div className="bg-background dark:bg-card shadow">
       <div className="mx-auto px-4 py-6 sm:px-6 lg:px-8">
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Calculadoras</h1>
       </div>
     </div>
     <main className="mx-auto px-4 py-6 sm:px-6 lg:px-8 contain-inline-size">
-      <div className="bg-background dark:bg-container shadow sm:rounded-lg px-4 py-5 sm:px-6 space-y-4">
+      <div className="bg-background dark:bg-card shadow sm:rounded-lg px-4 py-5 sm:px-6 space-y-4">
         <h3 className="text-lg font-medium leading-6">Calculadoras</h3>
         <CrearCalculadora parametros={parametros} />
         <DataTable
           columns={calculadoraColumns}
           data={data}
           filter="categoria"
-          columnsClassname="last:sticky last:right-0 last:bg-gradient-to-r from-transparent to-background dark:to-container last:to-[12px] last:pl-4 sm:last:static sm:last:p-2 sm:last:bg-none"
+          columnsClassname="last:sticky last:right-0 last:bg-gradient-to-r from-transparent to-background dark:to-card last:to-[12px] last:pl-4 sm:last:static sm:last:p-2 sm:last:bg-none"
         />
       </div>
     </main>

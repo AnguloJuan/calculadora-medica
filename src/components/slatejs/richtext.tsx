@@ -92,7 +92,7 @@ const RichText = ({ onChange, value, onBlur, placeholder }: RichTextProps) => {
           placeholder={placeholder || "Ingresa el texto…"}
           spellCheck
           onBlur={onBlur}
-          className='p-4 pt-0 bg-container form-input border-border rounded'
+          className='p-4 pt-0 bg-card form-input border-border rounded'
           onKeyDown={event => {
             for (const hotkey in HOTKEYS) {
               if (isHotkey(hotkey, event)) {

@@ -7,9 +7,9 @@ import SearchBar from "./SearchBar";
 
 export default async function Header({ rol }: { rol?: string }) {
   return (
-    <header className="sticky top-0 z-50 w-full bg-background">
+    <header className="sticky top-0 z-50 w-full bg-sidebar/95 border-b border-sidebar-border">
       <div className="w-full mx-auto 3xl:fixed:px-0 px-6">
-        <div className="3xl:fixed:container flex h-[theme(spacing.14)] items-center gap-2">
+        <div className="3xl:fixed:card flex h-[theme(spacing.14)] items-center gap-2">
           <Image
             alt="ToronjaLab"
             src="/logo.png"

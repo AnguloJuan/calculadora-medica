@@ -20,7 +20,7 @@ export default function CalculadoraInfo({ calculadora, evidencias }: Calculadora
       </TabsList>
 
       <TabsContent value="Formula">
-        <Card className="bg-container">
+        <Card className="bg-card">
           <CardHeader>
             <CardTitle>Formula</CardTitle>
           </CardHeader>
@@ -37,7 +37,7 @@ export default function CalculadoraInfo({ calculadora, evidencias }: Calculadora
       </TabsContent>
 
       <TabsContent value="Recomendaciones">
-        <Card className="bg-container">
+        <Card className="bg-card">
           <CardHeader>
             <CardTitle>Resultados y Recomendaciones</CardTitle>
           </CardHeader>
@@ -48,7 +48,7 @@ export default function CalculadoraInfo({ calculadora, evidencias }: Calculadora
       </TabsContent>
 
       <TabsContent value="Evidencias">
-        <Card className="bg-container">
+        <Card className="bg-card">
           <CardHeader>
             <CardTitle>Evidencias</CardTitle>
           </CardHeader>
