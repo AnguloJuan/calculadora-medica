@@ -10,9 +10,6 @@ import { redirect } from "next/navigation";
 interface RowsCalculadora extends RowDataPacket, Calculadora { }
 interface Parametros extends RowDataPacket, Parametro { }
 interface Unidades extends RowDataPacket, Unidad { }
-type IParametro = TypeParametroSchema & {
-  unidadActual?: Unidad;
-}
 
 interface Evidencias extends RowDataPacket, Evidencia { }
 
@@ -52,7 +49,7 @@ export default async function CalculadoraPage({ params }: { params: { categoria:
             'SELECT * FROM `parametro_unidad` as `pu` RIGHT JOIN `unidad` as `u` ON pu.id_unidad = u.id AND `id_parametro` = ? WHERE pu.id IS NOT NULL;',
             [parametro.id],
           );
-          return { ...parametro, unidades: unidadesRows, unidadPredeterminada: unidadesRows[0] };
+          return { ...parametro, unidades: unidadesRows };
         } catch (error) {
           console.error(error);
           return undefined;
@@ -60,14 +57,14 @@ export default async function CalculadoraPage({ params }: { params: { categoria:
       });
 
       const resolvedParametros = await Promise.all(parametrosConUnidades);
-      return resolvedParametros.filter((parametro) => parametro !== undefined) as IParametro[];
+      return resolvedParametros.filter((parametro) => parametro !== undefined) as TypeParametroSchema[];
     } catch (error) {
       console.error(error);
       redirect('/404');
     }
   }
 
-  const parametros: IParametro[] = await obtenerParametros();
+  const parametros: TypeParametroSchema[] = await obtenerParametros();
 
   async function obtenerEvidencias() {
     try {

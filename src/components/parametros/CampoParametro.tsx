@@ -12,12 +12,8 @@ import { Label } from "../ui/label"
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 
-type Parametro = TypeParametroSchema & {
-  unidadPredeterminada?: Unidad;
-}
-
 interface CampoParametroProps {
-  parametro: Parametro;
+  parametro: TypeParametroSchema;
   onChange?: (parametro: string, valor: number | string) => void;
 }
 
@@ -42,7 +38,8 @@ export default function CampoParametro({ parametro, onChange }: CampoParametroPr
 }
 
 function NumberInput({ parametro, onChange }: CampoParametroProps) {
-  const [unidad, setUnidad] = useState<string>(parametro.unidades ? parametro.unidades[0].unidad : undefined);
+  if (parametro.tipo_campo !== 'numerico') return null;
+  const [unidad, setUnidad] = useState<string>(parametro.unidades.length ? parametro.unidades[0].unidad : '');
   const [valor, setValor] = useState<string | number>('');
 
   const validarNumero = useCallback((valor: string | number) => {
@@ -75,7 +72,8 @@ function NumberInput({ parametro, onChange }: CampoParametroProps) {
             <span>{parametro.unidades[0].unidad}</span>
           ) : parametro.unidades.length === 2 ? (
             <Button
-              variant="outline"
+              variant="ghost"
+              type="button"
               className="h-full text-xs lg:text-sm font-medium px-2 rounded-e-lg rounded-s-none border-input"
               onClick={() => {
                 if (!parametro.unidades || parametro.unidades.length < 2) return;
@@ -92,7 +90,7 @@ function NumberInput({ parametro, onChange }: CampoParametroProps) {
           ) : parametro.unidades.length > 2 && (
             <Select
               name={`unidad_${parametro.nombre}`}
-              defaultValue={parametro.unidadPredeterminada ? String(parametro.unidadPredeterminada?.id) : String(parametro.unidades[0].id)}
+              defaultValue={parametro.unidades[0].id ? String(parametro.unidades[1].id) : String(parametro.unidades[0].id)}
               onValueChange={(e) => {
                 // setValor( valor ); Actualizar el valor con la conversion de la unidad
               }}
@@ -114,8 +112,10 @@ function NumberInput({ parametro, onChange }: CampoParametroProps) {
 }
 
 function SeleccionInput({ parametro, onChange }: CampoParametroProps) {
-  const opciones = parametro.opciones !== '' ? parametro.opciones?.split(',') : undefined;
-  const [valor, setValor] = useState<string | number>('');
+  if (parametro.tipo_campo !== 'seleccion' && parametro.tipo_campo !== 'radio') return null;
+  if (!parametro.opciones) return null;
+  const opciones = parametro.opciones?.split(',');
+  const [valor, setValor] = useState<string>('');
 
   if (!opciones || opciones.length === 0) {
     return <p className="text-red-500">No hay opciones disponibles para este campo.</p>
@@ -126,8 +126,9 @@ function SeleccionInput({ parametro, onChange }: CampoParametroProps) {
       <Select
         name={`campo_${parametro.nombre}`}
         onValueChange={(e) => {
-          setValor(e)
-          onChange && onChange(parametro.nombre, Number(e))
+          const valorActualizado = e === valor ? '' : e;
+          setValor(valorActualizado)
+          onChange && onChange(parametro.nombre, Number(valorActualizado))
         }}
         defaultValue=""
         value={String(valor)}
@@ -147,43 +148,44 @@ function SeleccionInput({ parametro, onChange }: CampoParametroProps) {
   }
   if (parametro.tipo_campo === 'radio') {
     return (
-      <div className="mx-auto w-full">
-        <RadioGroup
-          id={`campo_${parametro.nombre}`}
-          name={`campo_${parametro.nombre}`}
-          onValueChange={(value) => {
-            onChange && onChange(parametro.nombre, Number(value))
-          }}
-          aria-label={parametro.nombre}
-          className={`flex flex-col gap-2 w-full justify-between`}
-        // ${opciones.length > 3 ? 'flex-col' : 'flex-col'} 
-        >
-          <Each
-            of={opciones}
-            render={(opcion, index) => (
+      <RadioGroup
+        value={valor}
+        onValueChange={(value) => {
+          onChange && onChange(parametro.nombre, Number(value))
+        }}
+        className={`mx-auto w-full flex gap-2 justify-between ${opciones.length > 2 ? 'flex-col' : 'flex-row'} `}
+      >
+        <Each
+          of={opciones}
+          render={(opcion, index) => (<>
+            <div className="relative w-full">
               <RadioGroupItem
                 key={index}
+                id={opcion}
                 value={opcion}
                 onClick={() => {
                   setValor(valor === opcion ? '' : opcion)
                   onChange && onChange(parametro.nombre, Number(index))
                 }}
-                className="group relative flex w-full cursor-pointer rounded-lg col-span-1 bg-background border-gray-300 outline-gray-300 py-2 px-5 outline-none outline-offset-0 transition focus:outline-blue-500 data-[focus]:border-blue-500 data-[checked]:border-blue-500 data-[checked]:outline-blue-500"
+                className={`peer opacity-0 z-10 w-full h-full absolute cursor-pointer rounded-lg`}
+              />
+              <div
+                data-state={valor === opcion ? 'checked' : 'unchecked'}
+                className={`group flex flex-row items-center w-full px-2 py-2 rounded-lg bg-accent/80 hover:bg-accent hover:border-border/80 border-2 peer-data-[state=checked]:border-blue-400`}
               >
-                <div className="flex w-full items-center justify-between">
-                  <div className="text-sm/6">
-                    <p className="font-semibold">{opcion}</p>
-                  </div>
-                  <span>
-                    <IconCircle className="absolute size-4 text-white fill-blue-500 opacity-0 transition group-data-[checked]:opacity-100 translate-y-1 translate-x-1" />
-                    <IconCircle className="size-6 text-blue-500 fill-white opacity-0 transition group-data-[checked]:opacity-100" />
-                  </span>
-                </div>
-              </RadioGroupItem>
-            )}
-          />
-        </RadioGroup>
-      </div>
+                <Label htmlFor={opcion} className="w-full items-center justify-between font-semibold text-foreground transition group-data-[state=checked]:text-blue-500">
+                  {opcion}
+                </Label>
+                <span>
+                  <IconCircle className="absolute size-4 text-transparent fill-blue-500 opacity-0 transition group-data-[state=checked]:opacity-100 translate-y-1 translate-x-1" />
+                  <IconCircle className="size-6 text-blue-500 opacity-0 transition group-data-[state=checked]:opacity-100" />
+                </span>
+              </div>
+            </div>
+          </>
+          )}
+        />
+      </RadioGroup>
     )
   }
 }

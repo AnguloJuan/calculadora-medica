@@ -7,12 +7,9 @@ import { Each } from "../EachOf";
 import CampoParametro from "../parametros/CampoParametro";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "../ui/card";
 
-type IParametro = TypeParametroSchema & {
-  unidadPredeterminada?: Unidad;
-}
 interface CalculadoraProps {
   formula: string;
-  parametros: IParametro[];
+  parametros: TypeParametroSchema[];
   unidad_resultado?: string;
 }
 
